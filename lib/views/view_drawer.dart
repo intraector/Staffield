@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sailor/sailor.dart';
-import 'package:staff_time/constants/app_text_styles.dart';
-import 'package:staff_time/services/router.dart';
+import 'package:Staffield/constants/app_text_styles.dart';
+import 'package:Staffield/services/router.dart';
 
 class ViewDrawer extends StatelessWidget {
   @override

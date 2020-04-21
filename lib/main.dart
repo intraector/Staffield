@@ -1,12 +1,17 @@
+import 'package:Staffield/services/services_manager.dart';
+import 'package:Staffield/views/employees/screen_employees.dart';
+import 'package:Staffield/views/entries_list/screen_entries_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:Staffield/core/employees_repository.dart';
+import 'package:Staffield/services/sqlite/srvc_sqlite_employees.dart';
+import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
-import 'package:staff_time/constants/app_colors.dart';
-import 'package:staff_time/core/entries_repository.dart';
-import 'package:staff_time/services/router.dart';
-import 'package:staff_time/services/sqlite/srvc_sqlite_api.dart';
-import 'package:staff_time/views/entries_list/screen_entries_list.dart';
+import 'package:Staffield/constants/app_colors.dart';
+import 'package:Staffield/core/entries_repository.dart';
+import 'package:Staffield/services/router.dart';
+import 'package:Staffield/services/sqlite/srvc_sqlite_entries.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,12 +19,15 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
     MaterialApp(
-      title: 'staff_time',
+      title: 'Staffield',
       navigatorKey: Router.sailor.navigatorKey,
       onGenerateRoute: Router.sailor.generator(),
-      home: Injector(
-          inject: [Inject<EntriesRepository>(() => EntriesRepository(SrvcSqliteApi()))],
-          builder: (_) => ScreenEntriesList()),
+      home: Injector(inject: [
+        Inject<SrvcSqliteInit>(() => SrvcSqliteInit()),
+        Inject<ServicesManager>(() => ServicesManager(), isLazy: false),
+        Inject<EntriesRepository>(() => EntriesRepository(SrvcSqliteEntries())),
+        Inject<EmployeesRepository>(() => EmployeesRepository(SrvcSqliteEmployees())),
+      ], builder: (_) => ScreenEntriesList()),
       theme: ThemeData(
         buttonTheme: ButtonThemeData(
             buttonColor: AppColors.primary,

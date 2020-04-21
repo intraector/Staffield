@@ -3,29 +3,29 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:staff_time/constants/app_settings.dart';
-import 'package:staff_time/constants/sqlite_tables.dart';
+import 'package:Staffield/constants/app_settings.dart';
+import 'package:Staffield/constants/sqlite_tables.dart';
 
 class SrvcSqliteInit {
   Future<void> init() async {
     var _completer = Completer();
     initComplete = _completer.future;
     path = await getDatabasesPath();
-    path = join(path, 'chats.db');
+    path = join(path, 'db.db');
     // await deleteDb();
-    dbEntries = await openDb(path);
+    db = await openDb(path);
     _completer.complete();
   }
 
   Future<void> initComplete;
-  Database dbEntries;
+  Database db;
   String path;
 
   //-----------------------------------------
   Future<void> deleteDb() async {
-    if (dbEntries != null) {
-      await dbEntries.close();
-      dbEntries = null;
+    if (db != null) {
+      await db.close();
+      db = null;
     }
     if (await File(path).exists())
       return File(path).delete();
@@ -58,6 +58,15 @@ class SrvcSqliteInit {
             )''');
 
 //-----------------------------------------
+  Future<void> createEmployeesTable(Database db) => db.execute('''
+            CREATE TABLE IF NOT EXISTS ${SqliteTable.employees} (
+              id INTEGER PRIMARY KEY,
+              uid TEXT,
+              name TEXT,
+              hide INTEGER NOT NULL
+            )''');
+
+//-----------------------------------------
   Future<Database> openDb(String path) => openDatabase(
         path,
         version: AppSettings.appVersionInt,
@@ -70,6 +79,7 @@ class SrvcSqliteInit {
   Future<void> _onCreate(Database db, int version) async {
     await createEntriesTable(db);
     await createPenaltiesTable(db);
+    await createEmployeesTable(db);
     return null;
   }
 

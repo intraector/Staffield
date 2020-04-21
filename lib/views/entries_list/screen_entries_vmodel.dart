@@ -1,6 +1,6 @@
 import 'package:states_rebuilder/states_rebuilder.dart';
-import 'package:staff_time/core/entries_repository.dart';
-import 'package:staff_time/views/entries_list/model_entries_list_item.dart';
+import 'package:Staffield/core/entries_repository.dart';
+import 'package:Staffield/views/entries_list/model_entries_list_item.dart';
 
 class ScreenEntriesVModel with StatesRebuilder {
   ScreenEntriesVModel() {

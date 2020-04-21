@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:staff_time/constants/app_colors.dart';
-import 'package:staff_time/constants/app_fonts.dart';
+import 'package:Staffield/constants/app_colors.dart';
+import 'package:Staffield/constants/app_fonts.dart';
 
 class AppTextStyles {
   static TextStyle get screenTitle =>

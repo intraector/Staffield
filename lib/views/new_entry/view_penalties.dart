@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
-import 'package:staff_time/constants/app_colors.dart';
-import 'package:staff_time/models/penalty.dart';
-import 'package:staff_time/views/new_entry/dialog_penalty.dart';
-import 'package:staff_time/views/new_entry/screen_entry_vmodel.dart';
-import 'package:staff_time/utils/string_utils.dart';
+import 'package:Staffield/constants/app_colors.dart';
+import 'package:Staffield/models/penalty.dart';
+import 'package:Staffield/views/new_entry/dialog_penalty.dart';
+import 'package:Staffield/views/new_entry/screen_entry_vmodel.dart';
+import 'package:Staffield/utils/string_utils.dart';
 
 class ViewPenalties extends StatelessWidget {
   @override

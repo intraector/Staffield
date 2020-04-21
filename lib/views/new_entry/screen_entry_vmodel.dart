@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
-import 'package:staff_time/core/entries_repository.dart';
-import 'package:staff_time/models/entry.dart';
-import 'package:staff_time/models/penalty.dart';
-import 'package:staff_time/utils/format_input_currency.dart';
-import 'package:staff_time/utils/string_utils.dart';
+import 'package:Staffield/core/entries_repository.dart';
+import 'package:Staffield/models/entry.dart';
+import 'package:Staffield/models/penalty.dart';
+import 'package:Staffield/utils/format_input_currency.dart';
+import 'package:Staffield/utils/string_utils.dart';
 
 class ScreenEntryVModel {
   ScreenEntryVModel(String uid) {

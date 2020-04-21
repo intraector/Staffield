@@ -1,4 +1,4 @@
-import 'package:staff_time/models/penalty.dart';
+import 'package:Staffield/models/penalty.dart';
 import 'package:uuid_type/uuid_type.dart';
 
 class Entry {
@@ -23,11 +23,11 @@ class Entry {
 
   //-----------------------------------------
   Map<String, dynamic> toSqlite() => {
-        'uid': this.uid,
-        'timestamp': this.timestamp,
-        'name': this.name,
-        'revenue': this.revenue,
-        'wage': this.wage,
-        'interest': this.interest,
+        'uid': uid,
+        'timestamp': timestamp,
+        'name': name,
+        'revenue': revenue,
+        'wage': wage,
+        'interest': interest,
       };
 }

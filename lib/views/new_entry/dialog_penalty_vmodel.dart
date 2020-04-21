@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
-import 'package:staff_time/constants/penalty_type.dart';
-import 'package:staff_time/models/penalty.dart';
-import 'package:staff_time/utils/string_utils.dart';
-import 'package:staff_time/views/new_entry/screen_entry_vmodel.dart';
+import 'package:Staffield/constants/penalty_type.dart';
+import 'package:Staffield/models/penalty.dart';
+import 'package:Staffield/utils/string_utils.dart';
+import 'package:Staffield/views/new_entry/screen_entry_vmodel.dart';
 
 class DialogPenaltyVModel extends StatesRebuilder {
   DialogPenaltyVModel(this.penalty) {

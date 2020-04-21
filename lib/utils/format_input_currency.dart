@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:staff_time/utils/string_utils.dart';
+import 'package:Staffield/utils/string_utils.dart';
 
 String formatInputCurrency(
     {@required String newValue,

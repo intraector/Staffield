@@ -1,4 +1,4 @@
-import 'package:staff_time/models/entry.dart';
+import 'package:Staffield/models/entry.dart';
 
 class ModelEntriesListItem {
   ModelEntriesListItem.fromEntry(Entry entry) {

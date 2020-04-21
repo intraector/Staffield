@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:staff_time/core/interface_entries_repository.dart';
-import 'package:staff_time/models/entry.dart';
+import 'package:Staffield/core/entries_repository_interface.dart';
+import 'package:Staffield/models/entry.dart';
 
 class EntriesRepository {
   // EntriesRepository._privateConstructor();
@@ -12,7 +12,7 @@ class EntriesRepository {
     fetch();
   }
 
-  InterfaceEntriesRepository sqlite;
+  EntriesRepositoryInterface sqlite;
 
   var _repo = <Entry>[];
 
@@ -47,7 +47,7 @@ class EntriesRepository {
       _repo[index] = entry;
     else
       _repo.add(entry);
-    sqlite.add(entry);
+    sqlite.addOrUpdate(entry);
     _notifyRepoUpdates();
   }
 

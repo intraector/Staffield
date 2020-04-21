@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
-import 'package:staff_time/constants/app_colors.dart';
-import 'package:staff_time/constants/penalty_type.dart';
-import 'package:staff_time/models/penalty.dart';
-import 'package:staff_time/views/new_entry/dialog_penalty_vmodel.dart';
+import 'package:Staffield/constants/app_colors.dart';
+import 'package:Staffield/constants/penalty_type.dart';
+import 'package:Staffield/models/penalty.dart';
+import 'package:Staffield/views/new_entry/dialog_penalty_vmodel.dart';
 
 class DialogPenalty extends StatelessWidget {
   DialogPenalty(this.penalty, {this.isNewPenalty = false});

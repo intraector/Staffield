@@ -1,18 +1,19 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:staff_time/constants/sqlite_tables.dart';
-import 'package:staff_time/core/exceptions/e_insert.dart';
-import 'package:staff_time/core/interface_entries_repository.dart';
-import 'package:staff_time/models/entry.dart';
-import 'package:staff_time/models/penalty.dart';
-import 'package:staff_time/services/sqlite/srvc_sqlite_init.dart';
+import 'package:Staffield/constants/sqlite_tables.dart';
+import 'package:Staffield/core/entries_repository_interface.dart';
+import 'package:Staffield/core/exceptions/e_insert_entry.dart';
+import 'package:Staffield/models/entry.dart';
+import 'package:Staffield/models/penalty.dart';
+import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
+import 'package:states_rebuilder/states_rebuilder.dart';
 
-class SrvcSqliteApi implements InterfaceEntriesRepository {
-  SrvcSqliteApi() {
-    var init = SrvcSqliteInit();
-    init.init();
+class SrvcSqliteEntries implements EntriesRepositoryInterface {
+  SrvcSqliteEntries() {
+    var init = Injector.get<SrvcSqliteInit>();
+
     initComplete = init.initComplete;
     initComplete.whenComplete(() {
-      dbEntries = init.dbEntries;
+      dbEntries = init.db;
     });
   }
 
@@ -36,19 +37,21 @@ class SrvcSqliteApi implements InterfaceEntriesRepository {
 
   //-----------------------------------------
   @override
-  Future<bool> add(Entry entry) async {
+  Future<bool> addOrUpdate(Entry entry) async {
+    await initComplete;
     if (entry.timestamp == null) entry.timestamp = DateTime.now().millisecondsSinceEpoch;
     var result = await dbEntries.insert(SqliteTable.entries, entry.toSqlite(),
         conflictAlgorithm: ConflictAlgorithm.replace);
     if (result <= 0)
-      throw EInsert('Can\'t insert SrvcSqliteApi');
+      throw EInsertEntry('Can\'t insert SrvcSqliteEntries');
     else
       return true;
   }
 
   //-----------------------------------------
   @override
-  void remove(String uid) {
+  Future<void> remove(String uid) async {
+    await initComplete;
     dbEntries.delete(
       SqliteTable.entries,
       where: 'uid = ?',
@@ -60,12 +63,4 @@ class SrvcSqliteApi implements InterfaceEntriesRepository {
       whereArgs: [uid],
     );
   }
-
-  //-----------------------------------------
-  @override
-  void update() {
-    // TODO: implement update
-  }
-  //-----------------------------------------
-// Map<String, dynamic>
 }

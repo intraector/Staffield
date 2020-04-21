@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:staff_time/constants/penalty_type.dart';
+import 'package:Staffield/constants/penalty_type.dart';
 import 'package:uuid_type/uuid_type.dart';
 
 class Penalty {
