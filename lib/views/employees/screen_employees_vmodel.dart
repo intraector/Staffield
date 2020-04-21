@@ -1,8 +1,11 @@
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/models/employee.dart';
-import 'package:states_rebuilder/states_rebuilder.dart';
+import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 
-class ScreenEmployeesVModel with StatesRebuilder {
+final getIt = GetIt.instance;
+
+class ScreenEmployeesVModel with ChangeNotifier {
   ScreenEmployeesVModel() {
     _repo.updates.listen((data) {
       updateList();
@@ -10,11 +13,11 @@ class ScreenEmployeesVModel with StatesRebuilder {
   }
   var list = <Employee>[];
   int recordsPerScreen = 10;
-  final _repo = Injector.get<EmployeesRepository>();
+  final _repo = getIt<EmployeesRepository>();
 
   //-----------------------------------------
   void updateList() {
     list = _repo.repo.take(recordsPerScreen).toList();
-    rebuildStates();
+    notifyListeners();
   }
 }

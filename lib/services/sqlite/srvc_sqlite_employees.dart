@@ -1,16 +1,17 @@
-import 'package:print_color/print_color.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:Staffield/constants/sqlite_tables.dart';
 import 'package:Staffield/core/employees_repository_interface.dart';
 import 'package:Staffield/core/exceptions/e_insert_employee.dart';
 import 'package:Staffield/models/employee.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
-import 'package:states_rebuilder/states_rebuilder.dart';
+
+final getIt = GetIt.instance;
 
 class SrvcSqliteEmployees implements EmployeesRepositoryInterface {
   SrvcSqliteEmployees() {
-    Print.yellow('||| fired SrvcSqliteEmployees');
-    var init = Injector.get<SrvcSqliteInit>();
+    final init = getIt<SrvcSqliteInit>();
+
     initComplete = init.initComplete;
     initComplete.whenComplete(() {
       db = init.db;

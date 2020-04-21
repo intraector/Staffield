@@ -1,16 +1,24 @@
-import 'package:states_rebuilder/states_rebuilder.dart';
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
+import 'package:get_it/get_it.dart';
 import 'package:Staffield/core/entries_repository.dart';
 import 'package:Staffield/views/entries_list/model_entries_list_item.dart';
 
-class ScreenEntriesVModel with StatesRebuilder {
+final getIt = GetIt.instance;
+
+class ScreenEntriesVModel with ChangeNotifier {
   ScreenEntriesVModel() {
-    _repo.updates.listen((data) {
+    updateList();
+    _subsc = _repo.updates.listen((data) {
       updateList();
     });
   }
+
+  StreamSubscription<bool> _subsc;
   var list = <ModelEntriesListItem>[];
   int recordsPerScreen = 10;
-  final _repo = Injector.get<EntriesRepository>();
+  final _repo = getIt<EntriesRepository>();
 
   //-----------------------------------------
   void updateList() {
@@ -18,6 +26,13 @@ class ScreenEntriesVModel with StatesRebuilder {
         .take(recordsPerScreen)
         .map((entry) => ModelEntriesListItem.fromEntry(entry))
         .toList();
-    rebuildStates();
+    notifyListeners();
+  }
+
+  //-----------------------------------------
+  @override
+  void dispose() {
+    _subsc.cancel();
+    super.dispose();
   }
 }

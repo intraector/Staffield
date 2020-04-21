@@ -19,8 +19,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sailor: ^0.6.0
-  states_rebuilder: ^1.14.3
+  sailor: ^0.7.0
+  provider: ^4.0.5
+  get_it: ^4.0.1
   # mask_text_input_formatter: ^1.0.6
   flutter_money_formatter: ^0.8.3
   print_color: ^2.1.4

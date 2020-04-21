@@ -1,26 +1,26 @@
+import 'package:Staffield/views/new_entry/screen_entry_vmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/penalty_type.dart';
 import 'package:Staffield/models/penalty.dart';
 import 'package:Staffield/views/new_entry/dialog_penalty_vmodel.dart';
+import 'package:provider/provider.dart';
 
 class DialogPenalty extends StatelessWidget {
-  DialogPenalty(this.penalty, {this.isNewPenalty = false});
+  DialogPenalty(
+      {@required this.penalty, this.isNewPenalty = false, @required this.screenEntryVModel});
   final Penalty penalty;
   final bool isNewPenalty;
+  final ScreenEntryVModel screenEntryVModel;
   final _formKey = GlobalKey<FormState>();
   final focusMoney = FocusNode();
 
   @override
-  Widget build(BuildContext context) => Injector(
-      inject: [Inject(() => DialogPenaltyVModel(penalty))],
-      builder: (context) {
-        final vModel = Injector.get<DialogPenaltyVModel>();
-        return StateBuilder(
-          models: [vModel],
-          builder: (context, _) => SimpleDialog(
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+        create: (_) => DialogPenaltyVModel(penalty: penalty, screenEntryVModel: screenEntryVModel),
+        child: Consumer<DialogPenaltyVModel>(
+          builder: (_, vModel, __) => SimpleDialog(
             contentPadding: EdgeInsets.symmetric(horizontal: 15.0),
             title: Text("ШТРАФ", textAlign: TextAlign.center),
             children: <Widget>[
@@ -171,6 +171,6 @@ class DialogPenalty extends StatelessWidget {
               ),
             ],
           ),
-        );
-      });
+        ),
+      );
 }

@@ -1,21 +1,23 @@
 import 'package:flutter/cupertino.dart';
-import 'package:states_rebuilder/states_rebuilder.dart';
+import 'package:get_it/get_it.dart';
 import 'package:Staffield/core/entries_repository.dart';
 import 'package:Staffield/models/entry.dart';
 import 'package:Staffield/models/penalty.dart';
 import 'package:Staffield/utils/format_input_currency.dart';
 import 'package:Staffield/utils/string_utils.dart';
 
-class ScreenEntryVModel {
+final getIt = GetIt.instance;
+
+class ScreenEntryVModel with ChangeNotifier {
   ScreenEntryVModel(String uid) {
-    repo = Injector.get<EntriesRepository>();
     this.entry = uid == null ? Entry() : repo.getEntry(uid);
     txtCtrlRevenue.text = entry.revenue?.toString()?.formatCurrency() ?? '';
     txtCtrlWage.text = entry.wage?.toString()?.formatCurrency() ?? '';
     txtCtrlInterest.text = entry.interest?.toString()?.formatCurrency() ?? '';
     penalties = entry.penalties.map((penalty) => Penalty.fromOther(penalty)).toList();
   }
-  EntriesRepository repo;
+
+  final repo = getIt<EntriesRepository>();
   Entry entry;
   List<Penalty> penalties;
 
@@ -31,18 +33,23 @@ class ScreenEntryVModel {
   final int _interestMaxLength = 5;
 
   //-----------------------------------------
-  void addPenalty(Penalty newItem) => penalties.add(newItem);
+  void addPenalty(Penalty newItem) {
+    penalties.add(newItem);
+    notifyListeners();
+  }
 
   //-----------------------------------------
   void removePenalty(Penalty item) {
     var index = penalties.indexOf(item);
     if (index >= 0) penalties.removeAt(index);
+    notifyListeners();
   }
 
   //-----------------------------------------
   void updatePenalty(Penalty item) {
     var index = penalties.indexOf(item);
     if (index >= 0) penalties[index] = item;
+    notifyListeners();
   }
 
   //-----------------------------------------

@@ -1,5 +1,4 @@
 import 'package:Staffield/services/services_manager.dart';
-import 'package:Staffield/views/employees/screen_employees.dart';
 import 'package:Staffield/views/entries_list/screen_entries_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_employees.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
-import 'package:states_rebuilder/states_rebuilder.dart';
+import 'package:get_it/get_it.dart';
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/core/entries_repository.dart';
 import 'package:Staffield/services/router.dart';
@@ -16,18 +15,18 @@ import 'package:Staffield/services/sqlite/srvc_sqlite_entries.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Router.createRoutes();
+  final getIt = GetIt.instance;
+  getIt.registerSingleton<SrvcSqliteInit>(SrvcSqliteInit());
+  getIt.registerSingleton<ServicesManager>(ServicesManager());
+  getIt.registerSingleton<EntriesRepository>(EntriesRepository(SrvcSqliteEntries()));
+  getIt.registerSingleton<EmployeesRepository>(EmployeesRepository(SrvcSqliteEmployees()));
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
     MaterialApp(
       title: 'Staffield',
       navigatorKey: Router.sailor.navigatorKey,
       onGenerateRoute: Router.sailor.generator(),
-      home: Injector(inject: [
-        Inject<SrvcSqliteInit>(() => SrvcSqliteInit()),
-        Inject<ServicesManager>(() => ServicesManager(), isLazy: false),
-        Inject<EntriesRepository>(() => EntriesRepository(SrvcSqliteEntries())),
-        Inject<EmployeesRepository>(() => EmployeesRepository(SrvcSqliteEmployees())),
-      ], builder: (_) => ScreenEntriesList()),
+      home: ScreenEntriesList(),
       theme: ThemeData(
         buttonTheme: ButtonThemeData(
             buttonColor: AppColors.primary,

@@ -1,12 +1,11 @@
 import 'package:flutter/widgets.dart';
-import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:Staffield/constants/penalty_type.dart';
 import 'package:Staffield/models/penalty.dart';
 import 'package:Staffield/utils/string_utils.dart';
 import 'package:Staffield/views/new_entry/screen_entry_vmodel.dart';
 
-class DialogPenaltyVModel extends StatesRebuilder {
-  DialogPenaltyVModel(this.penalty) {
+class DialogPenaltyVModel extends ChangeNotifier {
+  DialogPenaltyVModel({@required this.penalty, @required this.screenEntryVModel}) {
     if (penalty.type == PenaltyType.plain) {
       txtCtrlPlainSum.text = penalty.total?.toString()?.formatCurrencyDecimal() ?? '';
     } else if (penalty.type == PenaltyType.minutesByMoney) {
@@ -17,7 +16,7 @@ class DialogPenaltyVModel extends StatesRebuilder {
   }
   Penalty penalty;
 
-  var screenEntryVModel = Injector.getAsReactive<ScreenEntryVModel>();
+  final ScreenEntryVModel screenEntryVModel;
 
   final txtCtrlPlainSum = TextEditingController();
   final txtCtrlMinutes = TextEditingController();
@@ -44,7 +43,7 @@ class DialogPenaltyVModel extends StatesRebuilder {
       penalty.total = 0.0;
 
     labelTotal = labelTotalPrefix + penalty.total.toString().formatCurrency();
-    rebuildStates();
+    notifyListeners();
   }
 
   //-----------------------------------------
@@ -90,6 +89,6 @@ class DialogPenaltyVModel extends StatesRebuilder {
 
   //-----------------------------------------
   void remove() {
-    screenEntryVModel.setState((state) => state.removePenalty(penalty));
+    screenEntryVModel.removePenalty(penalty);
   }
 }

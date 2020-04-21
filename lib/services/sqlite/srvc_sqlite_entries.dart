@@ -1,3 +1,4 @@
+import 'package:get_it/get_it.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:Staffield/constants/sqlite_tables.dart';
 import 'package:Staffield/core/entries_repository_interface.dart';
@@ -5,12 +6,12 @@ import 'package:Staffield/core/exceptions/e_insert_entry.dart';
 import 'package:Staffield/models/entry.dart';
 import 'package:Staffield/models/penalty.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
-import 'package:states_rebuilder/states_rebuilder.dart';
+
+final getIt = GetIt.instance;
 
 class SrvcSqliteEntries implements EntriesRepositoryInterface {
   SrvcSqliteEntries() {
-    var init = Injector.get<SrvcSqliteInit>();
-
+    final init = getIt<SrvcSqliteInit>();
     initComplete = init.initComplete;
     initComplete.whenComplete(() {
       dbEntries = init.db;

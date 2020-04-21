@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/models/penalty.dart';
 import 'package:Staffield/views/new_entry/dialog_penalty.dart';
@@ -7,10 +6,11 @@ import 'package:Staffield/views/new_entry/screen_entry_vmodel.dart';
 import 'package:Staffield/utils/string_utils.dart';
 
 class ViewPenalties extends StatelessWidget {
+  ViewPenalties(this.screenEntryVModel);
+  final ScreenEntryVModel screenEntryVModel;
   @override
   Widget build(BuildContext context) {
-    final screenEntryVModel = Injector.getAsReactive<ScreenEntryVModel>(context: context);
-    var penalties = screenEntryVModel.state.penalties;
+    var penalties = screenEntryVModel.penalties;
     return Column(
       children: <Widget>[
         if (penalties != null)
@@ -23,7 +23,7 @@ class ViewPenalties extends StatelessWidget {
 class ViewPenaltiesItem extends StatelessWidget {
   ViewPenaltiesItem(this.penalty, this.vModel);
   final Penalty penalty;
-  final ReactiveModel<ScreenEntryVModel> vModel;
+  final ScreenEntryVModel vModel;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -33,10 +33,11 @@ class ViewPenaltiesItem extends StatelessWidget {
           var res = await showDialog<Penalty>(
             context: context,
             barrierDismissible: false,
-            builder: (BuildContext context) => DialogPenalty(penalty),
+            builder: (BuildContext context) =>
+                DialogPenalty(penalty: penalty, screenEntryVModel: vModel),
           );
 
-          if (res != null) vModel.setState((state) => state.updatePenalty(res));
+          if (res != null) vModel.updatePenalty(res);
         },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
