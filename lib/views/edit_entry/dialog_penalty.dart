@@ -1,10 +1,10 @@
-import 'package:Staffield/views/new_entry/screen_entry_vmodel.dart';
+import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/penalty_type.dart';
 import 'package:Staffield/models/penalty.dart';
-import 'package:Staffield/views/new_entry/dialog_penalty_vmodel.dart';
+import 'package:Staffield/views/edit_entry/dialog_penalty_vmodel.dart';
 import 'package:provider/provider.dart';
 
 class DialogPenalty extends StatelessWidget {
@@ -12,7 +12,7 @@ class DialogPenalty extends StatelessWidget {
       {@required this.penalty, this.isNewPenalty = false, @required this.screenEntryVModel});
   final Penalty penalty;
   final bool isNewPenalty;
-  final ScreenEntryVModel screenEntryVModel;
+  final ScreenEditEntryVModel screenEntryVModel;
   final _formKey = GlobalKey<FormState>();
   final focusMoney = FocusNode();
 

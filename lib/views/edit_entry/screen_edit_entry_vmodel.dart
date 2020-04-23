@@ -1,23 +1,29 @@
+import 'package:Staffield/core/employees_repository.dart';
+import 'package:Staffield/models/employee.dart';
+import 'package:Staffield/views/edit_employee/dialog_edit_employee.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:Staffield/core/entries_repository.dart';
 import 'package:Staffield/models/entry.dart';
 import 'package:Staffield/models/penalty.dart';
 import 'package:Staffield/utils/format_input_currency.dart';
 import 'package:Staffield/utils/string_utils.dart';
+import 'package:print_color/print_color.dart';
 
 final getIt = GetIt.instance;
 
-class ScreenEntryVModel with ChangeNotifier {
-  ScreenEntryVModel(String uid) {
-    this.entry = uid == null ? Entry() : repo.getEntry(uid);
+class ScreenEditEntryVModel with ChangeNotifier {
+  ScreenEditEntryVModel(String uid) {
+    this.entry = uid == null ? Entry() : _entriesRepo.getEntry(uid);
     txtCtrlRevenue.text = entry.revenue?.toString()?.formatCurrency() ?? '';
     txtCtrlWage.text = entry.wage?.toString()?.formatCurrency() ?? '';
     txtCtrlInterest.text = entry.interest?.toString()?.formatCurrency() ?? '';
     penalties = entry.penalties.map((penalty) => Penalty.fromOther(penalty)).toList();
   }
 
-  final repo = getIt<EntriesRepository>();
+  final _entriesRepo = getIt<EntriesRepository>();
+  final _employeesRepo = getIt<EmployeesRepository>();
   Entry entry;
   List<Penalty> penalties;
 
@@ -39,6 +45,27 @@ class ScreenEntryVModel with ChangeNotifier {
   }
 
   //-----------------------------------------
+  List<Employee> get employeesItems {
+    var result = _employeesRepo.repo.toList()
+      ..add(Employee(name: 'Добавить сотрудника...', uid: '111'));
+    return result;
+  }
+
+  //-----------------------------------------
+  String get employeeUid => entry.employeeUid.isEmpty ? null : entry.employeeUid;
+
+  //-----------------------------------------
+  Future<void> setEmployeeUid(String uid, BuildContext context) async {
+    if (uid != '111')
+      entry.employeeUid = uid;
+    else {
+      var result = await showDialog(context: context, builder: (context) => DialogEditEmployee());
+      if (result != null) entry.employeeUid = result;
+    }
+    notifyListeners();
+  }
+
+  //-----------------------------------------
   void removePenalty(Penalty item) {
     var index = penalties.indexOf(item);
     if (index >= 0) penalties.removeAt(index);
@@ -53,11 +80,11 @@ class ScreenEntryVModel with ChangeNotifier {
   }
 
   //-----------------------------------------
-  String validateName(txt) {
-    if (txt.trim().isEmpty)
-      return 'введите имя';
+  String validateEmployeeUid(String txt) {
+    if (txt == null)
+      return 'Выберите сотрудника';
     else {
-      entry.name = txt;
+      entry.employeeUid = txt;
       return null;
     }
   }
@@ -148,16 +175,14 @@ class ScreenEntryVModel with ChangeNotifier {
   //-----------------------------------------
   void save() {
     entry.penalties = penalties.toList();
-    repo.addOrUpdate(entry);
+    _entriesRepo.addOrUpdate(entry);
   }
 
   //-----------------------------------------
-  void removeEntry() {
-    repo.remove(entry);
-  }
+  void removeEntry() => _entriesRepo.remove(entry.uid);
 
   //-----------------------------------------
-  String labelName = 'Имя';
+  String labelName = 'Сотрудник';
   String labelRevenue = 'Выручка';
   String labelWage = 'Оклад';
   String labelInterest = 'Процент';

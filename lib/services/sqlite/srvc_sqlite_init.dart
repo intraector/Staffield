@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:path/path.dart';
+import 'package:print_color/print_color.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:Staffield/constants/app_settings.dart';
 import 'package:Staffield/constants/sqlite_tables.dart';
@@ -11,9 +12,11 @@ class SrvcSqliteInit {
     var _completer = Completer();
     initComplete = _completer.future;
     path = await getDatabasesPath();
-    path = join(path, 'db.db');
-    // await deleteDb();
+    path = join(path, 'drrb.db');
+    await deleteDb();
     db = await openDb(path);
+    Print.magenta('||| db $db');
+
     _completer.complete();
   }
 
@@ -27,10 +30,14 @@ class SrvcSqliteInit {
       await db.close();
       db = null;
     }
-    if (await File(path).exists())
+    Print.magenta('||| db $db');
+    if (await File(path).exists()) {
+      Print.magenta('||| exists $path');
       return File(path).delete();
-    else
+    } else {
+      Print.red('||| db 1 $path');
       return Future.value(null);
+    }
   }
 
   //-----------------------------------------
@@ -39,7 +46,7 @@ class SrvcSqliteInit {
               id INTEGER PRIMARY KEY,
               uid TEXT UNIQUE,
               timestamp INTEGER,
-              name TEXT,
+              employeeUid TEXT,
               revenue REAL,
               wage REAL,
               interest REAL
@@ -77,6 +84,7 @@ class SrvcSqliteInit {
 
 //-----------------------------------------
   Future<void> _onCreate(Database db, int version) async {
+    Print.blue('||| fired _onCreate');
     await createEntriesTable(db);
     await createPenaltiesTable(db);
     await createEmployeesTable(db);

@@ -1,5 +1,6 @@
 import 'package:Staffield/services/services_manager.dart';
-import 'package:Staffield/views/entries_list/screen_entries_list.dart';
+import 'package:Staffield/services/sqlite/srvc_sqlite_entries_adapter.dart';
+import 'package:Staffield/views/entries/screen_entries.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -10,7 +11,6 @@ import 'package:get_it/get_it.dart';
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/core/entries_repository.dart';
 import 'package:Staffield/services/router.dart';
-import 'package:Staffield/services/sqlite/srvc_sqlite_entries.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,15 +18,15 @@ Future<void> main() async {
   final getIt = GetIt.instance;
   getIt.registerSingleton<SrvcSqliteInit>(SrvcSqliteInit());
   getIt.registerSingleton<ServicesManager>(ServicesManager());
-  getIt.registerSingleton<EntriesRepository>(EntriesRepository(SrvcSqliteEntries()));
   getIt.registerSingleton<EmployeesRepository>(EmployeesRepository(SrvcSqliteEmployees()));
+  getIt.registerSingleton<EntriesRepository>(EntriesRepository(SqliteEntriesAdapater()));
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
     MaterialApp(
       title: 'Staffield',
       navigatorKey: Router.sailor.navigatorKey,
       onGenerateRoute: Router.sailor.generator(),
-      home: ScreenEntriesList(),
+      home: ScreenEntries(),
       theme: ThemeData(
         buttonTheme: ButtonThemeData(
             buttonColor: AppColors.primary,

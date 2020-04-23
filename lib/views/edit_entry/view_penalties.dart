@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/models/penalty.dart';
-import 'package:Staffield/views/new_entry/dialog_penalty.dart';
-import 'package:Staffield/views/new_entry/screen_entry_vmodel.dart';
+import 'package:Staffield/views/edit_entry/dialog_penalty.dart';
+import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
 import 'package:Staffield/utils/string_utils.dart';
 
 class ViewPenalties extends StatelessWidget {
   ViewPenalties(this.screenEntryVModel);
-  final ScreenEntryVModel screenEntryVModel;
+  final ScreenEditEntryVModel screenEntryVModel;
   @override
   Widget build(BuildContext context) {
     var penalties = screenEntryVModel.penalties;
@@ -23,7 +23,7 @@ class ViewPenalties extends StatelessWidget {
 class ViewPenaltiesItem extends StatelessWidget {
   ViewPenaltiesItem(this.penalty, this.vModel);
   final Penalty penalty;
-  final ScreenEntryVModel vModel;
+  final ScreenEditEntryVModel vModel;
   @override
   Widget build(BuildContext context) {
     return Card(

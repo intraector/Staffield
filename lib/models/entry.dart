@@ -5,7 +5,8 @@ class Entry {
   Entry();
   String uid = TimeBasedUuidGenerator().generate().toString();
   int timestamp;
-  String name = '';
+  String employeeUid = '';
+  String employeeName = '';
   double revenue;
   double wage;
   double interest;
@@ -15,7 +16,7 @@ class Entry {
   Entry.fromSqlite(Map<String, dynamic> json) {
     uid = json['uid'];
     timestamp = json['timestamp'];
-    name = json['name'];
+    employeeUid = json['employeeUid'];
     revenue = json['revenue'];
     wage = json['wage'];
     interest = json['interest'];
@@ -25,7 +26,7 @@ class Entry {
   Map<String, dynamic> toSqlite() => {
         'uid': uid,
         'timestamp': timestamp,
-        'name': name,
+        'employeeUid': employeeUid,
         'revenue': revenue,
         'wage': wage,
         'interest': interest,

@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:Staffield/constants/penalty_type.dart';
 import 'package:Staffield/models/penalty.dart';
 import 'package:Staffield/utils/string_utils.dart';
-import 'package:Staffield/views/new_entry/screen_entry_vmodel.dart';
+import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
 
 class DialogPenaltyVModel extends ChangeNotifier {
   DialogPenaltyVModel({@required this.penalty, @required this.screenEntryVModel}) {
@@ -16,7 +16,7 @@ class DialogPenaltyVModel extends ChangeNotifier {
   }
   Penalty penalty;
 
-  final ScreenEntryVModel screenEntryVModel;
+  final ScreenEditEntryVModel screenEntryVModel;
 
   final txtCtrlPlainSum = TextEditingController();
   final txtCtrlMinutes = TextEditingController();

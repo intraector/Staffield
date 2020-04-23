@@ -52,10 +52,10 @@ class EntriesRepository {
   }
 
   //-----------------------------------------
-  void remove(Entry entry) {
-    var index = _repo.indexOf(entry);
+  void remove(String uid) {
+    var index = _repo.indexWhere((entry) => entry.uid == uid);
     if (index >= 0) _repo.removeAt(index);
-    sqlite.remove(entry.uid);
+    sqlite.remove(uid);
     _notifyRepoUpdates();
   }
 

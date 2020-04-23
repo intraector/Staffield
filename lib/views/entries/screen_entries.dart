@@ -5,11 +5,11 @@ import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/router_paths.dart';
 import 'package:Staffield/services/router.dart';
 import 'package:Staffield/utils/time_and_difference.dart';
-import 'package:Staffield/views/entries_list/screen_entries_vmodel.dart';
+import 'package:Staffield/views/entries/screen_entries_vmodel.dart';
 import 'package:Staffield/views/view_drawer.dart';
 import 'package:provider/provider.dart';
 
-class ScreenEntriesList extends StatelessWidget {
+class ScreenEntries extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
         create: (_) => ScreenEntriesVModel(),
@@ -22,7 +22,7 @@ class ScreenEntriesList extends StatelessWidget {
               backgroundColor: AppColors.secondary,
               child: Icon(Icons.add),
               onPressed: () =>
-                  Router.sailor.navigate(RouterPaths.newEntry, params: {'entry_uid': null}),
+                  Router.sailor.navigate(RouterPaths.editEntry, params: {'entry_uid': null}),
             ),
             body: Column(
               mainAxisSize: MainAxisSize.max,
@@ -32,8 +32,8 @@ class ScreenEntriesList extends StatelessWidget {
                     builder: (_, vModel, __) => ListView(
                       children: <Widget>[
                         ...vModel.list.map((entry) => InkWell(
-                              onTap: () => Router.sailor
-                                  .navigate(RouterPaths.newEntry, params: {'entry_uid': entry.uid}),
+                              onTap: () => Router.sailor.navigate(RouterPaths.editEntry,
+                                  params: {'entry_uid': entry.uid}),
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(8),

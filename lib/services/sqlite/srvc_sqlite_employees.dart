@@ -53,4 +53,12 @@ class SrvcSqliteEmployees implements EmployeesRepositoryInterface {
       whereArgs: [uid],
     );
   }
+
+  //-----------------------------------------
+  @override
+  Future<Employee> getEmployee(String uid) async {
+    await initComplete;
+    var result = await db.query(SqliteTable.employees, where: 'uid = ?', whereArgs: [uid]);
+    return Employee.fromSqlite(result.first);
+  }
 }

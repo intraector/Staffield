@@ -1,9 +1,11 @@
 import 'package:uuid_type/uuid_type.dart';
 
 class Employee {
-  String uid = TimeBasedUuidGenerator().generate().toString();
-  String name = '';
-  bool hide = false;
+  Employee({uid, this.name = '', this.hide = false})
+      : this.uid = uid ?? TimeBasedUuidGenerator().generate().toString();
+  String uid;
+  String name;
+  bool hide;
 
   //-----------------------------------------
   Employee.fromSqlite(Map<String, dynamic> json) {
@@ -13,9 +15,14 @@ class Employee {
   }
 
   //-----------------------------------------
-  Map<String, dynamic> toSqlite() => {
-        'uid': uid,
-        'name': name,
-        'hide': hide ? 1 : 0,
-      };
+  Map<String, dynamic> toSqlite() {
+    return {
+      'uid': uid,
+      'name': name,
+      'hide': hide ? 1 : 0,
+    };
+  }
+
+  @override
+  String toString() => '$uid $name $hide';
 }

@@ -3,7 +3,7 @@ import 'package:Staffield/models/entry.dart';
 class ModelEntriesListItem {
   ModelEntriesListItem.fromEntry(Entry entry) {
     uid = entry.uid;
-    name = entry.name;
+    name = entry.employeeName;
     timestamp = entry.timestamp;
   }
 

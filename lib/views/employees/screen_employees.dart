@@ -1,10 +1,9 @@
+import 'package:Staffield/views/edit_employee/dialog_edit_employee.dart';
 import 'package:Staffield/views/employees/screen_employees_vmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Staffield/views/bottom_navigation.dart';
 import 'package:Staffield/constants/app_colors.dart';
-import 'package:Staffield/constants/router_paths.dart';
-import 'package:Staffield/services/router.dart';
 import 'package:Staffield/views/view_drawer.dart';
 import 'package:provider/provider.dart';
 
@@ -18,8 +17,7 @@ class ScreenEmployees extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
             backgroundColor: AppColors.secondary,
             child: Icon(Icons.add),
-            onPressed: () =>
-                Router.sailor.navigate(RouterPaths.newEntry, params: {'entry_uid': null}),
+            onPressed: () => showDialog(context: context, builder: (_) => DialogEditEmployee()),
           ),
           body: Column(
             mainAxisSize: MainAxisSize.max,
@@ -28,24 +26,28 @@ class ScreenEmployees extends StatelessWidget {
                 child: ChangeNotifierProvider(
                   create: (_) => ScreenEmployeesVModel(),
                   child: Consumer<ScreenEmployeesVModel>(
-                    builder: (_, vModel, __) => ListView(
-                      children: <Widget>[
-                        ...vModel.list.map((employee) => InkWell(
-                              onTap: () => Router.sailor.navigate(RouterPaths.newEntry,
-                                  params: {'entry_uid': employee.uid}),
-                              child: Card(
-                                child: Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Text(employee.name),
-                                    ],
+                    builder: (_, vModel, __) {
+                      return ListView(
+                        children: <Widget>[
+                          ...vModel.list.map((employee) => InkWell(
+                                onTap: () => showDialog(
+                                    context: context,
+                                    builder: (_) => DialogEditEmployee(employee.uid)),
+                                child: Card(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Text(employee.name),
+                                        // Text(employee.uid),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ))
-                      ],
-                    ),
+                              ))
+                        ],
+                      );
+                    },
                   ),
                 ),
               ),

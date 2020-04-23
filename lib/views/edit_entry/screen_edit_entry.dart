@@ -4,49 +4,49 @@ import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/penalty_type.dart';
 import 'package:Staffield/models/penalty.dart';
 import 'package:Staffield/utils/regexp_digits_and_dot.dart';
-import 'package:Staffield/views/new_entry/dialog_penalty.dart';
-import 'package:Staffield/views/new_entry/screen_entry_vmodel.dart';
-import 'package:Staffield/views/new_entry/view_penalties.dart';
+import 'package:Staffield/views/edit_entry/dialog_penalty.dart';
+import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
+import 'package:Staffield/views/edit_entry/view_penalties.dart';
 import 'package:provider/provider.dart';
 // import 'package:Staffield/utils/CurrencyFormatter.dart';
 
 final _formKey = GlobalKey<FormState>();
 
-class ScreenEntry extends StatelessWidget {
-  ScreenEntry([this.entryUid]);
+class ScreenEditEntry extends StatelessWidget {
+  ScreenEditEntry([this.entryUid]);
   final focusRevenue = FocusNode();
   final focusWage = FocusNode();
   final focusInterest = FocusNode();
   final String entryUid;
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
-        create: (_) => ScreenEntryVModel(entryUid),
+        create: (_) => ScreenEditEntryVModel(entryUid),
         child: SafeArea(
           child: Scaffold(
             body: Container(
               alignment: Alignment.center,
               child: Form(
                 key: _formKey,
-                child: Consumer<ScreenEntryVModel>(
+                child: Consumer<ScreenEditEntryVModel>(
                   builder: (_, vModel, __) => ListView(
                     padding: EdgeInsets.symmetric(horizontal: 25.0),
                     children: <Widget>[
                       Row(
                         children: <Widget>[
                           Expanded(
-                            child: TextFormField(
-                              textInputAction: TextInputAction.next,
-                              initialValue: vModel.entry.name,
-                              decoration: InputDecoration(
-                                labelText: vModel.labelName,
-                                counterStyle: TextStyle(color: Colors.transparent),
-                              ),
-                              maxLines: 1,
-                              maxLengthEnforced: true,
-                              maxLength: vModel.nameMaxLength,
-                              validator: (txt) => vModel.validateName(txt),
-                              onFieldSubmitted: (_) =>
-                                  FocusScope.of(context).requestFocus(focusRevenue),
+                            child: DropdownButtonFormField(
+                              value: vModel.employeeUid,
+                              hint: Text(vModel.labelName),
+                              isExpanded: true,
+                              validator: vModel.validateEmployeeUid,
+                              items: vModel.employeesItems
+                                  .map((employee) => DropdownMenuItem(
+                                        value: employee.uid,
+                                        child: Text(employee.name),
+                                      ))
+                                  .toList(),
+                              onChanged: (employeeUid) =>
+                                  vModel.setEmployeeUid(employeeUid, context),
                             ),
                           ),
                         ],

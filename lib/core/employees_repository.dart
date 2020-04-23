@@ -18,6 +18,9 @@ class EmployeesRepository {
   Stream<bool> get updates => _streamCtrlRepoUpdates.stream;
 
   //-----------------------------------------
+  Employee getEmployee(String uid) => repo.firstWhere((employee) => employee.uid == uid);
+
+  //-----------------------------------------
   List<Employee> get repo => _repo;
 
   //-----------------------------------------
@@ -47,10 +50,10 @@ class EmployeesRepository {
   }
 
   //-----------------------------------------
-  void remove(Employee employee) {
-    var index = _repo.indexOf(employee);
+  void remove(String uid) {
+    var index = _repo.indexWhere((employee) => employee.uid == uid);
     if (index >= 0) _repo.removeAt(index);
-    sqlite.remove(employee.uid);
+    sqlite.remove(uid);
     _notifyRepoUpdates();
   }
 

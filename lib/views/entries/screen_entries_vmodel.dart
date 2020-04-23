@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:Staffield/core/entries_repository.dart';
-import 'package:Staffield/views/entries_list/model_entries_list_item.dart';
+import 'package:Staffield/views/entries/model_entries_list_item.dart';
 
 final getIt = GetIt.instance;
 
