@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:Staffield/core/entries_repository_interface.dart';
 import 'package:Staffield/models/entry.dart';
+import 'package:print_color/print_color.dart';
 
 class EntriesRepository {
   // EntriesRepository._privateConstructor();
@@ -36,11 +37,6 @@ class EntriesRepository {
   }
 
   //-----------------------------------------
-  void add(Entry entry) {
-    _repo.add(entry);
-  }
-
-  //-----------------------------------------
   void addOrUpdate(Entry entry) {
     var index = _repo.indexOf(entry);
     if (index >= 0)
@@ -56,13 +52,6 @@ class EntriesRepository {
     var index = _repo.indexWhere((entry) => entry.uid == uid);
     if (index >= 0) _repo.removeAt(index);
     sqlite.remove(uid);
-    _notifyRepoUpdates();
-  }
-
-  //-----------------------------------------
-  void update(Entry entry) {
-    var index = _repo.indexOf(entry);
-    if (index >= 0) _repo[index] = entry;
     _notifyRepoUpdates();
   }
 

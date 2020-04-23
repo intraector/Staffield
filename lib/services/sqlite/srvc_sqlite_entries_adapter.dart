@@ -20,7 +20,6 @@ class SqliteEntriesAdapater implements EntriesRepositoryInterface {
       var foundPenalties = penalties.where((penalty) => penalty.parentUid == entry.uid).toList();
       entry.penalties = foundPenalties;
       entry.employeeName = _employeesRepo.getEmployee(entry.employeeUid).name;
-      Print.yellow('||| entry.employeeName : ${entry.employeeName}');
     }
     return result;
   }

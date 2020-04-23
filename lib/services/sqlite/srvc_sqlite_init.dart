@@ -13,7 +13,7 @@ class SrvcSqliteInit {
     initComplete = _completer.future;
     path = await getDatabasesPath();
     path = join(path, 'drrb.db');
-    await deleteDb();
+    // await deleteDb();
     db = await openDb(path);
     Print.magenta('||| db $db');
 

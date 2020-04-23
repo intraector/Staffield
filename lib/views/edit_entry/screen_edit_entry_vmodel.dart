@@ -60,7 +60,10 @@ class ScreenEditEntryVModel with ChangeNotifier {
       entry.employeeUid = uid;
     else {
       var result = await showDialog(context: context, builder: (context) => DialogEditEmployee());
-      if (result != null) entry.employeeUid = result;
+      if (result != null) {
+        entry.employeeUid = result;
+        entry.employeeName = _employeesRepo.getEmployee(result).name;
+      }
     }
     notifyListeners();
   }
@@ -84,7 +87,6 @@ class ScreenEditEntryVModel with ChangeNotifier {
     if (txt == null)
       return 'Выберите сотрудника';
     else {
-      entry.employeeUid = txt;
       return null;
     }
   }

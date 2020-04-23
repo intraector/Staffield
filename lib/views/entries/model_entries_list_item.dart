@@ -10,4 +10,8 @@ class ModelEntriesListItem {
   String uid = '';
   String name = '';
   int timestamp;
+  @override
+  String toString() {
+    return '$uid, name: $name';
+  }
 }

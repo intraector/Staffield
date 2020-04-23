@@ -31,4 +31,9 @@ class Entry {
         'wage': wage,
         'interest': interest,
       };
+
+  //-----------------------------------------
+  @override
+  String toString() =>
+      'uid: $uid, employeeName: $employeeName, employeeUid: $employeeUid, revenue: $revenue, wage: $wage, interest: $interest';
 }

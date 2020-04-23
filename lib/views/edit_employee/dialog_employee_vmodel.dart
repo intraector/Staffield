@@ -26,7 +26,6 @@ class DialogEditEmployeeVModel with ChangeNotifier {
   //-----------------------------------------
   set hideEmployee(bool hide) {
     employee.hide = hide;
-    Print.yellow('||| hide : $hide');
     notifyListeners();
   }
 
