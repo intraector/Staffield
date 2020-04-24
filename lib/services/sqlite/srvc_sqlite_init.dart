@@ -32,10 +32,10 @@ class SrvcSqliteInit {
     }
     Print.magenta('||| db $db');
     if (await File(path).exists()) {
-      Print.magenta('||| exists $path');
+      Print.magenta('||| db   $path exists');
       return File(path).delete();
     } else {
-      Print.red('||| db 1 $path');
+      Print.magenta('||| db   $path not exists');
       return Future.value(null);
     }
   }
@@ -47,6 +47,7 @@ class SrvcSqliteInit {
               uid TEXT UNIQUE,
               timestamp INTEGER,
               employeeUid TEXT,
+              total REAL,
               revenue REAL,
               wage REAL,
               interest REAL

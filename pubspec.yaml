@@ -29,6 +29,7 @@ dependencies:
   sqflite: ^1.3.0
   path: ^1.6.4
   uuid_type: ^1.1.1
+  tuple: ^1.0.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

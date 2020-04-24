@@ -7,9 +7,10 @@ class Entry {
   int timestamp;
   String employeeUid = '';
   String employeeName = '';
-  double revenue;
-  double wage;
-  double interest;
+  double total = 0;
+  double revenue = 0;
+  double wage = 0;
+  double interest = 0;
   var penalties = <Penalty>[];
 
   //-----------------------------------------
@@ -17,6 +18,7 @@ class Entry {
     uid = json['uid'];
     timestamp = json['timestamp'];
     employeeUid = json['employeeUid'];
+    total = json['total'];
     revenue = json['revenue'];
     wage = json['wage'];
     interest = json['interest'];
@@ -27,6 +29,7 @@ class Entry {
         'uid': uid,
         'timestamp': timestamp,
         'employeeUid': employeeUid,
+        'total': total,
         'revenue': revenue,
         'wage': wage,
         'interest': interest,
@@ -35,5 +38,5 @@ class Entry {
   //-----------------------------------------
   @override
   String toString() =>
-      'uid: $uid, employeeName: $employeeName, employeeUid: $employeeUid, revenue: $revenue, wage: $wage, interest: $interest';
+      'uid: $uid, employeeName: $employeeName, employeeUid: $employeeUid, total: $total, revenue: $revenue, wage: $wage, interest: $interest';
 }

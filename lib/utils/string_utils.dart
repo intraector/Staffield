@@ -1,3 +1,5 @@
+import 'package:print_color/print_color.dart';
+
 extension SeparateThousands on String {
   String separateThousands() {
     var text = this.replaceAll(' ', '');
@@ -22,10 +24,15 @@ extension RemoveTrailingDots on String {
 
 extension FormatCurrency on String {
   String formatCurrency() {
+    if (this == null) return '';
     String text = this.removeTrailingDots();
     if (text[0] == '.') text = '0' + text;
     var chunks = text.split('.');
     chunks[0] = chunks[0].separateThousands();
+    if (chunks.length > 1) {
+      var trailingLength = chunks[1].length;
+      chunks[1] = chunks[1].substring(0, trailingLength >= 2 ? 2 : trailingLength);
+    }
     return chunks.join('.');
   }
 }

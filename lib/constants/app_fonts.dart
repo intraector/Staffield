@@ -1,15 +1,15 @@
 class AppFonts {
-  static double small1 = 10.0;
-  static double small2 = 11.0;
-  static double body1 = 12.0;
-  static double body2 = 13.0;
-  static double body3 = 14.0;
-  static double body4 = 15.0;
-  static double title1 = 16.0;
-  static double title2 = 17.0;
-  static double title3 = 18.0;
-  static double caption1 = 19.0;
-  static double caption2 = 20.0;
-  static double display1 = 22.0;
-  static double display2 = 24.0;
+  static double small6 = 10.0;
+  static double small5 = 11.0;
+  static double small4 = 12.0;
+  static double small3 = 13.0;
+  static double small2 = 14.0;
+  static double small1 = 15.0;
+  static double body = 16.0;
+  static double titleSub = 17.0;
+  static double title = 18.0;
+  static double captionSub = 19.0;
+  static double caption = 20.0;
+  static double displaySub = 22.0;
+  static double display = 24.0;
 }

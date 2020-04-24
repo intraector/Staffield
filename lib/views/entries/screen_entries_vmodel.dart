@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:Staffield/core/entries_repository.dart';
@@ -18,7 +19,7 @@ class ScreenEntriesVModel with ChangeNotifier {
 
   StreamSubscription<bool> _subsc;
   var list = <ModelEntriesListItem>[];
-  int recordsPerScreen = 10;
+  int recordsPerScreen = 1000;
   final _repo = getIt<EntriesRepository>();
 
   //-----------------------------------------
@@ -35,5 +36,16 @@ class ScreenEntriesVModel with ChangeNotifier {
   void dispose() {
     _subsc.cancel();
     super.dispose();
+  }
+
+  //-----------------------------------------
+  void generateRandomEntries({int days, int recordsPerDay}) =>
+      _repo.generateRandomEntries(days: days, recordsPerDay: recordsPerDay);
+
+  //-----------------------------------------
+  Future<void> refreshDb() async {
+    var sqliteInit = getIt<SrvcSqliteInit>();
+    await sqliteInit.deleteDb();
+    await sqliteInit.init();
   }
 }

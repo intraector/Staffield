@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:Staffield/constants/penalty_type.dart';
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/models/employee.dart';
 import 'package:Staffield/views/edit_employee/dialog_edit_employee.dart';
+import 'package:Staffield/views/edit_entry/dialog_penalty.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -16,10 +20,11 @@ final getIt = GetIt.instance;
 class ScreenEditEntryVModel with ChangeNotifier {
   ScreenEditEntryVModel(String uid) {
     this.entry = uid == null ? Entry() : _entriesRepo.getEntry(uid);
-    txtCtrlRevenue.text = entry.revenue?.toString()?.formatCurrency() ?? '';
+    txtCtrlRevenue.text = entry.revenue?.roundToDouble().toString()?.formatCurrency() ?? '';
     txtCtrlWage.text = entry.wage?.toString()?.formatCurrency() ?? '';
     txtCtrlInterest.text = entry.interest?.toString()?.formatCurrency() ?? '';
     penalties = entry.penalties.map((penalty) => Penalty.fromOther(penalty)).toList();
+    _bonus = entry.revenue * entry.interest / 100 ?? 0;
   }
 
   final _entriesRepo = getIt<EntriesRepository>();
@@ -38,9 +43,26 @@ class ScreenEditEntryVModel with ChangeNotifier {
   final int nameMaxLength = 40;
   final int _interestMaxLength = 5;
 
+  double _bonus;
   //-----------------------------------------
-  void addPenalty(Penalty newItem) {
-    penalties.add(newItem);
+  String get bonus => _bonus.toString().formatCurrency();
+
+  //-----------------------------------------
+  String get total => entry.total.toString().formatCurrency();
+
+  //-----------------------------------------
+  Future<void> addPenalty(BuildContext context, PenaltyType type) async {
+    var result = await showDialog<Penalty>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) => DialogPenalty(
+        penalty: Penalty(type: type, parentUid: entry.uid),
+        isNewPenalty: true,
+        screenEntryVModel: this,
+      ),
+    );
+    if (result != null) penalties.add(result);
+    calcTotal();
     notifyListeners();
   }
 
@@ -72,6 +94,7 @@ class ScreenEditEntryVModel with ChangeNotifier {
   void removePenalty(Penalty item) {
     var index = penalties.indexOf(item);
     if (index >= 0) penalties.removeAt(index);
+    calcTotal();
     notifyListeners();
   }
 
@@ -79,6 +102,7 @@ class ScreenEditEntryVModel with ChangeNotifier {
   void updatePenalty(Penalty item) {
     var index = penalties.indexOf(item);
     if (index >= 0) penalties[index] = item;
+    calcTotal();
     notifyListeners();
   }
 
@@ -121,6 +145,8 @@ class ScreenEditEntryVModel with ChangeNotifier {
       return 'Введите процент';
     else if (txt.endsWith('.'))
       return 'Проверьте ввод';
+    else if ((double.tryParse(txt) ?? 101) > 100)
+      return 'Проверьте ввод';
     else {
       entry.interest = double.parse(txtCtrlInterest.text.removeSpaces());
       return null;
@@ -129,6 +155,7 @@ class ScreenEditEntryVModel with ChangeNotifier {
 
   //-----------------------------------------
   void formatRevenue() {
+    Print.green('||| fired formatRevenue');
     var result = formatInputCurrency(
       newValue: txtCtrlRevenue.text,
       oldValue: _revenuePreviosInput,
@@ -141,6 +168,7 @@ class ScreenEditEntryVModel with ChangeNotifier {
       selection: TextSelection.collapsed(offset: result.length),
     );
     _revenuePreviosInput = result;
+    calcTotal();
   }
 
   //-----------------------------------------
@@ -157,6 +185,7 @@ class ScreenEditEntryVModel with ChangeNotifier {
       selection: TextSelection.collapsed(offset: result.length),
     );
     _wagePreviosInput = result;
+    calcTotal();
   }
 
   //-----------------------------------------
@@ -172,12 +201,32 @@ class ScreenEditEntryVModel with ChangeNotifier {
       selection: TextSelection.collapsed(offset: result.length),
     );
     _interestPreviosInput = result;
+    calcTotal();
   }
 
   //-----------------------------------------
   void save() {
     entry.penalties = penalties.toList();
+    calcTotal();
     _entriesRepo.addOrUpdate(entry);
+  }
+
+  //-----------------------------------------
+  void calcTotal() {
+    var fold = penalties.fold<double>(0, (value, penalty) => value + penalty.total);
+    var revenue = double.tryParse(txtCtrlRevenue.text.replaceAll(' ', '')) ?? 0;
+    var interest = double.tryParse(txtCtrlInterest.text.replaceAll(' ', '')) ?? 0;
+    _bonus = revenue * interest / 100;
+    var wage = double.tryParse(txtCtrlWage.text.replaceAll(' ', '')) ?? 0;
+
+    Print.blue('||| {wage} : ${wage}');
+    Print.blue('||| {revenue} : ${revenue}');
+    Print.blue('||| { interest} : ${interest}');
+    Print.blue('||| fold : $fold');
+    Print.blue('||| {penalties} : ${penalties}');
+    entry.total = (wage + _bonus - fold).roundToDouble();
+    Print.yellow('||| {entry.total} : ${entry.total}');
+    notifyListeners();
   }
 
   //-----------------------------------------
@@ -186,6 +235,7 @@ class ScreenEditEntryVModel with ChangeNotifier {
   //-----------------------------------------
   String labelName = 'Сотрудник';
   String labelRevenue = 'Выручка';
-  String labelWage = 'Оклад';
   String labelInterest = 'Процент';
+  String labelBonus = 'Бонус';
+  String labelWage = 'Оклад';
 }

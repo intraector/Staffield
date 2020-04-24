@@ -12,17 +12,32 @@ import 'package:provider/provider.dart';
 class ScreenEntries extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
-        create: (_) => ScreenEntriesVModel(),
+        create: (context) => ScreenEntriesVModel(),
         child: SafeArea(
           child: Scaffold(
             drawer: ViewDrawer(),
-            appBar: AppBar(),
+            appBar: AppBar(
+              actions: <Widget>[
+                Consumer<ScreenEntriesVModel>(
+                  builder: (_, vModel, __) => IconButton(
+                    icon: Icon(Icons.data_usage),
+                    onPressed: () => vModel.refreshDb(),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () =>
+                      Router.sailor.navigate(RouterPaths.editEntry, params: {'entry_uid': null}),
+                ),
+              ],
+            ),
             bottomNavigationBar: BottomNavigation(0),
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: AppColors.secondary,
-              child: Icon(Icons.add),
-              onPressed: () =>
-                  Router.sailor.navigate(RouterPaths.editEntry, params: {'entry_uid': null}),
+            floatingActionButton: Consumer<ScreenEntriesVModel>(
+              builder: (_, vModel, __) => FloatingActionButton(
+                backgroundColor: AppColors.secondary,
+                child: Icon(Icons.ac_unit),
+                onPressed: () => vModel.generateRandomEntries(days: 60, recordsPerDay: 3),
+              ),
             ),
             body: Column(
               mainAxisSize: MainAxisSize.max,
@@ -38,12 +53,13 @@ class ScreenEntries extends StatelessWidget {
                                 child: Padding(
                                   padding: EdgeInsets.all(8),
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Text(entry.name),
                                       Text(' ' +
                                           timeAndDifference(
                                             timestamp1: entry.timestamp,
-                                            showTime: true,
+                                            // showTime: true,
                                             showDate: true,
                                           ).toString()),
                                     ],
