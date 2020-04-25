@@ -157,7 +157,7 @@ packages:
       name: print_color
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.4"
+    version: "2.2.7"
   provider:
     dependency: "direct main"
     description:

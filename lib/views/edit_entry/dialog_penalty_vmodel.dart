@@ -61,19 +61,12 @@ class DialogPenaltyVModel extends ChangeNotifier {
 
   //-----------------------------------------
   String validateMinutes() {
-    if (txtCtrlMinutes.text.isEmpty)
-      return 'введите минуты';
-    else
-      return null;
+    int result = int.tryParse(txtCtrlMinutes.text) ?? 0;
+    return result == 0 ? 'введите минуты' : null;
   }
 
   //-----------------------------------------
-  String validateMoney() {
-    if (txtCtrlMoney.text.isEmpty)
-      return 'введите сумму';
-    else
-      return null;
-  }
+  String validateMoney() => txtCtrlMoney.text.isEmpty ? 'введите сумму' : null;
 
   //-----------------------------------------
   void save() {

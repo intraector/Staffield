@@ -1,17 +1,16 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:Staffield/constants/penalty_type.dart';
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entries_repository_interface.dart';
 import 'package:Staffield/models/entry.dart';
+import 'package:Staffield/models/penalty.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:print_color/print_color.dart';
 
 class EntriesRepository {
-  // EntriesRepository._privateConstructor();
-  // static final EntriesRepository _instance = EntriesRepository._privateConstructor();
-  // factory EntriesRepository() => _instance;
-
   EntriesRepository(this.sqlite) {
     fetch();
   }
@@ -21,8 +20,10 @@ class EntriesRepository {
   var _repo = <Entry>[];
 
   var _streamCtrlRepoUpdates = StreamController<bool>.broadcast();
+
   //-----------------------------------------
   Stream<bool> get updates => _streamCtrlRepoUpdates.stream;
+
   //-----------------------------------------
   List<Entry> get repo => _repo;
 
@@ -68,7 +69,7 @@ class EntriesRepository {
       Print.red('||| Employees list is empty');
       return;
     }
-    var _dates = generateRandomDates(days: days, recordsPerDay: recordsPerDay);
+    var _dates = generateRandomDatesOverPeriod(days: days, recordsPerDay: recordsPerDay);
     var random = Random();
 
     for (var date in _dates) {
@@ -80,25 +81,29 @@ class EntriesRepository {
       entry.revenue = random.nextDouble() * 20000;
       entry.wage = (200 + random.nextInt(400)).toDouble();
       entry.interest = (1 + random.nextInt(4)).toDouble();
+      entry.penalties = generateRandomPenalties(parentUid: entry.uid, maxCount: 3);
+      var fold = entry.penalties.fold<double>(0, (value, penalty) => value + penalty.total);
+      var _bonus = entry.revenue * entry.interest / 100;
+      entry.total = (entry.wage + _bonus - fold).roundToDouble();
       addOrUpdate(entry);
     }
   }
 
   //-----------------------------------------
-  List<DateTime> generateRandomDates({int days, int recordsPerDay}) {
+  List<DateTime> generateRandomDatesOverPeriod({int days, int recordsPerDay}) {
     var timestampNow = DateTime.now();
     var list = <DateTime>[];
     for (var i = 1; i <= days; i++) {
       var timestampMin = timestampNow.subtract(Duration(days: i));
       var timestampMax = timestampMin.add(Duration(days: 1));
-      list.addAll(generateRandom(min: timestampMin, max: timestampMax, count: recordsPerDay));
+      list.addAll(generateRandomDatesBetweenPointsInTime(
+          min: timestampMin, max: timestampMax, count: recordsPerDay));
     }
-    // Print.yellow('||| count : ${list.length}');
-    // for (var date in list) Print.yellow('||| date : $date');
     return list;
   }
 
-  List<DateTime> generateRandom({DateTime min, DateTime max, int count}) {
+  //-----------------------------------------
+  List<DateTime> generateRandomDatesBetweenPointsInTime({DateTime min, DateTime max, int count}) {
     var minInt = min.millisecondsSinceEpoch;
     var maxnInt = max.millisecondsSinceEpoch;
     var random = Random();
@@ -109,6 +114,25 @@ class EntriesRepository {
       list.add(DateTime.fromMillisecondsSinceEpoch(result));
     }
     return list;
+  }
+
+  //-----------------------------------------
+  List<Penalty> generateRandomPenalties({@required String parentUid, @required int maxCount}) {
+    if (maxCount == null) return [];
+    var result = <Penalty>[];
+    var random = Random();
+    var count = random.nextInt(maxCount + 1);
+    for (int i = 0; i < count; i++) {
+      var penalty = Penalty(parentUid: parentUid, type: PenaltyType.values[random.nextInt(2)]);
+      penalty.minutes = 1 + random.nextInt(20);
+      penalty.money = 10;
+      if (penalty.type == PenaltyType.plain)
+        penalty.total = 10 * random.nextInt(21).toDouble();
+      else
+        penalty.total = penalty.minutes.toDouble() * penalty.money.toDouble();
+      result.add(penalty);
+    }
+    return result;
   }
 
   //-----------------------------------------
