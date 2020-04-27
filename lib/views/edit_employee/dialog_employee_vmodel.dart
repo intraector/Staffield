@@ -1,8 +1,7 @@
 import 'package:Staffield/core/employees_repository.dart';
-import 'package:Staffield/models/employee.dart';
+import 'package:Staffield/core/models/employee.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
-import 'package:print_color/print_color.dart';
 
 final getIt = GetIt.instance;
 

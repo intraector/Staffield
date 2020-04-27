@@ -1,6 +1,7 @@
 class RouterPaths {
-  static String entriesList = 'entries_list';
-  static String editEntry = 'edit_entry';
+  static String entries = 'entriesList';
+  static String editEntry = 'editEntry';
   static String employees = 'employees';
-  static String editEmployee = 'edit_employee';
+  static String editEmployee = 'editEmployee';
+  static String reports = 'reports';
 }

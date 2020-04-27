@@ -19,9 +19,27 @@ class SrvcSqliteEntries {
   Database dbEntries;
 
   //-----------------------------------------
-  Future<List<Map<String, dynamic>>> fetchEntries() async {
+  Future<List<Map<String, dynamic>>> fetchEntries({int start, int end}) async {
+    String whereClause;
+    var whereArgs;
+    String whereStart = ' timestamp > ?';
+    String whereEnd = ' timestamp < ?';
+    if (start != null && end != null) {
+      whereClause = '$whereStart AND $whereEnd';
+      whereArgs = [start, end];
+    } else {
+      if (start != null) {
+        whereClause = whereStart;
+        whereArgs = [start];
+      }
+      if (end != null) {
+        whereClause = whereEnd;
+        whereArgs = [end];
+      }
+    }
     await initComplete;
-    return dbEntries.query(SqliteTable.entries);
+    return dbEntries.query(SqliteTable.entries,
+        where: whereClause, whereArgs: whereArgs, orderBy: 'timestamp DESC');
   }
 
   //-----------------------------------------

@@ -1,8 +1,9 @@
+import 'package:Staffield/core/models/penalty_mixin_time_by_money.dart';
 import 'package:flutter/foundation.dart';
 import 'package:Staffield/constants/penalty_type.dart';
 import 'package:uuid_type/uuid_type.dart';
 
-class Penalty {
+class Penalty with TimeByMoney {
   Penalty({@required this.type, @required this.parentUid}) {
     title = getPenaltyTitle(type);
   }
@@ -12,8 +13,6 @@ class Penalty {
   String title = '';
   PenaltyType type;
   double total;
-  int minutes;
-  int money;
 
   //-----------------------------------------
   Penalty.fromOther(Penalty penalty) {
@@ -22,8 +21,10 @@ class Penalty {
     title = penalty.title;
     type = penalty.type;
     total = penalty.total;
-    minutes = penalty.minutes;
-    money = penalty.money;
+    if (penalty.type == PenaltyType.minutesByMoney) {
+      minutes = penalty.minutes;
+      money = penalty.money;
+    }
   }
 
   //-----------------------------------------
@@ -33,20 +34,27 @@ class Penalty {
     title = json['title'];
     type = json['type'];
     total = json['total'];
-    minutes = json['minutes'];
-    money = json['money'];
+    if (type == PenaltyType.minutesByMoney) {
+      minutes = json['minutes'];
+      money = json['money'];
+    }
   }
 
   //-----------------------------------------
-  Map<String, dynamic> toSqlite() => {
-        'uid': this.uid,
-        'parentUid': this.parentUid,
-        'title': this.title,
-        'type': this.type,
-        'total': this.total,
-        'minutes': this.minutes,
-        'money': this.money,
-      };
+  Map<String, dynamic> toSqlite() {
+    var result = {
+      'uid': uid,
+      'parentUid': parentUid,
+      'title': title,
+      'type': type,
+      'total': total,
+    };
+    if (this.type == PenaltyType.minutesByMoney) {
+      result['minutes'] = minutes;
+      result['money'] = money;
+    }
+    return result;
+  }
 
   @override
   String toString() {

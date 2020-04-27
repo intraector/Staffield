@@ -1,4 +1,5 @@
-import 'package:Staffield/models/penalty.dart';
+import 'package:Staffield/core/models/penalty.dart';
+import 'package:Staffield/core/models/entry_report.dart';
 import 'package:uuid_type/uuid_type.dart';
 
 class Entry {
@@ -6,11 +7,12 @@ class Entry {
   String uid = TimeBasedUuidGenerator().generate().toString();
   int timestamp;
   String employeeUid = '';
-  String employeeName = '';
-  double total = 0;
+  String employeeNameAux = '';
   double revenue = 0;
-  double wage = 0;
   double interest = 0;
+  double wage = 0;
+  double total = 0;
+  double penaltiesTotalAux = 0;
   var penalties = <Penalty>[];
 
   //-----------------------------------------
@@ -36,7 +38,10 @@ class Entry {
       };
 
   //-----------------------------------------
+  EntryReport get report => EntryReport.fromEntry(this);
+
+  //-----------------------------------------
   @override
   String toString() =>
-      'uid: $uid, employeeName: $employeeName, employeeUid: $employeeUid, total: $total, revenue: $revenue, wage: $wage, interest: $interest';
+      'uid: $uid, employeeName: $employeeNameAux, employeeUid: $employeeUid, total: $total, revenue: $revenue, wage: $wage, interest: $interest';
 }

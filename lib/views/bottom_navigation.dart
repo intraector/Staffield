@@ -7,7 +7,7 @@ import 'package:Staffield/constants/router_paths.dart';
 
 class BottomNavigation extends StatelessWidget {
   BottomNavigation(this._index);
-  final int _index;
+  final String _index;
 
   @override
   Widget build(BuildContext context) {
@@ -15,26 +15,26 @@ class BottomNavigation extends StatelessWidget {
     final _disabledColor = AppColors.secondary;
     final double _iconSize = 26;
     var _list = <Widget>[];
+
     //----------------------------------------entries list
     var entriesList = IconButton(
-      icon: Icon(CommunityMaterialIcons.format_list_bulleted),
+      icon: Icon(Icons.assignment),
       iconSize: _iconSize,
       disabledColor: _disabledColor,
       color: _inactiveColor,
-      onPressed: _index == 0
+      onPressed: _index == RouterPaths.entries
           ? null
-          : () {
-              return Router.sailor
-                  .navigate(RouterPaths.entriesList, navigationType: NavigationType.pushReplace);
-            },
+          : () => Router.sailor
+              .navigate(RouterPaths.entries, navigationType: NavigationType.pushReplace),
     );
+
     //----------------------------------------employees
     var employees = IconButton(
       icon: Icon(CommunityMaterialIcons.account_multiple),
       iconSize: _iconSize,
       disabledColor: _disabledColor,
       color: _inactiveColor,
-      onPressed: _index == 1
+      onPressed: _index == RouterPaths.employees
           ? null
           : () {
               return Router.sailor
@@ -42,7 +42,21 @@ class BottomNavigation extends StatelessWidget {
             },
     );
 
-    _list = [entriesList, employees];
+    //----------------------------------------employees
+    var reports = IconButton(
+      icon: Icon(CommunityMaterialIcons.format_list_bulleted),
+      iconSize: _iconSize,
+      disabledColor: _disabledColor,
+      color: _inactiveColor,
+      onPressed: _index == RouterPaths.reports
+          ? null
+          : () {
+              return Router.sailor
+                  .navigate(RouterPaths.reports, navigationType: NavigationType.pushReplace);
+            },
+    );
+
+    _list = [entriesList, employees, reports];
     return BottomAppBar(
       child: Row(
         mainAxisSize: MainAxisSize.max,

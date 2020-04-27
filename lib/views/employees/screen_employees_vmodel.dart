@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:Staffield/core/employees_repository.dart';
-import 'package:Staffield/models/employee.dart';
+import 'package:Staffield/core/models/employee.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 

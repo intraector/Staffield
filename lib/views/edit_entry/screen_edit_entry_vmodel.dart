@@ -2,29 +2,30 @@ import 'dart:async';
 
 import 'package:Staffield/constants/penalty_type.dart';
 import 'package:Staffield/core/employees_repository.dart';
-import 'package:Staffield/models/employee.dart';
+import 'package:Staffield/core/models/employee.dart';
+import 'package:Staffield/core/utils/calc_total_mixin.dart';
 import 'package:Staffield/views/edit_employee/dialog_edit_employee.dart';
 import 'package:Staffield/views/edit_entry/dialog_penalty.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:Staffield/core/entries_repository.dart';
-import 'package:Staffield/models/entry.dart';
-import 'package:Staffield/models/penalty.dart';
+import 'package:Staffield/core/models/entry.dart';
+import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/utils/format_input_currency.dart';
 import 'package:Staffield/utils/string_utils.dart';
 import 'package:print_color/print_color.dart';
 
 final getIt = GetIt.instance;
 
-class ScreenEditEntryVModel with ChangeNotifier {
+class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   ScreenEditEntryVModel(String uid) {
     this.entry = uid == null ? Entry() : _entriesRepo.getEntry(uid);
     txtCtrlRevenue.text = entry.revenue?.roundToDouble().toString()?.formatCurrency() ?? '';
     txtCtrlWage.text = entry.wage?.toString()?.formatCurrency() ?? '';
     txtCtrlInterest.text = entry.interest?.toString()?.formatCurrency() ?? '';
     penalties = entry.penalties.map((penalty) => Penalty.fromOther(penalty)).toList();
-    _bonus = entry.revenue * entry.interest / 100 ?? 0;
+    entry.penaltiesTotalAux = entry.revenue * entry.interest / 100 ?? 0;
   }
 
   final _entriesRepo = getIt<EntriesRepository>();
@@ -43,9 +44,8 @@ class ScreenEditEntryVModel with ChangeNotifier {
   final int nameMaxLength = 40;
   final int _interestMaxLength = 5;
 
-  double _bonus;
   //-----------------------------------------
-  String get bonus => _bonus.toString().formatCurrency();
+  String get bonus => entry.penaltiesTotalAux.toString().formatCurrency();
 
   //-----------------------------------------
   String get total => entry.total.toString().formatCurrency();
@@ -84,7 +84,7 @@ class ScreenEditEntryVModel with ChangeNotifier {
       var result = await showDialog(context: context, builder: (context) => DialogEditEmployee());
       if (result != null) {
         entry.employeeUid = result;
-        entry.employeeName = _employeesRepo.getEmployee(result).name;
+        entry.employeeNameAux = _employeesRepo.getEmployee(result).name;
       }
     }
     notifyListeners();
@@ -213,19 +213,16 @@ class ScreenEditEntryVModel with ChangeNotifier {
 
   //-----------------------------------------
   void calcTotal() {
-    var fold = penalties.fold<double>(0, (value, penalty) => value + penalty.total);
+    // var fold = penalties.fold<double>(0, (value, penalty) => value + penalty.total);
     var revenue = double.tryParse(txtCtrlRevenue.text.replaceAll(' ', '')) ?? 0;
     var interest = double.tryParse(txtCtrlInterest.text.replaceAll(' ', '')) ?? 0;
-    _bonus = revenue * interest / 100;
     var wage = double.tryParse(txtCtrlWage.text.replaceAll(' ', '')) ?? 0;
-
-    Print.blue('||| {wage} : ${wage}');
-    Print.blue('||| {revenue} : ${revenue}');
-    Print.blue('||| { interest} : ${interest}');
-    Print.blue('||| fold : $fold');
-    Print.blue('||| {penalties} : ${penalties}');
-    entry.total = (wage + _bonus - fold).roundToDouble();
-    Print.yellow('||| {entry.total} : ${entry.total}');
+    var result =
+        calcTotalAndBonus(revenue: revenue, interest: interest, wage: wage, penalties: penalties);
+    // _bonus = revenue * interest / 100;
+    entry.penaltiesTotalAux = result.penaltiesTotal;
+    // entry.total = (wage + _bonus - fold).roundToDouble();
+    entry.total = result.total;
     notifyListeners();
   }
 

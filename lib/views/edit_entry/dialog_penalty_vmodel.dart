@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:Staffield/constants/penalty_type.dart';
-import 'package:Staffield/models/penalty.dart';
+import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/utils/string_utils.dart';
 import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
 
@@ -38,7 +38,8 @@ class DialogPenaltyVModel extends ChangeNotifier {
   void calcPenaltyTimeByMoney() {
     if (txtCtrlMinutes.text.isNotEmpty && txtCtrlMoney.text.isNotEmpty)
       penalty.total =
-          (int.tryParse(txtCtrlMinutes.text) * int.tryParse(txtCtrlMoney.text)).toDouble() ?? 0.0;
+          (double.tryParse(txtCtrlMinutes.text) * double.tryParse(txtCtrlMoney.text)).toDouble() ??
+              0.0;
     else
       penalty.total = 0.0;
 
@@ -74,9 +75,9 @@ class DialogPenaltyVModel extends ChangeNotifier {
       penalty.total = double.tryParse(txtCtrlPlainSum.text) ?? 0;
     else if (penalty.type == PenaltyType.minutesByMoney) {
       penalty.total =
-          (int.tryParse(txtCtrlMinutes.text) * int.tryParse(txtCtrlMoney.text)).toDouble() ?? 0;
-      penalty.minutes = int.tryParse(txtCtrlMinutes.text) ?? 0;
-      penalty.money = int.tryParse(txtCtrlMoney.text) ?? 0;
+          double.tryParse(txtCtrlMinutes.text) * double.tryParse(txtCtrlMoney.text) ?? 0.0;
+      penalty.minutes = double.tryParse(txtCtrlMinutes.text) ?? 0;
+      penalty.money = double.tryParse(txtCtrlMoney.text) ?? 0.0;
     }
   }
 

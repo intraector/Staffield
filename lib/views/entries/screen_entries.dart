@@ -41,7 +41,7 @@ class ScreenEntries extends StatelessWidget {
             //     ),
             //   ],
             // ),
-            bottomNavigationBar: BottomNavigation(0),
+            bottomNavigationBar: BottomNavigation(RouterPaths.entries),
             floatingActionButton: Consumer<ScreenEntriesVModel>(
               builder: (_, vModel, __) => FloatingActionButton(
                 backgroundColor: AppColors.secondary,
@@ -103,12 +103,12 @@ class ScreenEntries extends StatelessWidget {
                           IconButton(
                             icon: Icon(Icons.date_range),
                             onPressed: () async {
-                              DateTime date = await showDatePicker(
-                                context: context,
-                                firstDate: DateTime(DateTime.now().year - 5),
-                                lastDate: DateTime(DateTime.now().year + 5),
-                                initialDate: DateTime.now(),
-                              );
+                              // DateTime date = await showDatePicker(
+                              //   context: context,
+                              //   firstDate: DateTime(DateTime.now().year - 5),
+                              //   lastDate: DateTime(DateTime.now().year + 5),
+                              //   initialDate: DateTime.now(),
+                              // );
                             },
                           ),
                         ],

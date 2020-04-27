@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:Staffield/constants/sqlite_tables.dart';
 import 'package:Staffield/core/employees_repository_interface.dart';
 import 'package:Staffield/core/exceptions/e_insert_employee.dart';
-import 'package:Staffield/models/employee.dart';
+import 'package:Staffield/core/models/employee.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
 
 final getIt = GetIt.instance;

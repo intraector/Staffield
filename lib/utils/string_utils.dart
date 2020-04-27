@@ -1,5 +1,3 @@
-import 'package:print_color/print_color.dart';
-
 extension SeparateThousands on String {
   String separateThousands() {
     var text = this.replaceAll(' ', '');

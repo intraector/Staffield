@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Staffield/constants/app_colors.dart';
-import 'package:Staffield/models/penalty.dart';
+import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/views/edit_entry/dialog_penalty.dart';
 import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
 import 'package:Staffield/utils/string_utils.dart';

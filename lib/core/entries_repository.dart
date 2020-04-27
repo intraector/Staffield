@@ -4,15 +4,15 @@ import 'dart:math';
 import 'package:Staffield/constants/penalty_type.dart';
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entries_repository_interface.dart';
-import 'package:Staffield/models/entry.dart';
-import 'package:Staffield/models/penalty.dart';
+import 'package:Staffield/core/models/entry.dart';
+import 'package:Staffield/core/models/penalty.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:print_color/print_color.dart';
 
 class EntriesRepository {
   EntriesRepository(this.sqlite) {
-    fetch();
+    fetchToRepo();
   }
 
   EntriesRepositoryInterface sqlite;
@@ -34,10 +34,15 @@ class EntriesRepository {
   void _notifyRepoUpdates() => _streamCtrlRepoUpdates.sink.add(true);
 
   //-----------------------------------------
-  Future<void> fetch() async {
+  Future<void> fetchToRepo() async {
     var res = await sqlite.fetch();
     _repo.addAll(res);
     _notifyRepoUpdates();
+  }
+
+  //-----------------------------------------
+  Future<List<Entry>> fetch({DateTime start, DateTime end}) {
+    return sqlite.fetch(start: start.millisecondsSinceEpoch, end: end.millisecondsSinceEpoch);
   }
 
   //-----------------------------------------
@@ -77,7 +82,7 @@ class EntriesRepository {
       entry.timestamp = date.millisecondsSinceEpoch;
       var _tmp = random.nextInt(_employees.length);
       entry.employeeUid = _employees[_tmp].uid;
-      entry.employeeName = _employeesRepo.getEmployee(entry.employeeUid).name;
+      entry.employeeNameAux = _employeesRepo.getEmployee(entry.employeeUid).name;
       entry.revenue = random.nextDouble() * 20000;
       entry.wage = (200 + random.nextInt(400)).toDouble();
       entry.interest = (1 + random.nextInt(4)).toDouble();
@@ -124,7 +129,7 @@ class EntriesRepository {
     var count = random.nextInt(maxCount + 1);
     for (int i = 0; i < count; i++) {
       var penalty = Penalty(parentUid: parentUid, type: PenaltyType.values[random.nextInt(2)]);
-      penalty.minutes = 1 + random.nextInt(20);
+      penalty.minutes = 1 + random.nextInt(20).toDouble();
       penalty.money = 10;
       if (penalty.type == PenaltyType.plain)
         penalty.total = 10 * random.nextInt(21).toDouble();

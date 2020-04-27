@@ -1,3 +1,4 @@
+import 'package:Staffield/constants/router_paths.dart';
 import 'package:Staffield/views/edit_employee/dialog_edit_employee.dart';
 import 'package:Staffield/views/employees/screen_employees_vmodel.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +13,7 @@ class ScreenEmployees extends StatelessWidget {
   Widget build(BuildContext context) => SafeArea(
         child: Scaffold(
           drawer: ViewDrawer(),
-          bottomNavigationBar: BottomNavigation(1),
+          bottomNavigationBar: BottomNavigation(RouterPaths.employees),
           floatingActionButton: FloatingActionButton(
             backgroundColor: AppColors.secondary,
             child: Icon(Icons.add),

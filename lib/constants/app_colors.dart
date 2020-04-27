@@ -7,9 +7,9 @@ class AppColors {
   static Color primaryMiddle = Colors.grey[500];
   static Color primaryAccent = Colors.grey[700];
 
-  static Color secondary = Colors.teal[700];
-  static Color secondaryAccent = Colors.tealAccent[700];
+  static Color secondary = Colors.purple[700];
+  static Color secondaryAccent = Colors.purpleAccent[700];
   static Color background = Colors.grey[50];
   static Color error = Colors.red[600];
-  static Color block = Colors.teal[50];
+  static Color block = Colors.purple[50];
 }

@@ -61,8 +61,8 @@ class SrvcSqliteInit {
               parentUID TEXT,
               type TEXT,
               total REAL,
-              minutes INTEGER,
-              money INTEGER
+              minutes REAL,
+              money REAL
             )''');
 
 //-----------------------------------------

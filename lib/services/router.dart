@@ -1,4 +1,5 @@
 import 'package:Staffield/views/employees/screen_employees.dart';
+import 'package:Staffield/views/reports/screen_reports.dart';
 import 'package:flutter/animation.dart';
 import 'package:sailor/sailor.dart';
 import 'package:Staffield/constants/router_paths.dart';
@@ -17,18 +18,14 @@ class Router {
 
   static void createRoutes() {
     sailor.addRoutes([
-      SailorRoute(name: RouterPaths.entriesList, builder: (_, __, ___) => ScreenEntries()),
+      SailorRoute(name: RouterPaths.entries, builder: (_, __, ___) => ScreenEntries()),
       SailorRoute(
         name: RouterPaths.editEntry,
         builder: (_, __, params) => ScreenEditEntry(params.param<String>('entry_uid')),
         params: [SailorParam<String>(name: 'entry_uid')],
       ),
       SailorRoute(name: RouterPaths.employees, builder: (_, __, ___) => ScreenEmployees()),
-      // SailorRoute(
-      //   name: RouterPaths.editEmployee,
-      //   builder: (_, __, params) => DialogEditEmployee(params.param<String>('employee_uid')),
-      //   params: [SailorParam<String>(name: 'employee_uid')],
-      // ),
+      SailorRoute(name: RouterPaths.reports, builder: (_, __, ___) => ScreenReports()),
     ]);
   }
 }

@@ -1,8 +1,7 @@
 import 'dart:async';
 
 import 'package:Staffield/core/employees_repository_interface.dart';
-import 'package:Staffield/models/employee.dart';
-import 'package:print_color/print_color.dart';
+import 'package:Staffield/core/models/employee.dart';
 
 class EmployeesRepository {
   EmployeesRepository(this.sqlite) {
