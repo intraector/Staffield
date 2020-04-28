@@ -128,13 +128,13 @@ class EntriesRepository {
     var random = Random();
     var count = random.nextInt(maxCount + 1);
     for (int i = 0; i < count; i++) {
-      var penalty = Penalty(parentUid: parentUid, type: PenaltyType.values[random.nextInt(2)]);
-      penalty.minutes = 1 + random.nextInt(20).toDouble();
+      var penalty = Penalty(parentUid: parentUid, type: PenaltyType.random);
+      penalty.time = 1 + random.nextInt(20).toDouble();
       penalty.money = 10;
       if (penalty.type == PenaltyType.plain)
         penalty.total = 10 * random.nextInt(21).toDouble();
       else
-        penalty.total = penalty.minutes.toDouble() * penalty.money.toDouble();
+        penalty.total = penalty.time.toDouble() * penalty.money.toDouble();
       result.add(penalty);
     }
     return result;

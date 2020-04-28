@@ -137,17 +137,17 @@ class ScreenEditEntry extends StatelessWidget {
                           children: <Widget>[
                             Container(
                                 margin: const EdgeInsets.only(top: 20.0),
-                                child: DropdownButton<PenaltyType>(
+                                child: DropdownButton<String>(
                                     // icon: Icon(Icons.add),
                                     iconSize: 36,
                                     hint: Text('Добавить штраф'),
                                     items: [
                                       DropdownMenuItem(
-                                          child: Text(getPenaltyTitle(PenaltyType.plain)),
+                                          child: Text(PenaltyType.plain.title),
                                           value: PenaltyType.plain),
                                       DropdownMenuItem(
-                                          child: Text(getPenaltyTitle(PenaltyType.minutesByMoney)),
-                                          value: PenaltyType.minutesByMoney)
+                                          child: Text(PenaltyType.timeByMoney.title),
+                                          value: PenaltyType.timeByMoney)
                                     ],
                                     onChanged: (type) => vModel.addPenalty(context, type))),
                           ],

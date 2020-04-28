@@ -1,3 +1,4 @@
+import 'package:Staffield/services/sqlite/sqlite_fields.dart';
 import 'package:uuid_type/uuid_type.dart';
 
 class Employee {
@@ -9,17 +10,17 @@ class Employee {
 
   //-----------------------------------------
   Employee.fromSqlite(Map<String, dynamic> json) {
-    uid = json['uid'];
-    name = json['name'];
-    hide = json['hide'] == 1 ? true : false;
+    uid = json[SqliteFieldsEmployees.uid];
+    name = json[SqliteFieldsEmployees.name];
+    hide = json[SqliteFieldsEmployees.hide] == 1 ? true : false;
   }
 
   //-----------------------------------------
   Map<String, dynamic> toSqlite() {
     return {
-      'uid': uid,
-      'name': name,
-      'hide': hide ? 1 : 0,
+      SqliteFieldsEmployees.uid: uid,
+      SqliteFieldsEmployees.name: name,
+      SqliteFieldsEmployees.hide: hide ? 1 : 0,
     };
   }
 

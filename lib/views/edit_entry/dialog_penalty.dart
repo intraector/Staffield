@@ -54,7 +54,7 @@ class DialogPenalty extends StatelessWidget {
                             ),
                           ],
                         ),
-                      if (vModel.penalty.type == PenaltyType.minutesByMoney)
+                      if (vModel.penalty.type == PenaltyType.timeByMoney)
                         Column(
                           children: <Widget>[
                             Row(

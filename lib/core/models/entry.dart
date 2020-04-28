@@ -1,5 +1,6 @@
 import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/core/models/entry_report.dart';
+import 'package:Staffield/services/sqlite/sqlite_fields.dart';
 import 'package:uuid_type/uuid_type.dart';
 
 class Entry {
@@ -17,24 +18,24 @@ class Entry {
 
   //-----------------------------------------
   Entry.fromSqlite(Map<String, dynamic> json) {
-    uid = json['uid'];
-    timestamp = json['timestamp'];
-    employeeUid = json['employeeUid'];
-    total = json['total'];
-    revenue = json['revenue'];
-    wage = json['wage'];
-    interest = json['interest'];
+    uid = json[SqliteFieldsEntries.uid];
+    timestamp = json[SqliteFieldsEntries.timestamp];
+    employeeUid = json[SqliteFieldsEntries.employeeUid];
+    total = json[SqliteFieldsEntries.total];
+    revenue = json[SqliteFieldsEntries.revenue];
+    wage = json[SqliteFieldsEntries.wage];
+    interest = json[SqliteFieldsEntries.interest];
   }
 
   //-----------------------------------------
   Map<String, dynamic> toSqlite() => {
-        'uid': uid,
-        'timestamp': timestamp,
-        'employeeUid': employeeUid,
-        'total': total,
-        'revenue': revenue,
-        'wage': wage,
-        'interest': interest,
+        SqliteFieldsEntries.uid: uid,
+        SqliteFieldsEntries.timestamp: timestamp,
+        SqliteFieldsEntries.employeeUid: employeeUid,
+        SqliteFieldsEntries.total: total,
+        SqliteFieldsEntries.revenue: revenue,
+        SqliteFieldsEntries.wage: wage,
+        SqliteFieldsEntries.interest: interest,
       };
 
   //-----------------------------------------

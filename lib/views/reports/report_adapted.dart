@@ -12,9 +12,9 @@ class ReportAdapted with TimeByMoneyAdapted {
     revenue = report.revenue.toString().formatCurrencyDecimal();
     revenueAverage = report.revenueAverage.toString().formatCurrencyDecimal();
     penaltiesTotal = report.penaltiesTotalAux.toString().formatCurrencyDecimal();
-    report.penaltiesTotalByType.forEach((type, value) =>
-        penalties[getPenaltyTitle(type)] = value.toString().formatCurrencyDecimal());
-    minutes = report.minutes.toString().formatCurrencyDecimal();
+    report.penaltiesTotalByType
+        .forEach((type, value) => penalties[type.title] = value.toString().formatCurrencyDecimal());
+    minutes = report.time.toString().formatCurrencyDecimal();
   }
   String name;
   String total;

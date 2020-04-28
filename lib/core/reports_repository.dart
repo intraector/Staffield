@@ -33,7 +33,7 @@ class ReportsRepository {
       result.revenue += item.revenue;
       result.interest += item.interest;
       result.wage += item.wage;
-      result.minutes += item.minutes ?? 0.0;
+      result.time += item.time ?? 0.0;
       result.penaltiesTotalAux += item.penaltiesTotalAux ?? 0.0;
       result.total += item.total;
       item.penaltiesTotalByType

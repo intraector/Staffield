@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:Staffield/constants/penalty_type.dart';
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/models/employee.dart';
 import 'package:Staffield/core/utils/calc_total_mixin.dart';
@@ -14,7 +13,6 @@ import 'package:Staffield/core/models/entry.dart';
 import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/utils/format_input_currency.dart';
 import 'package:Staffield/utils/string_utils.dart';
-import 'package:print_color/print_color.dart';
 
 final getIt = GetIt.instance;
 
@@ -51,7 +49,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   String get total => entry.total.toString().formatCurrency();
 
   //-----------------------------------------
-  Future<void> addPenalty(BuildContext context, PenaltyType type) async {
+  Future<void> addPenalty(BuildContext context, String type) async {
     var result = await showDialog<Penalty>(
       context: context,
       barrierDismissible: false,
@@ -155,7 +153,6 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
 
   //-----------------------------------------
   void formatRevenue() {
-    Print.green('||| fired formatRevenue');
     var result = formatInputCurrency(
       newValue: txtCtrlRevenue.text,
       oldValue: _revenuePreviosInput,

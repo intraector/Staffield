@@ -1,6 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:Staffield/constants/sqlite_tables.dart';
+import 'package:Staffield/services/sqlite/sqlite_tables.dart';
 import 'package:Staffield/core/exceptions/e_insert_entry.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
 
@@ -49,14 +50,17 @@ class SrvcSqliteEntries {
   }
 
   //-----------------------------------------
-  Future<bool> addOrUpdate(Map<String, dynamic> entry) async {
+  Future<bool> addOrUpdate(
+      {@required Map<String, dynamic> entry,
+      @required Iterable<Map<String, dynamic>> penalties}) async {
     await initComplete;
-    var result = await dbEntries.insert(SqliteTable.entries, entry,
-        conflictAlgorithm: ConflictAlgorithm.replace);
-    if (result <= 0)
-      throw EInsertEntry('Can\'t insert SrvcSqliteEntries');
-    else
-      return true;
+    var batch = dbEntries.batch();
+    batch.insert(SqliteTable.entries, entry, conflictAlgorithm: ConflictAlgorithm.replace);
+    for (var penalty in penalties)
+      batch.insert(SqliteTable.penalties, penalty, conflictAlgorithm: ConflictAlgorithm.replace);
+    var results = await batch.commit();
+    if (results.any((result) => result <= 0)) throw EInsertEntry('Can\'t insert SrvcSqliteEntries');
+    return true;
   }
 
   //-----------------------------------------

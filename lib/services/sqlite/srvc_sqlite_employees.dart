@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:Staffield/constants/sqlite_tables.dart';
+import 'package:Staffield/services/sqlite/sqlite_tables.dart';
 import 'package:Staffield/core/employees_repository_interface.dart';
 import 'package:Staffield/core/exceptions/e_insert_employee.dart';
 import 'package:Staffield/core/models/employee.dart';

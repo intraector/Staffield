@@ -26,7 +26,8 @@ class SqliteEntriesAdapater implements EntriesRepositoryInterface {
   //-----------------------------------------
   Future<bool> addOrUpdate(Entry entry) async {
     if (entry.timestamp == null) entry.timestamp = DateTime.now().millisecondsSinceEpoch;
-    return _srvcSqliteEntries.addOrUpdate(entry.toSqlite());
+    return _srvcSqliteEntries.addOrUpdate(
+        entry: entry.toSqlite(), penalties: entry.penalties.map((penalty) => penalty.toSqlite()));
   }
 
   //-----------------------------------------

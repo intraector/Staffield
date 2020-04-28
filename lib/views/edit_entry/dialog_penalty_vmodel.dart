@@ -8,9 +8,9 @@ class DialogPenaltyVModel extends ChangeNotifier {
   DialogPenaltyVModel({@required this.penalty, @required this.screenEntryVModel}) {
     if (penalty.type == PenaltyType.plain) {
       txtCtrlPlainSum.text = penalty.total?.toString()?.formatCurrencyDecimal() ?? '';
-    } else if (penalty.type == PenaltyType.minutesByMoney) {
+    } else if (penalty.type == PenaltyType.timeByMoney) {
       labelTotal = labelTotalPrefix + (penalty.total?.toString()?.formatCurrency() ?? '0.0');
-      txtCtrlMinutes.text = penalty.minutes?.toString() ?? '';
+      txtCtrlMinutes.text = penalty.time?.toString() ?? '';
       txtCtrlMoney.text = penalty.money?.toString() ?? '';
     }
   }
@@ -30,9 +30,6 @@ class DialogPenaltyVModel extends ChangeNotifier {
   String labelMoney = 'Деньги';
   String labelTotalPrefix = 'Сумма: ';
   String labelTotal;
-
-  //-----------------------------------------
-  String titleOf(PenaltyType type) => getPenaltyTitle(type);
 
   //-----------------------------------------
   void calcPenaltyTimeByMoney() {
@@ -73,10 +70,10 @@ class DialogPenaltyVModel extends ChangeNotifier {
   void save() {
     if (penalty.type == PenaltyType.plain)
       penalty.total = double.tryParse(txtCtrlPlainSum.text) ?? 0;
-    else if (penalty.type == PenaltyType.minutesByMoney) {
+    else if (penalty.type == PenaltyType.timeByMoney) {
       penalty.total =
           double.tryParse(txtCtrlMinutes.text) * double.tryParse(txtCtrlMoney.text) ?? 0.0;
-      penalty.minutes = double.tryParse(txtCtrlMinutes.text) ?? 0;
+      penalty.time = double.tryParse(txtCtrlMinutes.text) ?? 0;
       penalty.money = double.tryParse(txtCtrlMoney.text) ?? 0.0;
     }
   }

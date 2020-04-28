@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:Staffield/services/sqlite/sqlite_fields.dart';
 import 'package:path/path.dart';
 import 'package:print_color/print_color.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:Staffield/constants/app_settings.dart';
-import 'package:Staffield/constants/sqlite_tables.dart';
+import 'package:Staffield/services/sqlite/sqlite_tables.dart';
 
 class SrvcSqliteInit {
   Future<void> init() async {
@@ -16,7 +17,6 @@ class SrvcSqliteInit {
     // await deleteDb();
     db = await openDb(path);
     Print.magenta('||| db $db');
-
     _completer.complete();
   }
 
@@ -43,35 +43,35 @@ class SrvcSqliteInit {
   //-----------------------------------------
   Future<void> createEntriesTable(Database db) => db.execute('''
             CREATE TABLE IF NOT EXISTS ${SqliteTable.entries} (
-              id INTEGER PRIMARY KEY,
-              uid TEXT UNIQUE,
-              timestamp INTEGER,
-              employeeUid TEXT,
-              total REAL,
-              revenue REAL,
-              wage REAL,
-              interest REAL
+              ${SqliteFieldsEntries.id} INTEGER PRIMARY KEY,
+              ${SqliteFieldsEntries.uid} TEXT UNIQUE,
+              ${SqliteFieldsEntries.timestamp} INTEGER,
+              ${SqliteFieldsEntries.employeeUid} TEXT,
+              ${SqliteFieldsEntries.total} REAL,
+              ${SqliteFieldsEntries.revenue} REAL,
+              ${SqliteFieldsEntries.wage} REAL,
+              ${SqliteFieldsEntries.interest} REAL
             )''');
 
 //-----------------------------------------
   Future<void> createPenaltiesTable(Database db) => db.execute('''
             CREATE TABLE IF NOT EXISTS ${SqliteTable.penalties} (
-              id INTEGER PRIMARY KEY,
-              uid TEXT,
-              parentUID TEXT,
-              type TEXT,
-              total REAL,
-              minutes REAL,
-              money REAL
+              ${SqliteFieldsPenalties.id} INTEGER PRIMARY KEY,
+              ${SqliteFieldsPenalties.uid} TEXT,
+              ${SqliteFieldsPenalties.parentUid} TEXT,
+              ${SqliteFieldsPenalties.type} TEXT,
+              ${SqliteFieldsPenalties.total} REAL,
+              ${SqliteFieldsPenalties.time} REAL,
+              ${SqliteFieldsPenalties.money} REAL
             )''');
 
 //-----------------------------------------
   Future<void> createEmployeesTable(Database db) => db.execute('''
             CREATE TABLE IF NOT EXISTS ${SqliteTable.employees} (
-              id INTEGER PRIMARY KEY,
-              uid TEXT,
-              name TEXT,
-              hide INTEGER NOT NULL
+              ${SqliteFieldsEmployees.id} INTEGER PRIMARY KEY,
+              ${SqliteFieldsEmployees.uid} TEXT,
+              ${SqliteFieldsEmployees.name} TEXT,
+              ${SqliteFieldsEmployees.hide} INTEGER NOT NULL
             )''');
 
 //-----------------------------------------

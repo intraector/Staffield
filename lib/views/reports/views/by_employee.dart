@@ -67,6 +67,10 @@ class ByEmployee extends StatelessWidget {
                             ],
                           ),
                         ),
+                        ...list[index].penalties.keys.map((name) => Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[Text(name), Text(list[index].penalties[name])],
+                            )),
                       ],
                     ),
                   ),

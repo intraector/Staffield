@@ -21,6 +21,7 @@ class ScreenReports extends StatelessWidget {
                 ),
                 bottomNavigationBar: BottomNavigation(RouterPaths.reports),
                 body: Column(
+                  mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     Card(
                       child: Padding(
@@ -56,16 +57,18 @@ class ScreenReports extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Selector<ScreenReportsVModel, Future<List<ReportAdapted>>>(
-                      selector: (context, vModel) => vModel.reportData,
-                      builder: (context, reportData, _) => FutureBuilder<List<ReportAdapted>>(
-                        future: reportData,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState != ConnectionState.done)
-                            return Center(child: CircularProgressIndicator());
-                          else
-                            return vModel.getView(snapshot.data);
-                        },
+                    Expanded(
+                      child: Selector<ScreenReportsVModel, Future<List<ReportAdapted>>>(
+                        selector: (context, vModel) => vModel.reportData,
+                        builder: (context, reportData, _) => FutureBuilder<List<ReportAdapted>>(
+                          future: reportData,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState != ConnectionState.done)
+                              return Center(child: CircularProgressIndicator());
+                            else
+                              return vModel.getView(snapshot.data);
+                          },
+                        ),
                       ),
                     ),
                   ],
