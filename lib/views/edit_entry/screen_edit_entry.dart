@@ -3,7 +3,7 @@ import 'package:Staffield/core/models/employee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:Staffield/constants/app_colors.dart';
-import 'package:Staffield/constants/penalty_type.dart';
+import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:Staffield/utils/regexp_digits_and_dot.dart';
 import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
 import 'package:Staffield/views/edit_entry/view_penalties.dart';

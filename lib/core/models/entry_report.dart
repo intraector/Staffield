@@ -1,4 +1,4 @@
-import 'package:Staffield/constants/penalty_type.dart';
+import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:Staffield/core/utils/calc_total_mixin.dart';
 import 'package:Staffield/core/models/entry.dart';
 import 'package:Staffield/core/models/penalty_mixin_time_by_money.dart';

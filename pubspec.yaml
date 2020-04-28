@@ -30,6 +30,7 @@ dependencies:
   path: ^1.6.4
   uuid_type: ^1.1.1
   tuple: ^1.0.3
+  linked_scroll_controller: ^0.1.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

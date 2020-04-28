@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:Staffield/constants/penalty_type.dart';
+import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/utils/string_utils.dart';
 import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';

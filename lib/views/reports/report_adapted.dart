@@ -1,4 +1,4 @@
-import 'package:Staffield/constants/penalty_type.dart';
+import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:Staffield/core/models/report.dart';
 import 'package:Staffield/views/reports/report_adatpted_mixin_time_by_money.dart';
 import 'package:Staffield/utils/string_utils.dart';
@@ -15,6 +15,7 @@ class ReportAdapted with TimeByMoneyAdapted {
     report.penaltiesTotalByType
         .forEach((type, value) => penalties[type.title] = value.toString().formatCurrencyDecimal());
     minutes = report.time.toString().formatCurrencyDecimal();
+    penaltiesCount = report.penaltiesCount.toString().formatCurrencyDecimal();
   }
   String name;
   String total;
@@ -23,5 +24,6 @@ class ReportAdapted with TimeByMoneyAdapted {
   String revenueAverage;
   String totalAverage;
   String penaltiesTotal;
+  String penaltiesCount;
   Map<String, String> penalties = {};
 }

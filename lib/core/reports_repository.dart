@@ -38,6 +38,7 @@ class ReportsRepository {
       result.total += item.total;
       item.penaltiesTotalByType
           .forEach((type, value) => result.penaltiesTotalByType[type] += value);
+      result.penaltiesCount += item.penaltiesCount;
       result.reportsCount++;
     }
     result.revenueAverage = result.revenue / result.reportsCount;

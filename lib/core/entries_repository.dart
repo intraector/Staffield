@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:Staffield/constants/penalty_type.dart';
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entries_repository_interface.dart';
 import 'package:Staffield/core/models/entry.dart';
 import 'package:Staffield/core/models/penalty.dart';
+import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:print_color/print_color.dart';

@@ -55,14 +55,22 @@ class ByEmployee extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
                             children: <Widget>[
-                              Text('Штрафы'),
+                              Text('Смены'),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child: Text(list[index].reportsCount),
                               ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: <Widget>[
+                              Text('Штрафы'),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(list[index].penaltiesTotal),
+                                child: Text(list[index].penaltiesCount),
                               ),
                             ],
                           ),
