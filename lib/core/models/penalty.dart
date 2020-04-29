@@ -13,6 +13,7 @@ class Penalty with TimeByMoney {
   String parentUid = '';
   String title = '';
   String type;
+  int timestamp;
   double total;
 
   //-----------------------------------------
@@ -21,6 +22,7 @@ class Penalty with TimeByMoney {
     parentUid = penalty.parentUid;
     title = penalty.title;
     type = penalty.type;
+    timestamp = penalty.timestamp;
     total = penalty.total;
     if (penalty.type == PenaltyType.timeByMoney) {
       time = penalty.time;
@@ -34,6 +36,7 @@ class Penalty with TimeByMoney {
     parentUid = json[SqliteFieldsPenalties.parentUid];
     title = PenaltyType.titleOf(json[SqliteFieldsPenalties.type]);
     type = json[SqliteFieldsPenalties.type];
+    timestamp = json[SqliteFieldsPenalties.timestamp];
     total = json[SqliteFieldsPenalties.total];
     if (type == PenaltyType.timeByMoney) {
       time = json[SqliteFieldsPenalties.time];
@@ -47,6 +50,7 @@ class Penalty with TimeByMoney {
       SqliteFieldsPenalties.uid: uid,
       SqliteFieldsPenalties.parentUid: parentUid,
       SqliteFieldsPenalties.type: type,
+      SqliteFieldsPenalties.timestamp: timestamp ?? DateTime.now().millisecondsSinceEpoch,
       SqliteFieldsPenalties.total: total,
     };
     if (this.type == PenaltyType.timeByMoney) {
@@ -58,6 +62,6 @@ class Penalty with TimeByMoney {
 
   @override
   String toString() {
-    return '$title $total parentUid: $parentUid';
+    return '$title $total parentUid: $parentUid timestamp: ${DateTime.fromMillisecondsSinceEpoch(timestamp)}';
   }
 }

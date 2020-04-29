@@ -1,5 +1,7 @@
+import 'package:Staffield/services/sqlite/prepare_query.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
+import 'package:print_color/print_color.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:Staffield/services/sqlite/sqlite_tables.dart';
 import 'package:Staffield/core/exceptions/e_insert_entry.dart';
@@ -20,33 +22,17 @@ class SrvcSqliteEntries {
   Database dbEntries;
 
   //-----------------------------------------
-  Future<List<Map<String, dynamic>>> fetchEntries({int start, int end}) async {
-    String whereClause;
-    var whereArgs;
-    String whereStart = ' timestamp > ?';
-    String whereEnd = ' timestamp < ?';
-    if (start != null && end != null) {
-      whereClause = '$whereStart AND $whereEnd';
-      whereArgs = [start, end];
-    } else {
-      if (start != null) {
-        whereClause = whereStart;
-        whereArgs = [start];
-      }
-      if (end != null) {
-        whereClause = whereEnd;
-        whereArgs = [end];
-      }
-    }
+  Future<List<Map<String, dynamic>>> fetchEntries({int start, int end, String employeeUid}) async {
+    var preparedString = PrepareQuery.forEntries(start: start, end: end, employeeUid: employeeUid);
     await initComplete;
-    return dbEntries.query(SqliteTable.entries,
-        where: whereClause, whereArgs: whereArgs, orderBy: 'timestamp DESC');
+    return dbEntries.rawQuery(preparedString.string);
   }
 
   //-----------------------------------------
-  Future<List<Map<String, dynamic>>> fetchPenalties() async {
+  Future<List<Map<String, dynamic>>> fetchPenalties({int start, int end, String parentUid}) async {
+    var preparedString = PrepareQuery.forPenalties(start: start, end: end, parentUid: parentUid);
     await initComplete;
-    return dbEntries.query(SqliteTable.penalties);
+    return dbEntries.rawQuery(preparedString.string);
   }
 
   //-----------------------------------------

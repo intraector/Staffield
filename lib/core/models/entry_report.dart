@@ -16,6 +16,7 @@ class EntryReport extends Entry with TimeByMoney, CalcTotal {
     wage = entry.wage;
     penalties = entry.penalties;
     time = 0;
+    timestamp = entry.timestamp;
 
     var calcTotalResult =
         calcTotalAndBonus(revenue: revenue, interest: interest, wage: wage, penalties: penalties);

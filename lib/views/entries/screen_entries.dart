@@ -46,7 +46,7 @@ class ScreenEntries extends StatelessWidget {
               builder: (_, vModel, __) => FloatingActionButton(
                 backgroundColor: AppColors.secondary,
                 child: Icon(Icons.ac_unit),
-                onPressed: () => vModel.generateRandomEntries(days: 60, recordsPerDay: 3),
+                onPressed: () => vModel.generateRandomEntries(days: 180, recordsPerDay: 3),
               ),
             ),
             body: NestedScrollView(

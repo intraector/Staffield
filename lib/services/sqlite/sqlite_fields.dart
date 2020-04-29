@@ -12,6 +12,7 @@ class SqliteFieldsEntries {
 class SqliteFieldsPenalties {
   static const id = 'id';
   static const uid = 'uid';
+  static const timestamp = 'timestamp';
   static const parentUid = 'parentUID';
   static const type = 'type';
   static const total = 'total';

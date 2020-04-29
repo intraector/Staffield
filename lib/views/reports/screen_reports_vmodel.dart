@@ -1,32 +1,51 @@
 import 'dart:async';
 
+import 'package:Staffield/core/employees_repository.dart';
+import 'package:Staffield/core/models/employee.dart';
 import 'package:Staffield/core/reports_repository.dart';
-import 'package:Staffield/views/reports/report_adapted.dart';
+import 'package:Staffield/views/reports/report_by_employee.dart';
 import 'package:Staffield/views/reports/report_type.dart';
-import 'package:Staffield/views/reports/views/by_employee.dart';
+import 'package:Staffield/views/reports/views/list_employees.dart';
 import 'package:Staffield/views/reports/views/data_table.dart';
-import 'package:Staffield/views/reports/views/table_with_still_employees_names.dart';
+import 'package:Staffield/views/reports/views/table_employees.dart';
+import 'package:Staffield/views/reports/views/table_one_employee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:Staffield/utils/time_and_difference.dart';
+import 'package:print_color/print_color.dart';
 
 class ScreenReportsVModel extends ChangeNotifier {
   ScreenReportsVModel() {
+    _employee = employeesList.first;
     fetchReportData();
   }
   final _reportsRepo = ReportsRepository();
-  DateTime _startDate = DateTime(2020, 4, 1);
+  final _employeesRepo = getIt<EmployeesRepository>();
+  DateTime _startDate = DateTime(2019, 8, 1);
+
   DateTime _endDate = currentDay;
 
-  ReportType _reportType = ReportType.byEmployees;
-  Future<List<ReportAdapted>> reportData;
+  ReportType _reportType = ReportType.listEmployees;
+  Employee _employee;
+  Widget view = Center(child: CircularProgressIndicator());
+  var _dummy = Employee(name: 'Нет сотрудников', uid: '111');
+
+  //-----------------------------------------
+  List<Employee> get employeesList =>
+      _employeesRepo.repo.isNotEmpty ? _employeesRepo.repo : [_dummy];
+
+  //-----------------------------------------
+  Employee get employee => _employee;
+  set employee(Employee employee) {
+    _employee = employee;
+    fetchReportData();
+  }
 
   //-----------------------------------------
   ReportType get reportType => _reportType;
   set reportType(ReportType type) {
     _reportType = type;
     fetchReportData();
-    notifyListeners();
   }
 
   //-----------------------------------------
@@ -73,27 +92,46 @@ class ScreenReportsVModel extends ChangeNotifier {
 
   //-----------------------------------------
   Future<void> fetchReportData() async {
-    var _completer = Completer<List<ReportAdapted>>();
-    reportData = _completer.future;
-    var reports = await _reportsRepo.fetch(_startDate, _endDate);
-    var result = reports.map((report) => ReportAdapted(report)).toList();
-    _completer.complete(result);
-  }
+    view = Center(child: CircularProgressIndicator());
+    notifyListeners();
 
-  //-----------------------------------------
-  Widget getView(List<ReportAdapted> list) {
-    Widget result;
     switch (_reportType) {
-      case ReportType.byEmployees:
-        result = ByEmployee(list);
+      case ReportType.listEmployees:
+        {
+          var reports = await _reportsRepo.fetchByEmployee(start: _startDate, end: _endDate);
+          var result = reports.map((report) => ReportByEmployee(report)).toList();
+          view = ListByEmployee(result);
+        }
         break;
       case ReportType.tableData:
-        result = TableData(list);
+        {
+          var reports = await _reportsRepo.fetchByEmployee(start: _startDate, end: _endDate);
+          var result = reports.map((report) => ReportByEmployee(report)).toList();
+          view = TableData(result);
+        }
         break;
-      case ReportType.tableWithStillEmployeeNames:
-        result = TableWithStillEmployeeNames(list);
+      case ReportType.tableEmployees:
+        {
+          var reports = await _reportsRepo.fetchByEmployee(start: _startDate, end: _endDate);
+          var result = reports.map((report) => ReportByEmployee(report)).toList();
+          view = TableEmployees(result);
+        }
+        break;
+      case ReportType.tableOneEmployeeByMonth:
+        {
+          var reports = await _reportsRepo.fetchOneEmployeeByMonth(
+            start: _startDate,
+            end: _endDate,
+            employeeUid: _employee.uid,
+          );
+          var result = reports.map((month, report) {
+            Print.yellow('||| month : $month');
+            return MapEntry(month, ReportByEmployee(report));
+          });
+          view = TableOneEmployee(result);
+        }
         break;
     }
-    return result;
+    notifyListeners();
   }
 }

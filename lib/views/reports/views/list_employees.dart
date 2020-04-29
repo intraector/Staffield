@@ -1,9 +1,9 @@
-import 'package:Staffield/views/reports/report_adapted.dart';
+import 'package:Staffield/views/reports/report_by_employee.dart';
 import 'package:flutter/material.dart';
 
-class ByEmployee extends StatelessWidget {
-  ByEmployee(this.list);
-  final List<ReportAdapted> list;
+class ListByEmployee extends StatelessWidget {
+  ListByEmployee(this.list);
+  final List<ReportByEmployee> list;
   @override
   Widget build(BuildContext context) => ListView.builder(
         shrinkWrap: true,

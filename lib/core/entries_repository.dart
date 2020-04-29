@@ -35,15 +35,22 @@ class EntriesRepository {
 
   //-----------------------------------------
   Future<void> fetchToRepo() async {
-    var res = await sqlite.fetch();
+    var res = await fetch(start: null, end: null, employeeUid: null);
     _repo.addAll(res);
     _notifyRepoUpdates();
   }
 
   //-----------------------------------------
-  Future<List<Entry>> fetch({DateTime start, DateTime end}) {
-    return sqlite.fetch(start: start.millisecondsSinceEpoch, end: end.millisecondsSinceEpoch);
-  }
+  Future<List<Entry>> fetch({
+    @required DateTime start,
+    @required DateTime end,
+    @required String employeeUid,
+  }) =>
+      sqlite.fetch(
+        start: start?.millisecondsSinceEpoch,
+        end: end?.millisecondsSinceEpoch,
+        employeeUid: employeeUid,
+      );
 
   //-----------------------------------------
   void addOrUpdate(Entry entry) {
@@ -86,7 +93,8 @@ class EntriesRepository {
       entry.revenue = random.nextDouble() * 20000;
       entry.wage = (200 + random.nextInt(400)).toDouble();
       entry.interest = (1 + random.nextInt(4)).toDouble();
-      entry.penalties = generateRandomPenalties(parentUid: entry.uid, maxCount: 3);
+      entry.penalties =
+          generateRandomPenalties(parentUid: entry.uid, maxCount: 3, timestamp: entry.timestamp);
       var fold = entry.penalties.fold<double>(0, (value, penalty) => value + penalty.total);
       var _bonus = entry.revenue * entry.interest / 100;
       entry.total = (entry.wage + _bonus - fold).roundToDouble();
@@ -122,13 +130,15 @@ class EntriesRepository {
   }
 
   //-----------------------------------------
-  List<Penalty> generateRandomPenalties({@required String parentUid, @required int maxCount}) {
+  List<Penalty> generateRandomPenalties(
+      {@required String parentUid, @required timestamp, @required int maxCount}) {
     if (maxCount == null) return [];
     var result = <Penalty>[];
     var random = Random();
     var count = random.nextInt(maxCount + 1);
     for (int i = 0; i < count; i++) {
       var penalty = Penalty(parentUid: parentUid, type: PenaltyType.random);
+      penalty.timestamp = timestamp;
       penalty.time = 1 + random.nextInt(20).toDouble();
       penalty.money = 10;
       if (penalty.type == PenaltyType.plain)

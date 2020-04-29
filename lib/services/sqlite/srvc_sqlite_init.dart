@@ -60,6 +60,7 @@ class SrvcSqliteInit {
               ${SqliteFieldsPenalties.uid} TEXT,
               ${SqliteFieldsPenalties.parentUid} TEXT,
               ${SqliteFieldsPenalties.type} TEXT,
+              ${SqliteFieldsPenalties.timestamp} INTEGER,
               ${SqliteFieldsPenalties.total} REAL,
               ${SqliteFieldsPenalties.time} REAL,
               ${SqliteFieldsPenalties.money} REAL

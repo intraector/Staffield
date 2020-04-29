@@ -1,13 +1,18 @@
 import 'package:Staffield/constants/app_colors.dart';
-import 'package:Staffield/views/reports/report_adapted.dart';
+import 'package:Staffield/core/models/employee.dart';
+import 'package:Staffield/views/reports/report_by_employee.dart';
+import 'package:Staffield/views/reports/screen_reports_vmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 
-class TableWithStillEmployeeNames extends StatelessWidget {
-  TableWithStillEmployeeNames(this.list);
-  final List<ReportAdapted> list;
+class TableOneEmployee extends StatelessWidget {
+  TableOneEmployee(this.list);
+  final Map<String, ReportByEmployee> list;
+
   @override
   Widget build(BuildContext context) {
+    var vModel = Provider.of<ScreenReportsVModel>(context, listen: false);
     final columnWidth = MediaQuery.of(context).size.shortestSide / 4.5;
     final nameHeight = MediaQuery.of(context).size.shortestSide / 11;
     final tableHeaderHeight = MediaQuery.of(context).size.shortestSide / 7.0;
@@ -19,6 +24,24 @@ class TableWithStillEmployeeNames extends StatelessWidget {
           child: ListView(
             shrinkWrap: true,
             children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Expanded(
+                      child: Card(
+                    child: Container(
+                      child: DropdownButton<Employee>(
+                          items: vModel.employeesList
+                              .map((employee) =>
+                                  DropdownMenuItem(value: employee, child: Text(employee.name)))
+                              .toList(),
+                          value: vModel.employee,
+                          onChanged: (uid) {
+                            vModel.employee = uid;
+                          }),
+                    ),
+                  ))
+                ],
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 20.0),
                 child: Stack(
@@ -39,7 +62,6 @@ class TableWithStillEmployeeNames extends StatelessWidget {
                               children: <Widget>[
                                 Container(
                                     width: columnWidth,
-                                    // alignment: Alignment.center,
                                     padding: EdgeInsets.all(cellPadding),
                                     child: Text('З/П,\nвсего')),
                                 Container(
@@ -65,7 +87,7 @@ class TableWithStillEmployeeNames extends StatelessWidget {
                               ],
                             ),
                           ),
-                          ...list
+                          ...list.values
                               .map(
                                 (report) => Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,14 +139,16 @@ class TableWithStillEmployeeNames extends StatelessWidget {
                       ),
                     ),
                     ...List.generate(
-                      list.length,
+                      list.keys.length,
                       (index) => Positioned(
                         top: tableHeaderHeight + nameHeight * 2 * index,
                         child: Container(
                           height: nameHeight,
                           color: AppColors.primaryBlend,
                           padding: EdgeInsets.all(cellPadding),
-                          child: Text(list[index].name),
+                          child: Text(
+                            list.keys.elementAt(index),
+                          ),
                         ),
                       ),
                     )

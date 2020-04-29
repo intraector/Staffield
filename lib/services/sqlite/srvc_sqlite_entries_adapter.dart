@@ -3,6 +3,8 @@ import 'package:Staffield/core/entries_repository_interface.dart';
 import 'package:Staffield/core/models/entry.dart';
 import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_entries.dart';
+import 'package:flutter/foundation.dart';
+import 'package:print_color/print_color.dart';
 
 class SqliteEntriesAdapater implements EntriesRepositoryInterface {
   var _srvcSqliteEntries = SrvcSqliteEntries();
@@ -10,9 +12,14 @@ class SqliteEntriesAdapater implements EntriesRepositoryInterface {
 
   //-----------------------------------------
   @override
-  Future<List<Entry>> fetch({int start, int end}) async {
-    var entriesMaps = await _srvcSqliteEntries.fetchEntries(start: start, end: end);
-    var penaltiesFuture = _srvcSqliteEntries.fetchPenalties();
+  Future<List<Entry>> fetch({
+    @required int start,
+    @required int end,
+    @required String employeeUid,
+  }) async {
+    var entriesMaps =
+        await _srvcSqliteEntries.fetchEntries(start: start, end: end, employeeUid: employeeUid);
+    var penaltiesFuture = _srvcSqliteEntries.fetchPenalties(start: start, end: end);
     var result = entriesMaps.map((entryMap) => Entry.fromSqlite(entryMap)).toList();
     var penalties = (await penaltiesFuture).map((penaltyMap) => Penalty.fromSqlite(penaltyMap));
     for (var entry in result) {
@@ -24,11 +31,8 @@ class SqliteEntriesAdapater implements EntriesRepositoryInterface {
   }
 
   //-----------------------------------------
-  Future<bool> addOrUpdate(Entry entry) async {
-    if (entry.timestamp == null) entry.timestamp = DateTime.now().millisecondsSinceEpoch;
-    return _srvcSqliteEntries.addOrUpdate(
-        entry: entry.toSqlite(), penalties: entry.penalties.map((penalty) => penalty.toSqlite()));
-  }
+  Future<bool> addOrUpdate(Entry entry) => _srvcSqliteEntries.addOrUpdate(
+      entry: entry.toSqlite(), penalties: entry.penalties.map((penalty) => penalty.toSqlite()));
 
   //-----------------------------------------
   Future<void> remove(String uid) => _srvcSqliteEntries.remove(uid);

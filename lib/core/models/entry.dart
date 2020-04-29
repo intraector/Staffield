@@ -30,7 +30,7 @@ class Entry {
   //-----------------------------------------
   Map<String, dynamic> toSqlite() => {
         SqliteFieldsEntries.uid: uid,
-        SqliteFieldsEntries.timestamp: timestamp,
+        SqliteFieldsEntries.timestamp: timestamp ?? DateTime.now().millisecondsSinceEpoch,
         SqliteFieldsEntries.employeeUid: employeeUid,
         SqliteFieldsEntries.total: total,
         SqliteFieldsEntries.revenue: revenue,

@@ -1,10 +1,10 @@
-import 'package:Staffield/views/reports/report_adapted.dart';
+import 'package:Staffield/views/reports/report_by_employee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class TableData extends StatelessWidget {
   TableData(this.list);
-  final List<ReportAdapted> list;
+  final List<ReportByEmployee> list;
   @override
   Widget build(BuildContext context) => Container(
         child: Column(

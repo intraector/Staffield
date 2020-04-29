@@ -1,6 +1,5 @@
 import 'package:Staffield/constants/router_paths.dart';
 import 'package:Staffield/views/bottom_navigation.dart';
-import 'package:Staffield/views/reports/report_adapted.dart';
 import 'package:Staffield/views/reports/report_type.dart';
 import 'package:Staffield/views/reports/screen_reports_vmodel.dart';
 import 'package:Staffield/views/view_drawer.dart';
@@ -79,17 +78,9 @@ class ScreenReports extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: Selector<ScreenReportsVModel, Future<List<ReportAdapted>>>(
-                        selector: (context, vModel) => vModel.reportData,
-                        builder: (context, reportData, _) => FutureBuilder<List<ReportAdapted>>(
-                          future: reportData,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState != ConnectionState.done)
-                              return Center(child: CircularProgressIndicator());
-                            else
-                              return vModel.getView(snapshot.data);
-                          },
-                        ),
+                      child: Selector<ScreenReportsVModel, Widget>(
+                        selector: (context, vModel) => vModel.view,
+                        builder: (context, view, _) => view,
                       ),
                     ),
                   ],
