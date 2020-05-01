@@ -1,3 +1,4 @@
 mixin TimeByMoneyAdapted {
-  String minutes;
+  String time;
+  String money;
 }

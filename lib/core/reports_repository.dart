@@ -15,11 +15,23 @@ class ReportsRepository {
   final _employeesRepo = getIt<EmployeesRepository>();
 
   //-----------------------------------------
-  Future<List<Report>> fetchByEmployee({
-    @required DateTime start,
-    @required DateTime end,
+  Future<List<EntryReport>> fetchEntriesList({
+    @required DateTime greaterThan,
+    @required DateTime lessThan,
+    @required String employeeUid,
   }) async {
-    var entries = await _entriesRepo.fetch(start: start, end: end, employeeUid: null);
+    var reports = await _entriesRepo.fetch(
+        greaterThan: greaterThan, lessThan: lessThan, employeeUid: employeeUid);
+    return reports.map((entry) => entry.report).toList();
+  }
+
+  //-----------------------------------------
+  Future<List<Report>> fetchByEmployee({
+    @required DateTime greaterThan,
+    @required DateTime lessThan,
+  }) async {
+    var entries =
+        await _entriesRepo.fetch(greaterThan: greaterThan, lessThan: lessThan, employeeUid: null);
     var entryReportsByEmployee = _separateByEmployee(entries);
     return entryReportsByEmployee.values.map((list) => _aggregateReport(list)).toList();
   }
@@ -30,7 +42,8 @@ class ReportsRepository {
     @required DateTime end,
     @required String employeeUid,
   }) async {
-    var entries = await _entriesRepo.fetch(start: start, end: end, employeeUid: employeeUid);
+    var entries =
+        await _entriesRepo.fetch(greaterThan: start, lessThan: end, employeeUid: employeeUid);
     var entryReportsByMonth = _separateByMonth(entries);
     return entryReportsByMonth.map((month, items) => MapEntry(month, _aggregateReport(items)));
   }

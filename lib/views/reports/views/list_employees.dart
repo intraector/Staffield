@@ -1,91 +1,156 @@
-import 'package:Staffield/views/reports/report_by_employee.dart';
+import 'package:Staffield/constants/app_colors.dart';
+import 'package:Staffield/constants/app_text_styles.dart';
+import 'package:Staffield/core/models/penalty.dart';
+import 'package:Staffield/views/reports/adapted_entry_report.dart';
 import 'package:flutter/material.dart';
 
 class ListByEmployee extends StatelessWidget {
   ListByEmployee(this.list);
-  final List<ReportByEmployee> list;
+  final List<AdaptedEntryReport> list;
   @override
-  Widget build(BuildContext context) => ListView.builder(
-        shrinkWrap: true,
-        itemCount: list.length,
-        itemBuilder: (context, index) => Row(
-          children: <Widget>[
-            Expanded(
-                child: Card(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: ExpansionTile(
-                      title: Text(list[index].name),
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: <Widget>[
-                              Text('Зарплата'),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(list[index].total),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(list[index].totalAverage),
-                              ),
-                            ],
+  Widget build(BuildContext context) => Row(
+        children: <Widget>[
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: list.length,
+              itemBuilder: (context, index) => Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(list[index].name,
+                              softWrap: false,
+                              overflow: TextOverflow.fade,
+                              style: AppTextStyles.body.copyWith(fontWeight: FontWeight.bold)),
+                          Text(list[index].total,
+                              style: AppTextStyles.body.copyWith(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 5.0)),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Wrap(
+                              alignment: WrapAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
+                                  margin: EdgeInsets.all(3.0),
+                                  decoration: BoxDecoration(
+                                      color: AppColors.primaryBlend,
+                                      borderRadius: BorderRadius.circular(5.0)),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Text('Выручка'),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Text(list[index].revenue),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
+                                  margin: EdgeInsets.all(3.0),
+                                  color: AppColors.primaryBlend,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Text('Бонус'),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Text(list[index].interest),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
+                                  margin: EdgeInsets.all(3.0),
+                                  color: AppColors.primaryBlend,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Text('Оклад'),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Text(list[index].wage),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
+                        ],
+                      ),
+                      if (list[index].penalties.isNotEmpty)
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: <Widget>[
-                              Text('Выручка'),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(list[index].revenue),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(list[index].revenueAverage),
-                              ),
-                            ],
-                          ),
+                          padding: EdgeInsets.only(top: 10.0),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: <Widget>[
-                              Text('Смены'),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(list[index].reportsCount),
+                      Column(
+                        children: <Widget>[
+                          ...list[index].penalties.map(
+                                (penalty) => Container(
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                          width: 0.5,
+                                          color: isLastItem(list[index], penalty)
+                                              ? AppColors.primaryMiddle
+                                              : Colors.transparent),
+                                      top: BorderSide(width: 0.5, color: AppColors.primaryMiddle),
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Container(
+                                            // color: Colors.cyan,
+                                            width: 100,
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(penalty.title)),
+                                        Container(
+                                          width: 50,
+                                          alignment: containsTime(list[index])
+                                              ? Alignment.center
+                                              : Alignment.centerRight,
+                                          child: Text(penalty.total),
+                                        ),
+                                        if (containsTime(list[index]))
+                                          Container(
+                                              alignment: Alignment.centerRight,
+                                              width: 50,
+                                              child: Text(penalty.time)),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: <Widget>[
-                              Text('Штрафы'),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(list[index].penaltiesCount),
-                              ),
-                            ],
-                          ),
-                        ),
-                        ...list[index].penalties.keys.map((name) => Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[Text(name), Text(list[index].penalties[name])],
-                            )),
-                      ],
-                    ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ))
-          ],
-        ),
+            ),
+          ),
+        ],
       );
+
+  bool containsTime(AdaptedEntryReport report) =>
+      report.penalties.any((penalty) => penalty.time != '');
+
+  bool isLastItem(AdaptedEntryReport report, PenaltyReport penalty) =>
+      report.penalties.indexOf(penalty) == report.penalties.length - 1;
 }

@@ -24,7 +24,6 @@ class EntryReport extends Entry with TimeByMoney, CalcTotal {
     total = calcTotalResult.total;
 
     for (var penalty in penalties) {
-      // if (penaltiesTotalByType[penalty.type] == null) penaltiesTotalByType[penalty.type] = 0.0;
       switch (penalty.type) {
         case PenaltyType.plain:
           {

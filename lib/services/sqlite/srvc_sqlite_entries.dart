@@ -1,7 +1,6 @@
 import 'package:Staffield/services/sqlite/prepare_query.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
-import 'package:print_color/print_color.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:Staffield/services/sqlite/sqlite_tables.dart';
 import 'package:Staffield/core/exceptions/e_insert_entry.dart';
@@ -22,15 +21,35 @@ class SrvcSqliteEntries {
   Database dbEntries;
 
   //-----------------------------------------
-  Future<List<Map<String, dynamic>>> fetchEntries({int start, int end, String employeeUid}) async {
-    var preparedString = PrepareQuery.forEntries(start: start, end: end, employeeUid: employeeUid);
+  Future<List<Map<String, dynamic>>> fetchEntries({
+    @required int greaterThan,
+    @required int lessThan,
+    @required String employeeUid,
+    @required int limit,
+  }) async {
+    var preparedString = PrepareQuery.forEntries(
+      greaterThan: greaterThan,
+      lessThan: lessThan,
+      employeeUid: employeeUid,
+      limit: limit,
+    );
     await initComplete;
     return dbEntries.rawQuery(preparedString.string);
   }
 
   //-----------------------------------------
-  Future<List<Map<String, dynamic>>> fetchPenalties({int start, int end, String parentUid}) async {
-    var preparedString = PrepareQuery.forPenalties(start: start, end: end, parentUid: parentUid);
+  Future<List<Map<String, dynamic>>> fetchPenalties({
+    @required int start,
+    @required int end,
+    @required String parentUid,
+    @required int limit,
+  }) async {
+    var preparedString = PrepareQuery.forPenalties(
+      greaterThan: start,
+      lessThan: end,
+      parentUid: parentUid,
+      limit: limit,
+    );
     await initComplete;
     return dbEntries.rawQuery(preparedString.string);
   }

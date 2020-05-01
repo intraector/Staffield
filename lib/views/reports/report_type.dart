@@ -3,6 +3,7 @@ enum ReportType {
   tableData,
   tableEmployees,
   tableOneEmployeeByMonth,
+  tableEntries,
 }
 
 extension Title on ReportType {
@@ -20,6 +21,9 @@ extension Title on ReportType {
         break;
       case ReportType.tableOneEmployeeByMonth:
         result = 'Отчет по одному сотруднику';
+        break;
+      case ReportType.tableEntries:
+        result = 'Список записей';
         break;
     }
     return result;

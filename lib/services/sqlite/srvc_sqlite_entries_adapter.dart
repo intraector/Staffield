@@ -3,8 +3,6 @@ import 'package:Staffield/core/entries_repository_interface.dart';
 import 'package:Staffield/core/models/entry.dart';
 import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_entries.dart';
-import 'package:flutter/foundation.dart';
-import 'package:print_color/print_color.dart';
 
 class SqliteEntriesAdapater implements EntriesRepositoryInterface {
   var _srvcSqliteEntries = SrvcSqliteEntries();
@@ -12,14 +10,19 @@ class SqliteEntriesAdapater implements EntriesRepositoryInterface {
 
   //-----------------------------------------
   @override
-  Future<List<Entry>> fetch({
-    @required int start,
-    @required int end,
-    @required String employeeUid,
-  }) async {
-    var entriesMaps =
-        await _srvcSqliteEntries.fetchEntries(start: start, end: end, employeeUid: employeeUid);
-    var penaltiesFuture = _srvcSqliteEntries.fetchPenalties(start: start, end: end);
+  Future<List<Entry>> fetch({int greaterThan, int lessThan, String employeeUid, int limit}) async {
+    var entriesMaps = await _srvcSqliteEntries.fetchEntries(
+      greaterThan: greaterThan,
+      lessThan: lessThan,
+      employeeUid: employeeUid,
+      limit: limit,
+    );
+    var penaltiesFuture = _srvcSqliteEntries.fetchPenalties(
+      start: greaterThan,
+      end: lessThan,
+      parentUid: null,
+      limit: null,
+    );
     var result = entriesMaps.map((entryMap) => Entry.fromSqlite(entryMap)).toList();
     var penalties = (await penaltiesFuture).map((penaltyMap) => Penalty.fromSqlite(penaltyMap));
     for (var entry in result) {

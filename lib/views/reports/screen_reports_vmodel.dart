@@ -3,16 +3,17 @@ import 'dart:async';
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/models/employee.dart';
 import 'package:Staffield/core/reports_repository.dart';
+import 'package:Staffield/views/reports/adapted_entry_report.dart';
 import 'package:Staffield/views/reports/report_by_employee.dart';
 import 'package:Staffield/views/reports/report_type.dart';
 import 'package:Staffield/views/reports/views/list_employees.dart';
 import 'package:Staffield/views/reports/views/data_table.dart';
 import 'package:Staffield/views/reports/views/table_employees.dart';
+import 'package:Staffield/views/reports/views/table_entries.dart';
 import 'package:Staffield/views/reports/views/table_one_employee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:Staffield/utils/time_and_difference.dart';
-import 'package:print_color/print_color.dart';
 
 class ScreenReportsVModel extends ChangeNotifier {
   ScreenReportsVModel() {
@@ -98,21 +99,25 @@ class ScreenReportsVModel extends ChangeNotifier {
     switch (_reportType) {
       case ReportType.listEmployees:
         {
-          var reports = await _reportsRepo.fetchByEmployee(start: _startDate, end: _endDate);
-          var result = reports.map((report) => ReportByEmployee(report)).toList();
+          var entryReports = await _reportsRepo.fetchEntriesList(
+              greaterThan: _startDate, lessThan: _endDate, employeeUid: null);
+          var result =
+              entryReports.map((entryReport) => AdaptedEntryReport.from(entryReport)).toList();
           view = ListByEmployee(result);
         }
         break;
       case ReportType.tableData:
         {
-          var reports = await _reportsRepo.fetchByEmployee(start: _startDate, end: _endDate);
+          var reports =
+              await _reportsRepo.fetchByEmployee(greaterThan: _startDate, lessThan: _endDate);
           var result = reports.map((report) => ReportByEmployee(report)).toList();
           view = TableData(result);
         }
         break;
       case ReportType.tableEmployees:
         {
-          var reports = await _reportsRepo.fetchByEmployee(start: _startDate, end: _endDate);
+          var reports =
+              await _reportsRepo.fetchByEmployee(greaterThan: _startDate, lessThan: _endDate);
           var result = reports.map((report) => ReportByEmployee(report)).toList();
           view = TableEmployees(result);
         }
@@ -120,15 +125,18 @@ class ScreenReportsVModel extends ChangeNotifier {
       case ReportType.tableOneEmployeeByMonth:
         {
           var reports = await _reportsRepo.fetchOneEmployeeByMonth(
-            start: _startDate,
-            end: _endDate,
-            employeeUid: _employee.uid,
-          );
-          var result = reports.map((month, report) {
-            Print.yellow('||| month : $month');
-            return MapEntry(month, ReportByEmployee(report));
-          });
+              start: _startDate, end: _endDate, employeeUid: _employee.uid);
+          var result = reports.map((month, report) => MapEntry(month, ReportByEmployee(report)));
           view = TableOneEmployee(result);
+        }
+        break;
+      case ReportType.tableEntries:
+        {
+          var entryReports = await _reportsRepo.fetchEntriesList(
+              greaterThan: _startDate, lessThan: _endDate, employeeUid: null);
+          var result =
+              entryReports.map((entryReport) => AdaptedEntryReport.from(entryReport)).toList();
+          view = TableEntries(result);
         }
         break;
     }

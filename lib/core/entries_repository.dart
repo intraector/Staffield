@@ -1,157 +1,101 @@
 import 'dart:async';
-import 'dart:math';
-
-import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entries_repository_interface.dart';
 import 'package:Staffield/core/models/entry.dart';
-import 'package:Staffield/core/models/penalty.dart';
-import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
-import 'package:print_color/print_color.dart';
 
 class EntriesRepository {
   EntriesRepository(this.sqlite) {
-    fetchToRepo();
+    fetchNextChunkToCache();
   }
 
   EntriesRepositoryInterface sqlite;
 
-  var _repo = <Entry>[];
+  var _cache = <Entry>[];
 
-  var _streamCtrlRepoUpdates = StreamController<bool>.broadcast();
+  var _streamCtrlCacheUpdates = StreamController<bool>.broadcast();
 
-  //-----------------------------------------
-  Stream<bool> get updates => _streamCtrlRepoUpdates.stream;
+  int limit = 100;
 
-  //-----------------------------------------
-  List<Entry> get repo => _repo;
+  int oldestTimestamp;
 
-  //-----------------------------------------
-  Entry getEntry(String uid) => _repo.firstWhere((entry) => entry.uid == uid);
+  bool _isLoading = false;
+  bool _endOfData = false;
 
   //-----------------------------------------
-  void _notifyRepoUpdates() => _streamCtrlRepoUpdates.sink.add(true);
+  Stream<bool> get updates => _streamCtrlCacheUpdates.stream;
+  void _notifyRepoUpdates() => _streamCtrlCacheUpdates.sink.add(true);
 
   //-----------------------------------------
-  Future<void> fetchToRepo() async {
-    var res = await fetch(start: null, end: null, employeeUid: null);
-    _repo.addAll(res);
+  List<Entry> get cache => _cache;
+
+  //-----------------------------------------
+  Entry getEntry(String uid) => _cache.firstWhere((entry) => entry.uid == uid);
+
+  //-----------------------------------------
+  Future<int> fetchNextChunkToCache() async {
+    if (_isLoading) return 0;
+    if (_endOfData) return 0;
+    _isLoading = true;
+    // Print.yellow('||| fired fetchNextChunk');
+    var res = await fetch(
+      greaterThan: null,
+      lessThan:
+          oldestTimestamp == null ? null : DateTime.fromMillisecondsSinceEpoch(oldestTimestamp),
+      employeeUid: null,
+      limit: limit,
+    );
+    if (res.length == 0) _endOfData = true;
+    setOldestTimestampFrom(res);
+    _cache.addAll(res);
     _notifyRepoUpdates();
+    _isLoading = false;
+    return res.length;
   }
 
   //-----------------------------------------
   Future<List<Entry>> fetch({
-    @required DateTime start,
-    @required DateTime end,
+    @required DateTime greaterThan,
+    @required DateTime lessThan,
     @required String employeeUid,
+    int limit,
   }) =>
       sqlite.fetch(
-        start: start?.millisecondsSinceEpoch,
-        end: end?.millisecondsSinceEpoch,
+        greaterThan: greaterThan?.millisecondsSinceEpoch,
+        lessThan: lessThan?.millisecondsSinceEpoch,
         employeeUid: employeeUid,
+        limit: limit,
       );
 
   //-----------------------------------------
   void addOrUpdate(Entry entry) {
-    var index = _repo.indexOf(entry);
+    var index = _cache.indexOf(entry);
     if (index >= 0)
-      _repo[index] = entry;
+      _cache[index] = entry;
     else
-      _repo.add(entry);
+      _cache.insert(0, entry);
     sqlite.addOrUpdate(entry);
     _notifyRepoUpdates();
   }
 
   //-----------------------------------------
   void remove(String uid) {
-    var index = _repo.indexWhere((entry) => entry.uid == uid);
-    if (index >= 0) _repo.removeAt(index);
+    var index = _cache.indexWhere((entry) => entry.uid == uid);
+    if (index >= 0) _cache.removeAt(index);
     sqlite.remove(uid);
     _notifyRepoUpdates();
   }
 
   //-----------------------------------------
-  static var getIt = GetIt.instance;
-  var _employeesRepo = getIt<EmployeesRepository>();
-
-  void generateRandomEntries({int days, int recordsPerDay}) {
-    var _employees = _employeesRepo.repo;
-    if (_employees.length == 0) {
-      Print.red('||| Employees list is empty');
-      return;
-    }
-    var _dates = generateRandomDatesOverPeriod(days: days, recordsPerDay: recordsPerDay);
-    var random = Random();
-
-    for (var date in _dates) {
-      var entry = Entry();
-      entry.timestamp = date.millisecondsSinceEpoch;
-      var _tmp = random.nextInt(_employees.length);
-      entry.employeeUid = _employees[_tmp].uid;
-      entry.employeeNameAux = _employeesRepo.getEmployee(entry.employeeUid).name;
-      entry.revenue = random.nextDouble() * 20000;
-      entry.wage = (200 + random.nextInt(400)).toDouble();
-      entry.interest = (1 + random.nextInt(4)).toDouble();
-      entry.penalties =
-          generateRandomPenalties(parentUid: entry.uid, maxCount: 3, timestamp: entry.timestamp);
-      var fold = entry.penalties.fold<double>(0, (value, penalty) => value + penalty.total);
-      var _bonus = entry.revenue * entry.interest / 100;
-      entry.total = (entry.wage + _bonus - fold).roundToDouble();
-      addOrUpdate(entry);
-    }
-  }
-
-  //-----------------------------------------
-  List<DateTime> generateRandomDatesOverPeriod({int days, int recordsPerDay}) {
-    var timestampNow = DateTime.now();
-    var list = <DateTime>[];
-    for (var i = 1; i <= days; i++) {
-      var timestampMin = timestampNow.subtract(Duration(days: i));
-      var timestampMax = timestampMin.add(Duration(days: 1));
-      list.addAll(generateRandomDatesBetweenPointsInTime(
-          min: timestampMin, max: timestampMax, count: recordsPerDay));
-    }
-    return list;
-  }
-
-  //-----------------------------------------
-  List<DateTime> generateRandomDatesBetweenPointsInTime({DateTime min, DateTime max, int count}) {
-    var minInt = min.millisecondsSinceEpoch;
-    var maxnInt = max.millisecondsSinceEpoch;
-    var random = Random();
-    var difference = maxnInt - minInt;
-    var list = <DateTime>[];
-    for (var i = 1; i <= count; i++) {
-      var result = maxnInt + random.nextInt(difference);
-      list.add(DateTime.fromMillisecondsSinceEpoch(result));
-    }
-    return list;
-  }
-
-  //-----------------------------------------
-  List<Penalty> generateRandomPenalties(
-      {@required String parentUid, @required timestamp, @required int maxCount}) {
-    if (maxCount == null) return [];
-    var result = <Penalty>[];
-    var random = Random();
-    var count = random.nextInt(maxCount + 1);
-    for (int i = 0; i < count; i++) {
-      var penalty = Penalty(parentUid: parentUid, type: PenaltyType.random);
-      penalty.timestamp = timestamp;
-      penalty.time = 1 + random.nextInt(20).toDouble();
-      penalty.money = 10;
-      if (penalty.type == PenaltyType.plain)
-        penalty.total = 10 * random.nextInt(21).toDouble();
-      else
-        penalty.total = penalty.time.toDouble() * penalty.money.toDouble();
-      result.add(penalty);
-    }
-    return result;
+  void setOldestTimestampFrom(List<Entry> list) {
+    if (list.isEmpty) return null;
+    var _oldest = list
+        .reduce((current, next) => current.timestamp < next.timestamp ? current : next)
+        .timestamp;
+    if (_oldest != null) oldestTimestamp = _oldest;
   }
 
   //-----------------------------------------
   dispose() {
-    _streamCtrlRepoUpdates.close();
+    _streamCtrlCacheUpdates.close();
   }
 }

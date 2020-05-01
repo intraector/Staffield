@@ -14,7 +14,7 @@ class ReportByEmployee with TimeByMoneyAdapted {
     penaltiesTotal = report.penaltiesTotalAux.toString().formatCurrencyDecimal();
     report.penaltiesTotalByType
         .forEach((type, value) => penalties[type.title] = value.toString().formatCurrencyDecimal());
-    minutes = report.time.toString().formatCurrencyDecimal();
+    time = report.time.toString().formatCurrencyDecimal();
     penaltiesCount = report.penaltiesCount.toString().formatCurrencyDecimal();
   }
   String name;
