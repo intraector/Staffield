@@ -22,9 +22,9 @@ class ScreenReportsVModel extends ChangeNotifier {
   }
   final _reportsRepo = ReportsRepository();
   final _employeesRepo = getIt<EmployeesRepository>();
-  DateTime _startDate = DateTime(2019, 8, 1);
+  DateTime _endDate = DateTime(2019, 8, 1);
 
-  DateTime _endDate = currentDay;
+  DateTime _startDate = currentDay;
 
   ReportType _reportType = ReportType.listEmployees;
   Employee _employee;
@@ -56,25 +56,10 @@ class ScreenReportsVModel extends ChangeNotifier {
   }
 
   //-----------------------------------------
-  String get startDate => timeAndDifference(date1: _startDate, showDate: true);
-
-  //-----------------------------------------
   String get endDate => timeAndDifference(date1: _endDate, showDate: true);
 
   //-----------------------------------------
-  Future<void> pickStartDate(BuildContext context) async {
-    DateTime date = await showDatePicker(
-      context: context,
-      firstDate: DateTime(DateTime.now().year - 5),
-      lastDate: DateTime(DateTime.now().year + 5),
-      initialDate: _startDate,
-    );
-    if (date != null) {
-      _startDate = date;
-      fetchReportData();
-      notifyListeners();
-    }
-  }
+  String get startDate => timeAndDifference(date1: _startDate, showDate: true);
 
   //-----------------------------------------
   Future<void> pickEndDate(BuildContext context) async {
@@ -92,6 +77,21 @@ class ScreenReportsVModel extends ChangeNotifier {
   }
 
   //-----------------------------------------
+  Future<void> pickStartDate(BuildContext context) async {
+    DateTime date = await showDatePicker(
+      context: context,
+      firstDate: DateTime(DateTime.now().year - 5),
+      lastDate: DateTime(DateTime.now().year + 5),
+      initialDate: _startDate,
+    );
+    if (date != null) {
+      _startDate = date;
+      fetchReportData();
+      notifyListeners();
+    }
+  }
+
+  //-----------------------------------------
   Future<void> fetchReportData() async {
     view = Center(child: CircularProgressIndicator());
     notifyListeners();
@@ -100,7 +100,7 @@ class ScreenReportsVModel extends ChangeNotifier {
       case ReportType.listEmployees:
         {
           var entryReports = await _reportsRepo.fetchEntriesList(
-              greaterThan: _startDate, lessThan: _endDate, employeeUid: null);
+              greaterThan: _endDate, lessThan: _startDate, employeeUid: null);
           var result =
               entryReports.map((entryReport) => AdaptedEntryReport.from(entryReport)).toList();
           view = ListByEmployee(result);
@@ -109,7 +109,7 @@ class ScreenReportsVModel extends ChangeNotifier {
       case ReportType.tableData:
         {
           var reports =
-              await _reportsRepo.fetchByEmployee(greaterThan: _startDate, lessThan: _endDate);
+              await _reportsRepo.fetchByEmployee(greaterThan: _endDate, lessThan: _startDate);
           var result = reports.map((report) => ReportByEmployee(report)).toList();
           view = TableData(result);
         }
@@ -117,7 +117,7 @@ class ScreenReportsVModel extends ChangeNotifier {
       case ReportType.tableEmployees:
         {
           var reports =
-              await _reportsRepo.fetchByEmployee(greaterThan: _startDate, lessThan: _endDate);
+              await _reportsRepo.fetchByEmployee(greaterThan: _endDate, lessThan: _startDate);
           var result = reports.map((report) => ReportByEmployee(report)).toList();
           view = TableEmployees(result);
         }
@@ -125,7 +125,7 @@ class ScreenReportsVModel extends ChangeNotifier {
       case ReportType.tableOneEmployeeByMonth:
         {
           var reports = await _reportsRepo.fetchOneEmployeeByMonth(
-              start: _startDate, end: _endDate, employeeUid: _employee.uid);
+              greaterThan: _endDate, lessThan: _startDate, employeeUid: _employee.uid);
           var result = reports.map((month, report) => MapEntry(month, ReportByEmployee(report)));
           view = TableOneEmployee(result);
         }
@@ -133,7 +133,7 @@ class ScreenReportsVModel extends ChangeNotifier {
       case ReportType.tableEntries:
         {
           var entryReports = await _reportsRepo.fetchEntriesList(
-              greaterThan: _startDate, lessThan: _endDate, employeeUid: null);
+              greaterThan: _endDate, lessThan: _startDate, employeeUid: null);
           var result =
               entryReports.map((entryReport) => AdaptedEntryReport.from(entryReport)).toList();
           view = TableEntries(result);

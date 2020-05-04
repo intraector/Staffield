@@ -39,14 +39,14 @@ class SrvcSqliteEntries {
 
   //-----------------------------------------
   Future<List<Map<String, dynamic>>> fetchPenalties({
-    @required int start,
-    @required int end,
+    @required int greaterThan,
+    @required int lessThan,
     @required String parentUid,
     @required int limit,
   }) async {
     var preparedString = PrepareQuery.forPenalties(
-      greaterThan: start,
-      lessThan: end,
+      greaterThan: greaterThan,
+      lessThan: lessThan,
       parentUid: parentUid,
       limit: limit,
     );
@@ -56,14 +56,16 @@ class SrvcSqliteEntries {
 
   //-----------------------------------------
   Future<bool> addOrUpdate(
-      {@required Map<String, dynamic> entry,
+      {@required Iterable<Map<String, dynamic>> entries,
       @required Iterable<Map<String, dynamic>> penalties}) async {
     await initComplete;
     var batch = dbEntries.batch();
-    batch.insert(SqliteTable.entries, entry, conflictAlgorithm: ConflictAlgorithm.replace);
+    for (var entry in entries)
+      batch.insert(SqliteTable.entries, entry, conflictAlgorithm: ConflictAlgorithm.replace);
     for (var penalty in penalties)
       batch.insert(SqliteTable.penalties, penalty, conflictAlgorithm: ConflictAlgorithm.replace);
     var results = await batch.commit();
+
     if (results.any((result) => result <= 0)) throw EInsertEntry('Can\'t insert SrvcSqliteEntries');
     return true;
   }

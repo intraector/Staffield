@@ -21,7 +21,10 @@ class ReportsRepository {
     @required String employeeUid,
   }) async {
     var reports = await _entriesRepo.fetch(
-        greaterThan: greaterThan, lessThan: lessThan, employeeUid: employeeUid);
+      greaterThan: greaterThan.millisecondsSinceEpoch,
+      lessThan: lessThan.millisecondsSinceEpoch,
+      employeeUid: employeeUid,
+    );
     return reports.map((entry) => entry.report).toList();
   }
 
@@ -30,20 +33,26 @@ class ReportsRepository {
     @required DateTime greaterThan,
     @required DateTime lessThan,
   }) async {
-    var entries =
-        await _entriesRepo.fetch(greaterThan: greaterThan, lessThan: lessThan, employeeUid: null);
+    var entries = await _entriesRepo.fetch(
+      greaterThan: greaterThan.millisecondsSinceEpoch,
+      lessThan: lessThan.millisecondsSinceEpoch,
+      employeeUid: null,
+    );
     var entryReportsByEmployee = _separateByEmployee(entries);
     return entryReportsByEmployee.values.map((list) => _aggregateReport(list)).toList();
   }
 
   //-----------------------------------------
   Future<Map<String, Report>> fetchOneEmployeeByMonth({
-    @required DateTime start,
-    @required DateTime end,
+    @required DateTime greaterThan,
+    @required DateTime lessThan,
     @required String employeeUid,
   }) async {
-    var entries =
-        await _entriesRepo.fetch(greaterThan: start, lessThan: end, employeeUid: employeeUid);
+    var entries = await _entriesRepo.fetch(
+      greaterThan: greaterThan.millisecondsSinceEpoch,
+      lessThan: lessThan.millisecondsSinceEpoch,
+      employeeUid: employeeUid,
+    );
     var entryReportsByMonth = _separateByMonth(entries);
     return entryReportsByMonth.map((month, items) => MapEntry(month, _aggregateReport(items)));
   }
@@ -84,7 +93,6 @@ class ReportsRepository {
         entryReportsByMonth['${_startDate.month.monthTitle} ${_startDate.year}'] = result;
       start = end;
     }
-    Print.yellow('||| {entryReportsByMonth.keys} : ${entryReportsByMonth.keys}');
     return entryReportsByMonth;
   }
 

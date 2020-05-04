@@ -24,7 +24,7 @@ class GenerateRandomEntries {
     }
     var _dates = generateRandomDatesOverPeriod(days: days, recordsPerDay: recordsPerDay);
     var random = Random();
-
+    var list = <Entry>[];
     for (var date in _dates) {
       var entry = Entry();
       entry.timestamp = date.millisecondsSinceEpoch;
@@ -39,8 +39,9 @@ class GenerateRandomEntries {
       var fold = entry.penalties.fold<double>(0, (value, penalty) => value + penalty.total);
       var _bonus = entry.revenue * entry.interest / 100;
       entry.total = (entry.wage + _bonus - fold).roundToDouble();
-      _entriesRepo.addOrUpdate(entry);
+      list.add(entry);
     }
+    _entriesRepo.addOrUpdate(list);
   }
 
   //-----------------------------------------

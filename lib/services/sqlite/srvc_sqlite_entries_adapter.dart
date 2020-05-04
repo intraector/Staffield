@@ -18,8 +18,8 @@ class SqliteEntriesAdapater implements EntriesRepositoryInterface {
       limit: limit,
     );
     var penaltiesFuture = _srvcSqliteEntries.fetchPenalties(
-      start: greaterThan,
-      end: lessThan,
+      greaterThan: greaterThan,
+      lessThan: lessThan,
       parentUid: null,
       limit: null,
     );
@@ -34,8 +34,15 @@ class SqliteEntriesAdapater implements EntriesRepositoryInterface {
   }
 
   //-----------------------------------------
-  Future<bool> addOrUpdate(Entry entry) => _srvcSqliteEntries.addOrUpdate(
-      entry: entry.toSqlite(), penalties: entry.penalties.map((penalty) => penalty.toSqlite()));
+  Future<bool> addOrUpdate(List<Entry> entries) {
+    var entriesMaps = <Map<String, dynamic>>[];
+    var penaltiesMaps = <Map<String, dynamic>>[];
+    for (var entry in entries) {
+      entriesMaps.add(entry.toSqlite());
+      penaltiesMaps.addAll(entry.penalties.map((penalty) => penalty.toSqlite()));
+    }
+    return _srvcSqliteEntries.addOrUpdate(entries: entriesMaps, penalties: penaltiesMaps);
+  }
 
   //-----------------------------------------
   Future<void> remove(String uid) => _srvcSqliteEntries.remove(uid);

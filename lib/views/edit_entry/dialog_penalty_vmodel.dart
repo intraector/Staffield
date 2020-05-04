@@ -10,8 +10,8 @@ class DialogPenaltyVModel extends ChangeNotifier {
       txtCtrlPlainSum.text = penalty.total?.toString()?.formatCurrencyDecimal() ?? '';
     } else if (penalty.type == PenaltyType.timeByMoney) {
       labelTotal = labelTotalPrefix + (penalty.total?.toString()?.formatCurrency() ?? '0.0');
-      txtCtrlMinutes.text = penalty.time?.toString() ?? '';
-      txtCtrlMoney.text = penalty.money?.toString() ?? '';
+      txtCtrlMinutes.text = penalty.time == 0.0 ? '' : penalty.time.toString();
+      txtCtrlMoney.text = penalty.money == 0.0 ? '' : penalty.money.toString();
     }
   }
   Penalty penalty;

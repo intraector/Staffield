@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/models/employee.dart';
 import 'package:Staffield/core/utils/calc_total_mixin.dart';
+import 'package:Staffield/utils/dialog_confirm.dart';
 import 'package:Staffield/views/edit_employee/dialog_edit_employee.dart';
 import 'package:Staffield/views/edit_entry/dialog_penalty.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,9 +20,10 @@ final getIt = GetIt.instance;
 class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   ScreenEditEntryVModel(String uid) {
     this.entry = uid == null ? Entry() : _entriesRepo.getEntry(uid);
-    txtCtrlRevenue.text = entry.revenue?.roundToDouble().toString()?.formatCurrency() ?? '';
-    txtCtrlWage.text = entry.wage?.toString()?.formatCurrency() ?? '';
-    txtCtrlInterest.text = entry.interest?.toString()?.formatCurrency() ?? '';
+    txtCtrlRevenue.text =
+        uid == null ? '' : entry.revenue?.roundToDouble().toString()?.formatCurrency();
+    txtCtrlInterest.text = uid == null ? '' : entry.interest?.toString()?.formatCurrency() ?? '';
+    txtCtrlWage.text = uid == null ? '' : entry.wage?.toString()?.formatCurrency() ?? '';
     penalties = entry.penalties.map((penalty) => Penalty.fromOther(penalty)).toList();
     entry.penaltiesTotalAux = entry.revenue * entry.interest / 100 ?? 0;
   }
@@ -203,9 +205,10 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
 
   //-----------------------------------------
   void save() {
+    entry.timestamp = DateTime.now().millisecondsSinceEpoch;
     entry.penalties = penalties.toList();
     calcTotal();
-    _entriesRepo.addOrUpdate(entry);
+    _entriesRepo.addOrUpdate([entry]);
   }
 
   //-----------------------------------------
@@ -224,7 +227,24 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   }
 
   //-----------------------------------------
-  void removeEntry() => _entriesRepo.remove(entry.uid);
+  Future<void> removeEntry(BuildContext context) async {
+    var _isConfirmed = await dialogConfirm(context, text: 'Удалить эту запись?');
+    if (_isConfirmed ?? false) {
+      _entriesRepo.remove(entry.uid);
+      Navigator.of(context).pop();
+    }
+  }
+
+  //-----------------------------------------
+  Future<void> goBack(BuildContext context) async {
+    if (penalties.isEmpty)
+      Navigator.of(context).pop();
+    else {
+      var isConfirmed =
+          await dialogConfirm(context, text: ('Изменения не будут сохранены. Продолжить?'));
+      if (isConfirmed ?? false) Navigator.of(context).pop();
+    }
+  }
 
   //-----------------------------------------
   String labelName = 'Сотрудник';

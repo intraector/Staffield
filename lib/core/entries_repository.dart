@@ -12,16 +12,23 @@ class EntriesRepository {
 
   var _cache = <Entry>[];
 
-  var _streamCtrlCacheUpdates = StreamController<bool>.broadcast();
-
-  int limit = 100;
-
-  int oldestTimestamp;
-
   bool _isLoading = false;
   bool _endOfData = false;
 
+  int _startTimestamp;
+  int _oldestTimestamp;
+  int limit = 100;
+
   //-----------------------------------------
+  int get startTimestamp => _startTimestamp;
+
+  set startTimestamp(int timestamp) {
+    _startTimestamp = timestamp;
+    fetchNextChunkToCache(restart: true);
+  }
+
+  //-----------------------------------------
+  var _streamCtrlCacheUpdates = StreamController<bool>.broadcast();
   Stream<bool> get updates => _streamCtrlCacheUpdates.stream;
   void _notifyRepoUpdates() => _streamCtrlCacheUpdates.sink.add(true);
 
@@ -32,49 +39,50 @@ class EntriesRepository {
   Entry getEntry(String uid) => _cache.firstWhere((entry) => entry.uid == uid);
 
   //-----------------------------------------
-  Future<int> fetchNextChunkToCache() async {
+  Future<int> fetchNextChunkToCache({bool restart = false}) async {
     if (_isLoading) return 0;
+    if (restart) _endOfData = false;
     if (_endOfData) return 0;
     _isLoading = true;
-    // Print.yellow('||| fired fetchNextChunk');
-    var res = await fetch(
+    var result = await fetch(
       greaterThan: null,
-      lessThan:
-          oldestTimestamp == null ? null : DateTime.fromMillisecondsSinceEpoch(oldestTimestamp),
+      lessThan: restart ? _startTimestamp : _oldestTimestamp,
       employeeUid: null,
       limit: limit,
     );
-    if (res.length == 0) _endOfData = true;
-    setOldestTimestampFrom(res);
-    _cache.addAll(res);
+    if (result.length == 0) _endOfData = true;
+    setOldestTimestampFrom(result);
+    restart == false ? _cache.addAll(result) : _cache = result;
     _notifyRepoUpdates();
     _isLoading = false;
-    return res.length;
+    return result.length;
   }
 
   //-----------------------------------------
   Future<List<Entry>> fetch({
-    @required DateTime greaterThan,
-    @required DateTime lessThan,
+    @required int greaterThan,
+    @required int lessThan,
     @required String employeeUid,
     int limit,
   }) =>
       sqlite.fetch(
-        greaterThan: greaterThan?.millisecondsSinceEpoch,
-        lessThan: lessThan?.millisecondsSinceEpoch,
+        greaterThan: greaterThan,
+        lessThan: lessThan,
         employeeUid: employeeUid,
         limit: limit,
       );
 
   //-----------------------------------------
-  void addOrUpdate(Entry entry) {
-    var index = _cache.indexOf(entry);
-    if (index >= 0)
-      _cache[index] = entry;
-    else
-      _cache.insert(0, entry);
-    sqlite.addOrUpdate(entry);
+  Future<bool> addOrUpdate(List<Entry> entries) {
+    for (var entry in entries) {
+      var index = _cache.indexOf(entry);
+      if (index >= 0)
+        _cache[index] = entry;
+      else
+        _cache.insert(0, entry);
+    }
     _notifyRepoUpdates();
+    return sqlite.addOrUpdate(entries);
   }
 
   //-----------------------------------------
@@ -91,7 +99,7 @@ class EntriesRepository {
     var _oldest = list
         .reduce((current, next) => current.timestamp < next.timestamp ? current : next)
         .timestamp;
-    if (_oldest != null) oldestTimestamp = _oldest;
+    if (_oldest != null) _oldestTimestamp = _oldest;
   }
 
   //-----------------------------------------

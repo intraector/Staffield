@@ -32,25 +32,25 @@ class ScreenReports extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
                                 Selector<ScreenReportsVModel, String>(
-                                  selector: (context, vModel) => vModel.startDate,
+                                  selector: (context, vModel) => vModel.endDate,
                                   builder: (context, startDate, _) => Row(
                                     children: <Widget>[
                                       Text('НАЧАЛО: '),
                                       InkWell(
-                                        child: Text(vModel.startDate),
-                                        onTap: () => vModel.pickStartDate(context),
+                                        child: Text(vModel.endDate),
+                                        onTap: () => vModel.pickEndDate(context),
                                       ),
                                     ],
                                   ),
                                 ),
                                 Selector<ScreenReportsVModel, String>(
-                                  selector: (context, vModel) => vModel.endDate,
+                                  selector: (context, vModel) => vModel.startDate,
                                   builder: (context, startDate, _) => Row(
                                     children: <Widget>[
                                       Text('КОНЕЦ: '),
                                       InkWell(
-                                        child: Text(vModel.endDate),
-                                        onTap: () => vModel.pickEndDate(context),
+                                        child: Text(vModel.startDate),
+                                        onTap: () => vModel.pickStartDate(context),
                                       ),
                                     ],
                                   ),
