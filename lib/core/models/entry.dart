@@ -14,6 +14,7 @@ class Entry {
   double wage = 0;
   double total = 0;
   double penaltiesTotalAux = 0;
+  double bonusAux = 0;
   var penalties = <Penalty>[];
 
   //-----------------------------------------

@@ -17,9 +17,10 @@ class AdaptedEntryReport with TimeByMoneyAdapted {
     name = report.employeeNameAux;
     total = report.total.toString().formatCurrencyDecimal();
     revenue = report.revenue.toString().formatCurrencyDecimal();
-    interest = report.interest.toString().formatCurrency() + ' %';
-    wage = report.wage.toString().formatCurrencyDecimal();
-    penaltiesTotal = report.penaltiesTotalAux.toString().formatCurrencyDecimal();
+    interest = report.interest.toString().formatCurrency();
+    bonus = report.bonusAux.toString().formatCurrency();
+    wage = report.wage.toString().formatCurrency();
+    penaltiesTotal = report.penaltiesTotalAux.toString().formatCurrency();
     penalties = report.penalties.map((penalty) => penalty.report).toList();
     time = report.time.toString().formatCurrencyDecimal();
     penaltiesCount = report.penaltiesCount.toString().formatCurrencyDecimal();
@@ -29,6 +30,7 @@ class AdaptedEntryReport with TimeByMoneyAdapted {
   String total;
   String revenue;
   String interest;
+  String bonus;
   String wage;
   String penaltiesTotal;
   String penaltiesCount;

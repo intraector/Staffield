@@ -3,9 +3,9 @@ import 'package:Staffield/constants/app_gradients.dart';
 import 'package:Staffield/constants/app_text_styles.dart';
 import 'package:Staffield/constants/router_paths.dart';
 import 'package:Staffield/services/router.dart';
-import 'package:Staffield/views/entries/view_item_penalties.dart';
 import 'package:Staffield/views/reports/adapted_entry_report.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class ViewScreenEntriesItem extends StatelessWidget {
   ViewScreenEntriesItem(this.item);
@@ -34,7 +34,7 @@ class ViewScreenEntriesItem extends StatelessWidget {
                     item.name,
                     softWrap: false,
                     overflow: TextOverflow.fade,
-                    style: AppTextStyles.titleBold,
+                    style: AppTextStyles.bodyBoldLight,
                   ),
                 ),
               ],
@@ -57,22 +57,25 @@ class ViewScreenEntriesItem extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                       child: Wrap(
-                        alignment: WrapAlignment.spaceEvenly,
+                        alignment: WrapAlignment.spaceBetween,
                         children: <Widget>[
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
                             margin: EdgeInsets.all(3.0),
                             decoration: BoxDecoration(
-                              color: AppColors.primaryBlend,
+                              color: AppColors.primaryAccent,
                               borderRadius: BorderRadius.circular(5.0),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                Text('Выручка'),
+                                Icon(MdiIcons.cash, color: AppColors.white),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 8.0),
-                                  child: Text(item.revenue),
+                                  child: Text(
+                                    item.wage,
+                                    style: AppTextStyles.bodyBoldLight,
+                                  ),
                                 ),
                               ],
                             ),
@@ -81,16 +84,19 @@ class ViewScreenEntriesItem extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
                             margin: EdgeInsets.all(3.0),
                             decoration: BoxDecoration(
-                              color: AppColors.primaryBlend,
+                              color: AppColors.primaryAccent,
                               borderRadius: BorderRadius.circular(5.0),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                Text('Бонус'),
+                                Icon(MdiIcons.cashPlus, color: AppColors.white),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 8.0),
-                                  child: Text(item.interest),
+                                  child: Text(
+                                    item.bonus,
+                                    style: AppTextStyles.bodyBoldLight,
+                                  ),
                                 ),
                               ],
                             ),
@@ -99,16 +105,19 @@ class ViewScreenEntriesItem extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
                             margin: EdgeInsets.all(3.0),
                             decoration: BoxDecoration(
-                              color: AppColors.primaryBlend,
+                              color: AppColors.primaryAccent,
                               borderRadius: BorderRadius.circular(5.0),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                Text('Оклад'),
+                                Icon(MdiIcons.cashMinus, color: AppColors.white),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 8.0),
-                                  child: Text(item.wage),
+                                  child: Text(
+                                    item.penaltiesTotal,
+                                    style: AppTextStyles.bodyBoldLight,
+                                  ),
                                 ),
                               ],
                             ),
@@ -121,7 +130,48 @@ class ViewScreenEntriesItem extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    ViewItemPenalties(item),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
+                      margin: EdgeInsets.all(3.0),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryAccent,
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Icon(MdiIcons.cashMultiple, color: AppColors.white),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              item.revenue,
+                              style: AppTextStyles.bodyBoldLight,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
+                      margin: EdgeInsets.all(3.0),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryAccent,
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Icon(MdiIcons.brightnessPercent, color: AppColors.white),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              item.interest,
+                              style: AppTextStyles.bodyBoldLight,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     Container(
                         margin: EdgeInsets.only(top: 5.0),
                         padding: EdgeInsets.all(8.0),

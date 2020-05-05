@@ -13,6 +13,7 @@ class EntryReport extends Entry with TimeByMoney, CalcTotal {
     employeeNameAux = entry.employeeNameAux;
     revenue = entry.revenue;
     interest = entry.interest;
+    bonusAux = revenue * interest / 100;
     wage = entry.wage;
     penalties = entry.penalties;
     time = 0;
@@ -20,8 +21,10 @@ class EntryReport extends Entry with TimeByMoney, CalcTotal {
 
     var calcTotalResult =
         calcTotalAndBonus(revenue: revenue, interest: interest, wage: wage, penalties: penalties);
+
     penaltiesTotalAux = calcTotalResult.penaltiesTotal;
     total = calcTotalResult.total;
+    bonusAux = calcTotalResult.bonus;
 
     for (var penalty in penalties) {
       switch (penalty.type) {
@@ -42,6 +45,7 @@ class EntryReport extends Entry with TimeByMoney, CalcTotal {
   }
 
   int penaltiesCount = 0;
+  double bonusAux;
   Map<String, double> penaltiesTotalByType = {};
 
   @override

@@ -10,6 +10,7 @@ import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:Staffield/utils/regexp_digits_and_dot.dart';
 import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
 import 'package:Staffield/views/edit_entry/view_penalties.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 // import 'package:Staffield/utils/CurrencyFormatter.dart';
@@ -64,7 +65,7 @@ class ScreenEditEntry extends StatelessWidget {
                                 key: _formKey,
                                 child: ListView(
                                   shrinkWrap: true,
-                                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                                  padding: EdgeInsets.symmetric(horizontal: 10.0),
                                   children: <Widget>[
                                     Row(
                                       children: <Widget>[
@@ -75,6 +76,7 @@ class ScreenEditEntry extends StatelessWidget {
                                                   _vModel.employeeUid, _vModel.employeesItems),
                                               builder: (context, tuple, __) =>
                                                   DropdownButtonFormField(
+                                                    decoration: InputDecoration(isDense: true),
                                                     value: tuple.item1,
                                                     hint: Text(vModel.labelName),
                                                     isExpanded: true,
@@ -88,9 +90,111 @@ class ScreenEditEntry extends StatelessWidget {
                                                     onChanged: (employeeUid) {
                                                       vModel.setEmployeeUid(employeeUid, context);
                                                       FocusScope.of(context)
-                                                          .requestFocus(focusRevenue);
+                                                          .requestFocus(focusWage);
                                                     },
                                                   )),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: <Widget>[
+                                        Flexible(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(horizontal: 2.0),
+                                                child: Text(
+                                                  vModel.labelWage,
+                                                  style: AppTextStyles.small1Bold,
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.symmetric(
+                                                    horizontal: 7.0, vertical: 5.5),
+                                                margin: EdgeInsets.all(3.0),
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.primaryAccent,
+                                                  borderRadius: BorderRadius.circular(5.0),
+                                                ),
+                                                child: TextFormField(
+                                                  controller: vModel.txtCtrlWage,
+                                                  textInputAction: TextInputAction.next,
+                                                  minLines: 1,
+                                                  maxLines: 1,
+                                                  focusNode: focusWage,
+                                                  style: AppTextStyles.bodyBoldLight,
+                                                  decoration: InputDecoration(
+                                                    contentPadding: EdgeInsets.symmetric(
+                                                        horizontal: 0.0, vertical: 2.0),
+                                                    isDense: true,
+                                                    icon: Icon(
+                                                      MdiIcons.cash,
+                                                      size: 26.0,
+                                                      color: AppColors.white,
+                                                    ),
+                                                    enabledBorder: UnderlineInputBorder(
+                                                        borderSide:
+                                                            BorderSide(color: AppColors.white)),
+                                                    focusedBorder: UnderlineInputBorder(
+                                                        borderSide:
+                                                            BorderSide(color: AppColors.white)),
+                                                  ),
+                                                  cursorColor: AppColors.white,
+                                                  keyboardType: TextInputType.number,
+                                                  inputFormatters: [
+                                                    WhitelistingTextInputFormatter(
+                                                        regexpDigitsAndDot())
+                                                  ],
+                                                  onChanged: (_) => vModel.formatWage(),
+                                                  validator: (txt) => vModel.validateWage(txt),
+                                                  onFieldSubmitted: (_) => FocusScope.of(context)
+                                                      .requestFocus(focusRevenue),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(horizontal: 2.0),
+                                                child: Text(
+                                                  vModel.labelBonus,
+                                                  style: AppTextStyles.small1Bold,
+                                                ),
+                                              ),
+                                              Selector<ScreenEditEntryVModel, String>(
+                                                selector: (_, _vModel) => _vModel.bonus,
+                                                builder: (context, bonus, __) => DataChip(
+                                                  text: bonus,
+                                                  icon: MdiIcons.cashPlus,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(horizontal: 2.0),
+                                                child: Text(
+                                                  vModel.labelPenalties,
+                                                  style: AppTextStyles.small1Bold,
+                                                ),
+                                              ),
+                                              Selector<ScreenEditEntryVModel, String>(
+                                                  selector: (_, _vModel) => _vModel.penaltiesTotal,
+                                                  builder: (context, penaltiesTotal, __) =>
+                                                      DataChip(
+                                                        text: penaltiesTotal,
+                                                        icon: MdiIcons.cashMinus,
+                                                      )),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -103,8 +207,11 @@ class ScreenEditEntry extends StatelessWidget {
                                               controller: vModel.txtCtrlRevenue,
                                               textInputAction: TextInputAction.next,
                                               focusNode: focusRevenue,
-                                              decoration:
-                                                  InputDecoration(labelText: vModel.labelRevenue),
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                labelText: vModel.labelRevenue,
+                                                icon: Icon(MdiIcons.cashMultiple, size: 24.0),
+                                              ),
                                               maxLines: 1,
                                               keyboardType: TextInputType.number,
                                               inputFormatters: [
@@ -123,8 +230,11 @@ class ScreenEditEntry extends StatelessWidget {
                                             child: TextFormField(
                                               controller: vModel.txtCtrlInterest,
                                               focusNode: focusInterest,
-                                              decoration:
-                                                  InputDecoration(labelText: vModel.labelInterest),
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                labelText: vModel.labelInterest,
+                                                icon: Icon(MdiIcons.brightnessPercent, size: 24.0),
+                                              ),
                                               maxLines: 1,
                                               keyboardType: TextInputType.number,
                                               inputFormatters: [
@@ -137,42 +247,11 @@ class ScreenEditEntry extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          margin: EdgeInsets.only(left: 20.0),
-                                          child: Selector<ScreenEditEntryVModel, String>(
-                                              selector: (_, _vModel) => _vModel.bonus,
-                                              builder: (context, bonus, __) => Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Text(vModel.labelBonus,
-                                                          style: AppTextStyles.textLabel),
-                                                      Text(bonus, style: AppTextStyles.body),
-                                                    ],
-                                                  )),
-                                        ),
                                       ],
                                     ),
                                     Row(
                                       crossAxisAlignment: CrossAxisAlignment.end,
                                       children: <Widget>[
-                                        Expanded(
-                                          child: TextFormField(
-                                            controller: vModel.txtCtrlWage,
-                                            textInputAction: TextInputAction.next,
-                                            focusNode: focusWage,
-                                            decoration:
-                                                InputDecoration(labelText: vModel.labelWage),
-                                            maxLines: 1,
-                                            keyboardType: TextInputType.number,
-                                            inputFormatters: [
-                                              WhitelistingTextInputFormatter(regexpDigitsAndDot())
-                                            ],
-                                            onChanged: (_) => vModel.formatWage(),
-                                            validator: (txt) => vModel.validateWage(txt),
-                                            onFieldSubmitted: (_) =>
-                                                FocusScope.of(context).requestFocus(focusInterest),
-                                          ),
-                                        ),
                                         Expanded(
                                           child: Container(
                                             margin: EdgeInsets.only(left: 20.0),
@@ -259,6 +338,35 @@ class ScreenEditEntry extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class DataChip extends StatelessWidget {
+  DataChip({@required this.text, @required this.icon});
+  final String text;
+  final IconData icon;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 4.0),
+      margin: EdgeInsets.all(3.0),
+      decoration: BoxDecoration(
+        color: AppColors.primaryAccent,
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 4.0),
+            child: Icon(icon, color: AppColors.white),
+          ),
+          Flexible(
+            child: SingleChildScrollView(child: Text(text, style: AppTextStyles.bodyBoldLight)),
+          ),
+        ],
       ),
     );
   }

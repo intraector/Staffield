@@ -8,15 +8,17 @@ class CalcTotal {
     @required double wage,
     @required List<Penalty> penalties,
   }) {
-    var totalPenalties = penalties.fold<double>(0, (value, penalty) => value + penalty.total);
     var result = CalcTotalResult();
-    result.penaltiesTotal = revenue * interest / 100;
-    result.total = (wage + result.penaltiesTotal - totalPenalties).roundToDouble();
+    result.penaltiesTotal = penalties.fold<double>(0, (value, penalty) => value + penalty.total);
+
+    result.bonus = revenue * interest / 100;
+    result.total = (wage + result.bonus - result.penaltiesTotal).roundToDouble();
     return result;
   }
 }
 
 class CalcTotalResult {
   double total;
+  double bonus;
   double penaltiesTotal;
 }

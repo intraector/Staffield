@@ -1,5 +1,5 @@
-import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sailor/sailor.dart';
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/services/router.dart';
@@ -30,7 +30,7 @@ class BottomNavigation extends StatelessWidget {
 
     //----------------------------------------employees
     var employees = IconButton(
-      icon: Icon(CommunityMaterialIcons.account_multiple),
+      icon: Icon(MdiIcons.accountMultiple),
       iconSize: _iconSize,
       disabledColor: _disabledColor,
       color: _inactiveColor,
@@ -44,7 +44,7 @@ class BottomNavigation extends StatelessWidget {
 
     //----------------------------------------employees
     var reports = IconButton(
-      icon: Icon(CommunityMaterialIcons.format_list_bulleted),
+      icon: Icon(MdiIcons.formatListBulleted),
       iconSize: _iconSize,
       disabledColor: _disabledColor,
       color: _inactiveColor,

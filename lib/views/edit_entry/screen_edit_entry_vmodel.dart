@@ -14,6 +14,7 @@ import 'package:Staffield/core/models/entry.dart';
 import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/utils/format_input_currency.dart';
 import 'package:Staffield/utils/string_utils.dart';
+import 'package:print_color/print_color.dart';
 
 final getIt = GetIt.instance;
 
@@ -45,7 +46,10 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   final int _interestMaxLength = 5;
 
   //-----------------------------------------
-  String get bonus => entry.penaltiesTotalAux.toString().formatCurrency();
+  String get bonus => entry.bonusAux.toString().formatCurrency();
+
+  //-----------------------------------------
+  String get penaltiesTotal => entry.penaltiesTotalAux.toString().formatCurrency();
 
   //-----------------------------------------
   String get total => entry.total.toString().formatCurrency();
@@ -118,9 +122,9 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   //-----------------------------------------
   String validateRevenue(String txt) {
     if (txt.isEmpty)
-      return 'Введите выручку';
+      return '!';
     else if (txt.endsWith('.'))
-      return 'Проверьте ввод';
+      return '!';
     else {
       entry.revenue = double.parse(txtCtrlRevenue.text.removeSpaces());
       return null;
@@ -130,9 +134,9 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   //-----------------------------------------
   String validateWage(String txt) {
     if (txt.isEmpty)
-      return 'Введите выручку';
+      return '!';
     else if (txt.endsWith('.'))
-      return 'Проверьте ввод';
+      return '!';
     else {
       entry.wage = double.parse(txtCtrlWage.text.removeSpaces());
       return null;
@@ -142,11 +146,11 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   //-----------------------------------------
   String validateInterest(String txt) {
     if (txt.isEmpty)
-      return 'Введите процент';
+      return '!';
     else if (txt.endsWith('.'))
-      return 'Проверьте ввод';
+      return '!';
     else if ((double.tryParse(txt) ?? 101) > 100)
-      return 'Проверьте ввод';
+      return '!';
     else {
       entry.interest = double.parse(txtCtrlInterest.text.removeSpaces());
       return null;
@@ -213,16 +217,14 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
 
   //-----------------------------------------
   void calcTotal() {
-    // var fold = penalties.fold<double>(0, (value, penalty) => value + penalty.total);
     var revenue = double.tryParse(txtCtrlRevenue.text.replaceAll(' ', '')) ?? 0;
     var interest = double.tryParse(txtCtrlInterest.text.replaceAll(' ', '')) ?? 0;
     var wage = double.tryParse(txtCtrlWage.text.replaceAll(' ', '')) ?? 0;
     var result =
         calcTotalAndBonus(revenue: revenue, interest: interest, wage: wage, penalties: penalties);
-    // _bonus = revenue * interest / 100;
-    entry.penaltiesTotalAux = result.penaltiesTotal;
-    // entry.total = (wage + _bonus - fold).roundToDouble();
+    entry.bonusAux = result.bonus;
     entry.total = result.total;
+    entry.penaltiesTotalAux = result.penaltiesTotal;
     notifyListeners();
   }
 
@@ -250,6 +252,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   String labelName = 'Сотрудник';
   String labelRevenue = 'Выручка';
   String labelInterest = 'Процент';
-  String labelBonus = 'Бонус';
-  String labelWage = 'Оклад';
+  String labelBonus = 'БОНУС';
+  String labelWage = 'ОКЛАД';
+  String labelPenalties = 'ШТРАФЫ';
 }
