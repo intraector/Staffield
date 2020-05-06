@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:Staffield/core/entries_repository.dart';
-import 'package:print_color/print_color.dart';
 
 final getIt = GetIt.instance;
 
@@ -25,12 +24,12 @@ class ScreenEntriesVModel with ChangeNotifier {
   final _repo = getIt<EntriesRepository>();
   var _generateRandomEntries = GenerateRandomEntries();
 
-  String currentItemDate = '';
+  // String currentItemDate = '';
 
   int get startTimestamp => _repo.startTimestamp;
 
   String get startTimestampLabel =>
-      'С ' +
+      'до ' +
       timeAndDifference(
           timestamp1: startTimestamp ?? DateTime.now().millisecondsSinceEpoch,
           showDate: true,
@@ -55,27 +54,28 @@ class ScreenEntriesVModel with ChangeNotifier {
   }
 
   //-----------------------------------------
-  void setCurrentItemDate(int index) {
-    currentItemDate = cache[index].date;
-    notifyListeners();
-  }
+  // void setCurrentItemDate(int index) {
+  //   currentItemDate = cache[index].date;
+  //   notifyListeners();
+  // }
 
   //-----------------------------------------
   void updateList() {
     var _currentDate;
+    var result = <AdaptedEntryReport>[];
     if (_repo.cache.isNotEmpty) {
       _currentDate = DateTime.fromMillisecondsSinceEpoch(_repo.cache.first.timestamp);
+      result.add(AdaptedEntryReport.dateLabel(_repo.cache.first));
     }
-    var tmp = <AdaptedEntryReport>[];
     for (var entry in _repo.cache) {
       var _nextDate = DateTime.fromMillisecondsSinceEpoch(entry.timestamp);
       if (_nextDate.day != _currentDate.day) {
         _currentDate = _nextDate;
-        tmp.add(AdaptedEntryReport.dateLabel(entry));
+        result.add(AdaptedEntryReport.dateLabel(entry));
       }
-      tmp.add(AdaptedEntryReport.from(entry.report));
+      result.add(AdaptedEntryReport.from(entry.report));
     }
-    cache = tmp;
+    cache = result;
     // if (cache.isNotEmpty) currentItemDate = cache.first.date;
     notifyListeners();
   }

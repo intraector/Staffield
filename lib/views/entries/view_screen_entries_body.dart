@@ -5,7 +5,6 @@ import 'package:Staffield/views/entries/view_screen_entries_item.dart';
 import 'package:Staffield/views/reports/adapted_entry_report.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ViewScreenEntriesBody extends StatefulWidget {
   @override
@@ -13,15 +12,6 @@ class ViewScreenEntriesBody extends StatefulWidget {
 }
 
 class _ViewScreenEntriesBodyState extends State<ViewScreenEntriesBody> {
-  final itemPositionsListener = ItemPositionsListener.create();
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    var vModel = Provider.of<ScreenEntriesVModel>(context, listen: false);
-    itemPositionsListener.itemPositions.addListener(() => listenerItemPosition(vModel));
-  }
-
   @override
   Widget build(BuildContext context) => Column(
         mainAxisSize: MainAxisSize.max,
@@ -38,24 +28,23 @@ class _ViewScreenEntriesBodyState extends State<ViewScreenEntriesBody> {
                         return true;
                       },
                       child: Scrollbar(
-                        child: ScrollablePositionedList.builder(
+                        child: ListView.builder(
                             physics: const AlwaysScrollableScrollPhysics(),
                             itemCount: list.length,
-                            itemPositionsListener: itemPositionsListener,
                             itemBuilder: (context, index) => list[index].isDateLabel
                                 ? Container(
                                     padding: EdgeInsets.only(left: 8.0),
-                                    margin: EdgeInsets.only(top: 14.0, left: 5.0),
+                                    margin: EdgeInsets.only(top: 14.0, bottom: 14.0),
                                     alignment: Alignment.centerLeft,
-                                    height: 22,
+                                    height: 26,
                                     decoration: BoxDecoration(
-                                      gradient: AppGradients.solidStone,
+                                      gradient: AppGradients.mirage,
                                       boxShadow: [
                                         BoxShadow(
                                           color: Colors.black,
                                           spreadRadius: 0,
-                                          blurRadius: 3,
-                                          offset: Offset(0, 3), // changes position of shadow
+                                          blurRadius: 2,
+                                          offset: Offset(0, 2), // changes position of shadow
                                         ),
                                       ],
                                     ),
@@ -68,7 +57,4 @@ class _ViewScreenEntriesBodyState extends State<ViewScreenEntriesBody> {
           ),
         ],
       );
-
-  void listenerItemPosition(ScreenEntriesVModel vModel) =>
-      vModel.setCurrentItemDate(itemPositionsListener.itemPositions.value.first.index);
 }

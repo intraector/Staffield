@@ -6,7 +6,6 @@ import 'package:Staffield/core/models/report.dart';
 import 'package:Staffield/utils/month_string.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
-import 'package:print_color/print_color.dart';
 
 final getIt = GetIt.instance;
 

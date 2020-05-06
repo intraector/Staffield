@@ -13,4 +13,6 @@ class AppColors {
   static Color error = Colors.red[600];
   static Color block = Colors.purple[50];
   static Color white = Colors.white;
+  static Color black = Colors.black;
+  static Color experimental = Colors.white;
 }

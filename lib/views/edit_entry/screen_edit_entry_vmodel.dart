@@ -14,7 +14,6 @@ import 'package:Staffield/core/models/entry.dart';
 import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/utils/format_input_currency.dart';
 import 'package:Staffield/utils/string_utils.dart';
-import 'package:print_color/print_color.dart';
 
 final getIt = GetIt.instance;
 
@@ -250,8 +249,8 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
 
   //-----------------------------------------
   String labelName = 'Сотрудник';
-  String labelRevenue = 'Выручка';
-  String labelInterest = 'Процент';
+  String labelRevenue = 'ВЫРУЧКА';
+  String labelInterest = 'ПРОЦЕНТ';
   String labelBonus = 'БОНУС';
   String labelWage = 'ОКЛАД';
   String labelPenalties = 'ШТРАФЫ';
