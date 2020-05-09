@@ -28,28 +28,29 @@ class ScreenEmployees extends StatelessWidget {
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  title: Text("СОТРУДНИКИ",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.0,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black,
-                            offset: Offset(0, 0),
-                            blurRadius: 8,
-                          ),
-                          Shadow(
-                            color: Colors.black,
-                            offset: Offset(0, 0),
-                            blurRadius: 4,
-                          ),
-                        ],
-                      )),
-                  background: Image.network(
-                    "https://www.itforum365.com.br/wp-content/uploads/2019/06/rh-cv-compressed.jpg",
-                    fit: BoxFit.fitWidth,
-                  )),
+                centerTitle: true,
+                title: Text("СОТРУДНИКИ",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15.0,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black,
+                          offset: Offset(0, 0),
+                          blurRadius: 8,
+                        ),
+                        Shadow(
+                          color: Colors.black,
+                          offset: Offset(0, 0),
+                          blurRadius: 4,
+                        ),
+                      ],
+                    )),
+                background: Image.network(
+                  "https://www.itforum365.com.br/wp-content/uploads/2019/06/rh-cv-compressed.jpg",
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
             ),
           ],
           body: Column(

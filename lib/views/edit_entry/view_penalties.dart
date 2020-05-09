@@ -6,15 +6,15 @@ import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
 import 'package:Staffield/utils/string_utils.dart';
 
 class ViewPenalties extends StatelessWidget {
-  ViewPenalties(this.screenEntryVModel);
-  final ScreenEditEntryVModel screenEntryVModel;
+  ViewPenalties(this.screenEditEntryVModel);
+  final ScreenEditEntryVModel screenEditEntryVModel;
   @override
   Widget build(BuildContext context) {
-    var penalties = screenEntryVModel.penalties;
+    var penalties = screenEditEntryVModel.penalties;
     return Column(
       children: <Widget>[
         if (penalties != null)
-          ...penalties.map((penalty) => ViewPenaltiesItem(penalty, screenEntryVModel)).toList()
+          ...penalties.map((penalty) => ViewPenaltiesItem(penalty, screenEditEntryVModel)).toList()
       ],
     );
   }
@@ -47,7 +47,7 @@ class ViewPenaltiesItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Text(
-                    penalty.title.toUpperCase(),
+                    vModel.getPenaltyType(penalty.typeUid).title.toUpperCase(),
                     overflow: TextOverflow.fade,
                     softWrap: false,
                     style: TextStyle(

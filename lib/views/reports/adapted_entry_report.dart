@@ -2,10 +2,9 @@ import 'package:Staffield/core/models/entry.dart';
 import 'package:Staffield/core/models/entry_report.dart';
 import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/utils/time_and_difference.dart';
-import 'package:Staffield/views/reports/report_adatpted_mixin_time_by_money.dart';
 import 'package:Staffield/utils/string_utils.dart';
 
-class AdaptedEntryReport with TimeByMoneyAdapted {
+class AdaptedEntryReport {
   AdaptedEntryReport.dateLabel(Entry entry) {
     isDateLabel = true;
     date = timeAndDifference(timestamp1: entry.timestamp, showDate: true);
@@ -22,7 +21,7 @@ class AdaptedEntryReport with TimeByMoneyAdapted {
     wage = report.wage.toString().formatCurrency();
     penaltiesTotal = report.penaltiesTotalAux.toString().formatCurrency();
     penalties = report.penalties.map((penalty) => penalty.report).toList();
-    time = report.time.toString().formatCurrencyDecimal();
+    penaltyUnit = report.penaltyUnit.toString().formatCurrencyDecimal();
     penaltiesCount = report.penaltiesCount.toString().formatCurrencyDecimal();
   }
   String uid;
@@ -35,6 +34,7 @@ class AdaptedEntryReport with TimeByMoneyAdapted {
   String penaltiesTotal;
   String penaltiesCount;
   String date;
+  String penaltyUnit;
   var penalties = <PenaltyReport>[];
   bool isDateLabel = false;
 }

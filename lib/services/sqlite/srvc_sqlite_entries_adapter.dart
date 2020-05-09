@@ -3,6 +3,9 @@ import 'package:Staffield/core/entries_repository_interface.dart';
 import 'package:Staffield/core/models/entry.dart';
 import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_entries.dart';
+import 'package:get_it/get_it.dart';
+
+final getIt = GetIt.instance;
 
 class SqliteEntriesAdapater implements EntriesRepositoryInterface {
   var _srvcSqliteEntries = SrvcSqliteEntries();

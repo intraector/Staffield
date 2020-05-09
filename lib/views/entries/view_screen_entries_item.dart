@@ -1,11 +1,9 @@
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/app_font_family.dart';
 import 'package:Staffield/constants/app_fonts.dart';
-import 'package:Staffield/constants/app_gradients.dart';
 import 'package:Staffield/constants/app_text_styles.dart';
 import 'package:Staffield/constants/router_paths.dart';
 import 'package:Staffield/services/router.dart';
-import 'package:Staffield/views/common/chip_total.dart';
 import 'package:Staffield/views/common/data_chip.dart';
 import 'package:Staffield/views/reports/adapted_entry_report.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +36,7 @@ class ViewScreenEntriesItem extends StatelessWidget {
                       overflow: TextOverflow.fade,
                       style: TextStyle(
                         fontFamily: AppFontFamily.ptsans,
-                        fontSize: AppFontSize.title,
+                        fontSize: AppFontSize.title1,
                         color: AppColors.primary,
                         // fontWeight: FontWeight.bold,
                       ),
@@ -56,11 +54,11 @@ class ViewScreenEntriesItem extends StatelessWidget {
                       alignment: WrapAlignment.spaceEvenly,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: <Widget>[
-                        DataChip(value: item.wage, label: 'Зарплата'),
+                        DataChip(value: item.wage, label: 'ОКЛАД'),
                         Icon(Icons.add, size: 18.0),
-                        DataChip(value: item.bonus, label: 'Бонус'),
+                        DataChip(value: item.bonus, label: 'БОНУС'),
                         Icon(Icons.remove, size: 18.0),
-                        DataChip(value: item.penaltiesTotal, label: 'Штрафы'),
+                        DataChip(value: item.penaltiesTotal, label: 'ШТРАФЫ'),
                       ],
                     ),
                   ),
@@ -76,7 +74,7 @@ class ViewScreenEntriesItem extends StatelessWidget {
                       margin: EdgeInsets.only(top: 5.0),
                       padding: EdgeInsets.symmetric(vertical: 5.0),
                       child: Text('Итого: ',
-                          style: TextStyle(fontSize: AppFontSize.small, color: AppColors.primary)),
+                          style: TextStyle(fontSize: AppFontSize.small1, color: AppColors.primary)),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 5.0),

@@ -1,45 +1,51 @@
-import 'package:flutter/widgets.dart';
 import 'package:Staffield/core/models/penalty_type.dart';
+import 'package:Staffield/core/penalty_types_repository.dart';
+import 'package:flutter/widgets.dart';
+import 'package:Staffield/core/models/penalty_mode.dart';
 import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/utils/string_utils.dart';
 import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
+import 'package:get_it/get_it.dart';
+import 'package:print_color/print_color.dart';
+
+final getIt = GetIt.instance;
 
 class DialogPenaltyVModel extends ChangeNotifier {
   DialogPenaltyVModel({@required this.penalty, @required this.screenEntryVModel}) {
-    if (penalty.type == PenaltyType.plain) {
+    _type = _penaltyTypesRepo.getType(penalty.typeUid);
+    penalty.mode = _type.mode;
+    if (penalty.mode == PenaltyMode.plain) {
       txtCtrlPlainSum.text = penalty.total?.toString()?.formatCurrencyDecimal() ?? '';
-    } else if (penalty.type == PenaltyType.timeByMoney) {
+    } else if (penalty.mode == PenaltyMode.calc) {
       labelTotal = labelTotalPrefix + (penalty.total?.toString()?.formatCurrency() ?? '0.0');
-      txtCtrlMinutes.text = penalty.time == 0.0 ? '' : penalty.time.toString();
-      txtCtrlMoney.text = penalty.money == 0.0 ? '' : penalty.money.toString();
+      txtCtrlUnit.text = penalty.unit == 0.0 ? '' : penalty.unit.toString();
+      txtCtrlCost.text = penalty.cost == 0.0 ? '' : penalty.cost.toString();
     }
   }
-  Penalty penalty;
-
-  final ScreenEditEntryVModel screenEntryVModel;
-
-  final txtCtrlPlainSum = TextEditingController();
-  final txtCtrlMinutes = TextEditingController();
-  final txtCtrlMoney = TextEditingController();
-
-  int maxLengthPlainSum = 8;
+  PenaltyType _type;
+  String get labelUnit => _type.unitTitle.toUpperCase();
+  String get labelTitle => _type.title.toUpperCase();
+  String labelCost = 'Цена'.toUpperCase();
+  String labelTotal;
+  String labelTotalPrefix = 'Сумма: '.toUpperCase();
   int maxLengthMinutes = 4;
   int maxLengthMoney = 4;
+  int maxLengthPlainSum = 8;
+  Penalty penalty;
+  final ScreenEditEntryVModel screenEntryVModel;
+  final txtCtrlUnit = TextEditingController();
+  final txtCtrlCost = TextEditingController();
+  final txtCtrlPlainSum = TextEditingController();
 
-  String labelMinutes = 'Минуты';
-  String labelMoney = 'Деньги';
-  String labelTotalPrefix = 'Сумма: ';
-  String labelTotal;
+  final _penaltyTypesRepo = getIt<PenaltyTypesRepository>();
 
   //-----------------------------------------
   void calcPenaltyTimeByMoney() {
-    if (txtCtrlMinutes.text.isNotEmpty && txtCtrlMoney.text.isNotEmpty)
+    if (txtCtrlUnit.text.isNotEmpty && txtCtrlCost.text.isNotEmpty)
       penalty.total =
-          (double.tryParse(txtCtrlMinutes.text) * double.tryParse(txtCtrlMoney.text)).toDouble() ??
-              0.0;
+          (double.tryParse(txtCtrlUnit.text) * double.tryParse(txtCtrlCost.text)).toDouble() ?? 0.0;
     else
       penalty.total = 0.0;
-
     labelTotal = labelTotalPrefix + penalty.total.toString().formatCurrency();
     notifyListeners();
   }
@@ -59,22 +65,21 @@ class DialogPenaltyVModel extends ChangeNotifier {
 
   //-----------------------------------------
   String validateMinutes() {
-    int result = int.tryParse(txtCtrlMinutes.text) ?? 0;
+    int result = int.tryParse(txtCtrlUnit.text) ?? 0;
     return result == 0 ? 'введите минуты' : null;
   }
 
   //-----------------------------------------
-  String validateMoney() => txtCtrlMoney.text.isEmpty ? 'введите сумму' : null;
+  String validateMoney() => txtCtrlCost.text.isEmpty ? 'введите сумму' : null;
 
   //-----------------------------------------
   void save() {
-    if (penalty.type == PenaltyType.plain)
+    if (penalty.mode == PenaltyMode.plain)
       penalty.total = double.tryParse(txtCtrlPlainSum.text) ?? 0;
-    else if (penalty.type == PenaltyType.timeByMoney) {
-      penalty.total =
-          double.tryParse(txtCtrlMinutes.text) * double.tryParse(txtCtrlMoney.text) ?? 0.0;
-      penalty.time = double.tryParse(txtCtrlMinutes.text) ?? 0;
-      penalty.money = double.tryParse(txtCtrlMoney.text) ?? 0.0;
+    else if (penalty.mode == PenaltyMode.calc) {
+      penalty.total = double.tryParse(txtCtrlUnit.text) * double.tryParse(txtCtrlCost.text) ?? 0.0;
+      penalty.unit = double.tryParse(txtCtrlUnit.text) ?? 0;
+      penalty.cost = double.tryParse(txtCtrlCost.text) ?? 0.0;
     }
   }
 

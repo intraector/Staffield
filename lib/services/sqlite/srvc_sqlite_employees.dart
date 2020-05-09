@@ -18,17 +18,8 @@ class SrvcSqliteEmployees implements EmployeesRepositoryInterface {
     });
   }
 
-  Future<void> initComplete;
   Database db;
-
-  //-----------------------------------------
-  @override
-  Future<List<Employee>> fetch() async {
-    await initComplete;
-    var employeesJsons = await db.query(SqliteTable.employees);
-    var result = employeesJsons.map((json) => Employee.fromSqlite(json)).toList();
-    return result;
-  }
+  Future<void> initComplete;
 
   //-----------------------------------------
   @override
@@ -45,13 +36,11 @@ class SrvcSqliteEmployees implements EmployeesRepositoryInterface {
 
   //-----------------------------------------
   @override
-  Future<int> remove(String uid) async {
+  Future<List<Employee>> fetch() async {
     await initComplete;
-    return db.delete(
-      SqliteTable.employees,
-      where: 'uid = ?',
-      whereArgs: [uid],
-    );
+    var employeesJsons = await db.query(SqliteTable.employees);
+    var result = employeesJsons.map((json) => Employee.fromSqlite(json)).toList();
+    return result;
   }
 
   //-----------------------------------------
@@ -60,5 +49,16 @@ class SrvcSqliteEmployees implements EmployeesRepositoryInterface {
     await initComplete;
     var result = await db.query(SqliteTable.employees, where: 'uid = ?', whereArgs: [uid]);
     return Employee.fromSqlite(result.first);
+  }
+
+  //-----------------------------------------
+  @override
+  Future<int> remove(String uid) async {
+    await initComplete;
+    return db.delete(
+      SqliteTable.employees,
+      where: 'uid = ?',
+      whereArgs: [uid],
+    );
   }
 }

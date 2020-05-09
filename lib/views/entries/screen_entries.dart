@@ -24,7 +24,6 @@ class ScreenEntries extends StatelessWidget {
               drawer: ViewDrawer(),
               bottomNavigationBar: BottomNavigation(RouterPaths.entries),
               floatingActionButton: FloatingActionButton(
-                backgroundColor: AppColors.secondary,
                 child: Icon(Icons.add),
                 onPressed: () =>
                     Router.sailor.navigate(RouterPaths.editEntry, params: {'entry_uid': null}),

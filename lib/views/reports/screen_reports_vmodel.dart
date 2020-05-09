@@ -14,6 +14,9 @@ import 'package:Staffield/views/reports/views/table_one_employee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:Staffield/utils/time_and_difference.dart';
+import 'package:get_it/get_it.dart';
+
+final getIt = GetIt.instance;
 
 class ScreenReportsVModel extends ChangeNotifier {
   ScreenReportsVModel() {
@@ -103,7 +106,7 @@ class ScreenReportsVModel extends ChangeNotifier {
               greaterThan: _endDate, lessThan: _startDate, employeeUid: null);
           var result =
               entryReports.map((entryReport) => AdaptedEntryReport.from(entryReport)).toList();
-          view = ListByEmployee(result);
+          view = ListEmployees(result);
         }
         break;
       case ReportType.tableData:

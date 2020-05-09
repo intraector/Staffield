@@ -19,7 +19,7 @@ class ChipTotal extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          Text(title, style: TextStyle(fontSize: AppFontSize.small, color: AppColors.primary)),
+          Text(title, style: TextStyle(fontSize: AppFontSize.small1, color: AppColors.primary)),
           Text(value, style: AppTextStyles.digitsBold),
         ],
       ));

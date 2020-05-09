@@ -11,19 +11,19 @@ extension Title on ReportType {
     String result;
     switch (this) {
       case ReportType.listEmployees:
-        result = 'Список по сотрудникам';
+        result = 'список по сотрудникам';
         break;
       case ReportType.tableData:
-        result = 'Таблица';
+        result = 'таблица';
         break;
       case ReportType.tableEmployees:
-        result = 'Отчет по сотрудникам';
+        result = 'отчет по сотрудникам';
         break;
       case ReportType.tableOneEmployeeByMonth:
-        result = 'Отчет по одному сотруднику';
+        result = 'отчет по одному сотруднику';
         break;
       case ReportType.tableEntries:
-        result = 'Список записей';
+        result = 'список записей';
         break;
     }
     return result;

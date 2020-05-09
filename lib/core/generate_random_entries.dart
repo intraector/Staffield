@@ -4,7 +4,8 @@ import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entries_repository.dart';
 import 'package:Staffield/core/models/entry.dart';
 import 'package:Staffield/core/models/penalty.dart';
-import 'package:Staffield/core/models/penalty_type.dart';
+import 'package:Staffield/core/models/penalty_mode.dart';
+import 'package:Staffield/core/penalty_types_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:print_color/print_color.dart';
@@ -15,6 +16,7 @@ class GenerateRandomEntries {
   //-----------------------------------------
   var _employeesRepo = getIt<EmployeesRepository>();
   var _entriesRepo = getIt<EntriesRepository>();
+  var _penaltyTypesRepo = getIt<PenaltyTypesRepository>();
 
   void generateRandomEntries({int days, int recordsPerDay}) {
     var _employees = _employeesRepo.repo;
@@ -79,14 +81,14 @@ class GenerateRandomEntries {
     var random = Random();
     var count = random.nextInt(maxCount + 1);
     for (int i = 0; i < count; i++) {
-      var penalty = Penalty(parentUid: parentUid, type: PenaltyType.random);
+      var penalty = Penalty(parentUid: parentUid, typeUid: _penaltyTypesRepo.getRandom().uid);
       penalty.timestamp = timestamp;
-      penalty.time = 1 + random.nextInt(20).toDouble();
-      penalty.money = 10;
-      if (penalty.type == PenaltyType.plain)
+      penalty.unit = 1 + random.nextInt(20).toDouble();
+      penalty.cost = 10;
+      if (penalty.mode == PenaltyMode.plain)
         penalty.total = 10 * random.nextInt(21).toDouble();
       else
-        penalty.total = penalty.time.toDouble() * penalty.money.toDouble();
+        penalty.total = penalty.unit.toDouble() * penalty.cost.toDouble();
       result.add(penalty);
     }
     return result;

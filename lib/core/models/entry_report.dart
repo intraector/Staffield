@@ -1,14 +1,10 @@
-import 'package:Staffield/core/models/penalty_type.dart';
+import 'package:Staffield/core/models/penalty_mode.dart';
 import 'package:Staffield/core/utils/calc_total_mixin.dart';
 import 'package:Staffield/core/models/entry.dart';
-import 'package:Staffield/core/models/penalty_mixin_time_by_money.dart';
 
-class EntryReport extends Entry with TimeByMoney, CalcTotal {
-  EntryReport() {
-    for (var type in PenaltyType.allTypes) penaltiesTotalByType[type] = 0.0;
-  }
+class EntryReport extends Entry with CalcTotal {
+  EntryReport();
   EntryReport.fromEntry(Entry entry) {
-    for (var type in PenaltyType.allTypes) penaltiesTotalByType[type] = 0.0;
     uid = entry.uid;
     employeeNameAux = entry.employeeNameAux;
     revenue = entry.revenue;
@@ -16,7 +12,7 @@ class EntryReport extends Entry with TimeByMoney, CalcTotal {
     bonusAux = revenue * interest / 100;
     wage = entry.wage;
     penalties = entry.penalties;
-    time = 0;
+    penaltyUnit = 0;
     timestamp = entry.timestamp;
 
     var calcTotalResult =
@@ -27,16 +23,18 @@ class EntryReport extends Entry with TimeByMoney, CalcTotal {
     bonusAux = calcTotalResult.bonus;
 
     for (var penalty in penalties) {
-      switch (penalty.type) {
-        case PenaltyType.plain:
+      switch (penalty.mode) {
+        case PenaltyMode.plain:
           {
-            penaltiesTotalByType[penalty.type] += penalty.total;
+            penaltiesTotalByType[penalty.typeUid] =
+                (penaltiesTotalByType[penalty.typeUid] ?? 0.0) + penalty.total;
           }
           break;
-        case PenaltyType.timeByMoney:
+        case PenaltyMode.calc:
           {
-            penaltiesTotalByType[penalty.type] += (penalty.time * penalty.money);
-            time += penalty.time;
+            penaltiesTotalByType[penalty.typeUid] =
+                (penaltiesTotalByType[penalty.typeUid] ?? 0.0) + (penalty.unit * penalty.cost);
+            penaltyUnit += penalty.unit;
           }
           break;
       }
@@ -46,6 +44,7 @@ class EntryReport extends Entry with TimeByMoney, CalcTotal {
 
   int penaltiesCount = 0;
   double bonusAux;
+  double penaltyUnit;
   Map<String, double> penaltiesTotalByType = {};
 
   @override

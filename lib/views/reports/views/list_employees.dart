@@ -4,8 +4,8 @@ import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/views/reports/adapted_entry_report.dart';
 import 'package:flutter/material.dart';
 
-class ListByEmployee extends StatelessWidget {
-  ListByEmployee(this.list);
+class ListEmployees extends StatelessWidget {
+  ListEmployees(this.list);
   final List<AdaptedEntryReport> list;
   @override
   Widget build(BuildContext context) => Row(
@@ -115,11 +115,11 @@ class ListByEmployee extends StatelessWidget {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: <Widget>[
-                                        Container(
-                                            // color: Colors.cyan,
-                                            width: 100,
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(penalty.title)),
+                                        // Container(
+                                        //     // color: Colors.cyan,
+                                        //     width: 100,
+                                        //     alignment: Alignment.centerLeft,
+                                        //     child: Text(penalty.title)),
                                         Container(
                                           width: 50,
                                           alignment: containsTime(list[index])

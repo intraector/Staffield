@@ -8,7 +8,7 @@ class EntriesRepository {
     fetchNextChunkToCache();
   }
 
-  EntriesRepositoryInterface sqlite;
+  final EntriesRepositoryInterface sqlite;
 
   var _cache = <Entry>[];
 

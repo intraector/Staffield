@@ -14,15 +14,27 @@ class SqliteFieldsPenalties {
   static const uid = 'uid';
   static const timestamp = 'timestamp';
   static const parentUid = 'parentUID';
-  static const type = 'type';
+  static const mode = 'mode';
+  static const typeId = 'typeId';
   static const total = 'total';
-  static const time = 'minutes';
-  static const money = 'money';
+  static const unit = 'unit';
+  static const cost = 'cost';
 }
 
 class SqliteFieldsEmployees {
   static const id = 'id';
   static const uid = 'uid';
   static const name = 'name';
+  static const hide = 'hide';
+}
+
+class SqliteFieldsPenaltyTypes {
+  static const id = 'id';
+  static const uid = 'uid';
+  static const mode = 'mode';
+  static const title = 'title';
+  static const unitTitle = 'unitTitle';
+  static const unitDefaultValue = 'unitDefaultValue';
+  static const costDefaultValue = 'costDefaultValue';
   static const hide = 'hide';
 }

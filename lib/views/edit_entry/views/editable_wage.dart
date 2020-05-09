@@ -1,42 +1,34 @@
-import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/app_text_styles.dart';
 import 'package:Staffield/utils/regexp_digits_and_dot.dart';
 import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
 
 class EditableWage extends StatelessWidget {
-  EditableWage({@required this.vModel, @required this.focusNode, @required this.nextFocus});
-  final ScreenEditEntryVModel vModel;
+  EditableWage({@required this.focusNode, @required this.nextFocus});
   final FocusNode focusNode;
   final FocusNode nextFocus;
   @override
   Widget build(BuildContext context) {
+    var vModel = Provider.of<ScreenEditEntryVModel>(context, listen: false);
     TextInputAction textInputAction =
         nextFocus == null ? TextInputAction.done : TextInputAction.next;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 5.5),
-      margin: EdgeInsets.all(3.0),
-      decoration: BoxDecoration(
-        color: AppColors.primaryAccent,
-        borderRadius: BorderRadius.circular(5.0),
-      ),
+      margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
       child: TextFormField(
         controller: vModel.txtCtrlWage,
         textInputAction: textInputAction,
         minLines: 1,
         maxLines: 1,
         focusNode: focusNode,
-        style: AppTextStyles.bodyBoldLight,
+        style: AppTextStyles.digitsBold,
         decoration: InputDecoration(
+          labelText: vModel.labelWage,
+          labelStyle: AppTextStyles.dataChipLabel,
           contentPadding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 2.0),
           isDense: true,
-          icon: Icon(MdiIcons.cash, size: 26.0, color: AppColors.white),
-          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.white)),
-          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.white)),
         ),
-        cursorColor: AppColors.white,
         keyboardType: TextInputType.number,
         inputFormatters: [WhitelistingTextInputFormatter(regexpDigitsAndDot())],
         onChanged: (_) => vModel.formatWage(),

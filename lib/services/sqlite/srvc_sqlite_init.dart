@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:Staffield/core/models/penalty_mode.dart';
+import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:Staffield/services/sqlite/sqlite_fields.dart';
 import 'package:path/path.dart';
 import 'package:print_color/print_color.dart';
@@ -59,21 +61,49 @@ class SrvcSqliteInit {
               ${SqliteFieldsPenalties.id} INTEGER PRIMARY KEY,
               ${SqliteFieldsPenalties.uid} TEXT,
               ${SqliteFieldsPenalties.parentUid} TEXT,
-              ${SqliteFieldsPenalties.type} TEXT,
+              ${SqliteFieldsPenalties.mode} TEXT,
+              ${SqliteFieldsPenalties.typeId} INTEGER,
               ${SqliteFieldsPenalties.timestamp} INTEGER,
               ${SqliteFieldsPenalties.total} REAL,
-              ${SqliteFieldsPenalties.time} REAL,
-              ${SqliteFieldsPenalties.money} REAL
+              ${SqliteFieldsPenalties.unit} REAL,
+              ${SqliteFieldsPenalties.cost} REAL
             )''');
 
 //-----------------------------------------
   Future<void> createEmployeesTable(Database db) => db.execute('''
             CREATE TABLE IF NOT EXISTS ${SqliteTable.employees} (
-              ${SqliteFieldsEmployees.id} INTEGER PRIMARY KEY,
+              ${SqliteFieldsEmployees.id} INTEGER PRIMARY KEY AUTOINCREMENT,
               ${SqliteFieldsEmployees.uid} TEXT,
               ${SqliteFieldsEmployees.name} TEXT,
               ${SqliteFieldsEmployees.hide} INTEGER NOT NULL
             )''');
+
+//-----------------------------------------
+  Future<void> createPenaltyTypesTable(Database db) => db.execute('''
+            CREATE TABLE IF NOT EXISTS ${SqliteTable.penaltyTypes} (
+              ${SqliteFieldsPenaltyTypes.id} INTEGER PRIMARY KEY,
+              ${SqliteFieldsPenaltyTypes.uid} TEXT,
+              ${SqliteFieldsPenaltyTypes.mode} TEXT,
+              ${SqliteFieldsPenaltyTypes.title} TEXT,
+              ${SqliteFieldsPenaltyTypes.unitTitle} TEXT,
+              ${SqliteFieldsPenaltyTypes.unitDefaultValue} REAL,
+              ${SqliteFieldsPenaltyTypes.costDefaultValue} REAL,
+              ${SqliteFieldsPenaltyTypes.hide} INTEGER NOT NULL
+            )''');
+
+//-----------------------------------------
+  Future<void> insertInitialPenaltyTypes(Database db) async {
+    var type = PenaltyType()
+      ..mode = PenaltyMode.plain
+      ..title = 'Штраф';
+    await db.insert(SqliteTable.penaltyTypes, type.toSqlite);
+
+    type = PenaltyType()
+      ..mode = PenaltyMode.calc
+      ..title = 'Опоздание'
+      ..unitTitle = 'Минуты';
+    await db.insert(SqliteTable.penaltyTypes, type.toSqlite);
+  }
 
 //-----------------------------------------
   Future<Database> openDb(String path) => openDatabase(
@@ -90,6 +120,8 @@ class SrvcSqliteInit {
     await createEntriesTable(db);
     await createPenaltiesTable(db);
     await createEmployeesTable(db);
+    await createPenaltyTypesTable(db);
+    await insertInitialPenaltyTypes(db);
     return null;
   }
 

@@ -1,5 +1,9 @@
+import 'package:Staffield/constants/app_font_family.dart';
+import 'package:Staffield/constants/app_fonts.dart';
+import 'package:Staffield/core/penalty_types_repository.dart';
 import 'package:Staffield/services/services_manager.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_entries_adapter.dart';
+import 'package:Staffield/services/sqlite/srvc_sqlite_penalty_types_adapter.dart';
 import 'package:Staffield/views/entries/screen_entries.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +15,7 @@ import 'package:get_it/get_it.dart';
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/core/entries_repository.dart';
 import 'package:Staffield/services/router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +23,8 @@ Future<void> main() async {
   final getIt = GetIt.instance;
   getIt.registerSingleton<SrvcSqliteInit>(SrvcSqliteInit());
   getIt.registerSingleton<ServicesManager>(ServicesManager());
+  getIt.registerSingleton<PenaltyTypesRepository>(
+      PenaltyTypesRepository(SrvcSqlitePenaltyTypesAdapter()));
   getIt.registerSingleton<EmployeesRepository>(EmployeesRepository(SrvcSqliteEmployees()));
   getIt.registerSingleton<EntriesRepository>(EntriesRepository(SqliteEntriesAdapater()));
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -27,38 +34,120 @@ Future<void> main() async {
       navigatorKey: Router.sailor.navigatorKey,
       onGenerateRoute: Router.sailor.generator(),
       home: ScreenEntries(),
-      theme: ThemeData(
-        buttonTheme: ButtonThemeData(
-            buttonColor: AppColors.primary,
-            textTheme: ButtonTextTheme.primary,
-            highlightColor: AppColors.secondaryAccent),
-        primaryColor: AppColors.primary,
-        backgroundColor: AppColors.background,
-        dialogBackgroundColor: AppColors.background,
-        errorColor: AppColors.error,
-        scaffoldBackgroundColor: AppColors.background,
-        cardColor: Colors.white,
-        indicatorColor: AppColors.secondary,
-        buttonColor: AppColors.secondary,
-        bottomAppBarColor: AppColors.background,
-        textSelectionHandleColor: AppColors.secondary,
-        textSelectionColor: AppColors.secondary,
-        toggleableActiveColor: AppColors.secondaryAccent,
-        textTheme: TextTheme(
-            display4: TextStyle(fontSize: 24.0),
-            display3: TextStyle(fontSize: 22.0),
-            display2: TextStyle(fontSize: 20.0),
-            display1: TextStyle(fontSize: 19.0, fontWeight: FontWeight.bold),
-            headline: TextStyle(fontSize: 18.0),
-            title: TextStyle(fontSize: 17.0),
-            subhead: TextStyle(fontSize: 16.0),
-            body2: TextStyle(fontSize: 15.0),
-            body1: TextStyle(fontSize: 14.0),
-            caption: TextStyle(fontSize: 12.0),
-            subtitle: TextStyle(fontSize: 11.0),
-            button: TextStyle(color: Colors.teal[700]),
-            overline: TextStyle(fontSize: 10.0)),
-      ),
+      theme: _kShrineTheme,
+      //  ThemeData(
+
+      //   textTheme: TextTheme(
+      //     headline1:
+      //         GoogleFonts.manrope(fontSize: 95, fontWeight: FontWeight.w300, letterSpacing: -1.5),
+      //     headline2:
+      //         GoogleFonts.manrope(fontSize: 59, fontWeight: FontWeight.w300, letterSpacing: -0.5),
+      //     headline3: GoogleFonts.manrope(fontSize: 48, fontWeight: FontWeight.w400),
+      //     headline4:
+      //         GoogleFonts.manrope(fontSize: 34, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+      //     headline5: GoogleFonts.manrope(fontSize: 24, fontWeight: FontWeight.w400),
+      //     headline6:
+      //         GoogleFonts.manrope(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+      //     subtitle1:
+      //         GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.15),
+      //     subtitle2:
+      //         GoogleFonts.manrope(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
+      //     bodyText2:
+      //         GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
+      //     bodyText1:
+      //         GoogleFonts.manrope(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+      //     button:
+      //         GoogleFonts.manrope(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
+      //     caption:
+      //         GoogleFonts.manrope(fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
+      //     overline:
+      //         GoogleFonts.manrope(fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+      //   ),
+      // ),
     ),
   );
+}
+
+final ThemeData _kShrineTheme = _buildShrineTheme();
+
+// ThemeData _buildShrineTheme() {
+//   final ThemeData base = ThemeData.light();
+//   return base.copyWith(
+//     accentColor: AppColors.kShrineBrown900,
+//     primaryColor: AppColors.kShrinePink100,
+//     buttonTheme: base.buttonTheme.copyWith(
+//       buttonColor: AppColors.kShrinePink100,
+//       colorScheme: base.colorScheme.copyWith(
+//         secondary: AppColors.kShrineBrown900,
+//       ),
+//     ),
+//     buttonBarTheme: base.buttonBarTheme.copyWith(
+//       buttonTextTheme: ButtonTextTheme.accent,
+//     ),
+//     scaffoldBackgroundColor: AppColors.kShrineBackgroundWhite,
+//     cardColor: AppColors.kShrineBackgroundWhite,
+//     textSelectionColor: AppColors.kShrinePink100,
+//     errorColor: AppColors.kShrineErrorRed,
+//     textTheme: _buildShrineTextTheme(base.textTheme),
+//     primaryTextTheme: _buildShrineTextTheme(base.primaryTextTheme),
+//     accentTextTheme: _buildShrineTextTheme(base.accentTextTheme),
+//     primaryIconTheme: base.iconTheme.copyWith(color: AppColors.kShrineBrown900),
+//     inputDecorationTheme: InputDecorationTheme(
+//       border: OutlineInputBorder(),
+//     ),
+//     // TODO: Add the text themes (103)
+//     // TODO: Add the icon themes (103)
+//     // TODO: Decorate the inputs (103)
+//   );
+// }
+
+// TextTheme _buildShrineTextTheme(TextTheme base) {
+//   return base
+//       .copyWith(
+//         headline: base.headline.copyWith(
+//           fontWeight: FontWeight.w500,
+//         ),
+//         title: base.title.copyWith(fontSize: 18.0),
+//         caption: base.caption.copyWith(
+//           fontWeight: FontWeight.w400,
+//           fontSize: 14.0,
+//         ),
+//       )
+//       .apply(
+//         fontFamily: 'Rubik',
+//         displayColor: AppColors.kShrineBrown900,
+//         bodyColor: AppColors.kShrineBrown900,
+//       );
+// }
+ThemeData _buildShrineTheme() {
+  final ThemeData base = ThemeData.dark();
+  return base.copyWith(
+    primaryColor: AppColors.kShrinePurple,
+    buttonTheme: base.buttonTheme.copyWith(
+        buttonColor: AppColors.kShrinePurple,
+        textTheme: ButtonTextTheme.primary,
+        colorScheme: ColorScheme.light().copyWith(primary: AppColors.kShrinePurple)),
+    scaffoldBackgroundColor: AppColors.kShrineSurfaceWhite,
+    textTheme: _buildShrineTextTheme(base.textTheme),
+    primaryTextTheme: _buildShrineTextTheme(base.primaryTextTheme),
+    accentTextTheme: _buildShrineTextTheme(base.accentTextTheme),
+    primaryIconTheme: base.iconTheme.copyWith(color: AppColors.kShrineSurfaceWhite),
+  );
+}
+
+TextTheme _buildShrineTextTheme(TextTheme base) {
+  return base
+      .copyWith(
+        headline: base.headline.copyWith(
+          fontWeight: FontWeight.w500,
+        ),
+        title: base.title.copyWith(fontSize: 18.0),
+        caption: base.caption.copyWith(
+          fontWeight: FontWeight.w400,
+          fontSize: 14.0,
+        ),
+      )
+      .apply(
+        fontFamily: 'Raleway',
+      );
 }

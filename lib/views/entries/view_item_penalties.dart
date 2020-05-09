@@ -28,10 +28,10 @@ class ViewItemPenalties extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Container(
-                        width: 100,
-                        alignment: Alignment.centerLeft,
-                        child: Text(penalty.title, style: AppTextStyles.small1Light)),
+                    // Container(
+                    //     width: 100,
+                    //     alignment: Alignment.centerLeft,
+                    //     child: Text(penalty.title, style: AppTextStyles.small1Light)),
                     Container(
                       width: 50,
                       alignment: containsTime(item) ? Alignment.center : Alignment.centerRight,

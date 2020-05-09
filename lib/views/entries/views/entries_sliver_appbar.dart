@@ -14,9 +14,8 @@ class EntriesSliverAppBar extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         title: Text("СМЕНЫ ПЕРСОНАЛА",
-            style: TextStyle(
+            style: Theme.of(context).textTheme.title.copyWith(
               color: Colors.white,
-              fontSize: 15.0,
               shadows: [
                 Shadow(
                   color: Colors.black,
