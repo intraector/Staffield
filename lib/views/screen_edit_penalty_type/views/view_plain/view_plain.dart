@@ -3,24 +3,22 @@ import 'package:Staffield/constants/app_font_family.dart';
 import 'package:Staffield/constants/app_fonts.dart';
 import 'package:Staffield/constants/app_text_styles.dart';
 import 'package:Staffield/utils/regexp_digits_and_dot.dart';
-import 'package:Staffield/views/dialog_penalty_type/dialog_penalty_type_vmodel.dart';
-import 'package:Staffield/views/dialog_penalty_type/views/view_plain/view_plain_vmodel.dart';
+import 'package:Staffield/views/screen_edit_penalty_type/screen_edit_penalty_type_vmodel.dart';
+import 'package:Staffield/views/screen_edit_penalty_type/views/view_plain/view_plain_vmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class ViewPlain extends StatelessWidget {
   ViewPlain(this.vModelParent);
-  final DialogPenaltyTypeVModel vModelParent;
+  final ScreenEditPenaltyTypeVModel vModelParent;
   final focusDefaultValue = FocusNode();
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ViewPlainVModel>(
       create: (context) => ViewPlainVModel(vModelParent),
       child: Consumer<ViewPlainVModel>(
-        builder: (context, vModel, _) => ListView(
-          shrinkWrap: true,
-          physics: AlwaysScrollableScrollPhysics(),
+        builder: (context, vModel, _) => Column(
           children: <Widget>[
             Row(
               children: <Widget>[
@@ -34,6 +32,8 @@ class ViewPlain extends StatelessWidget {
                       labelStyle: AppTextStyles.dataChipLabel,
                       counterStyle: TextStyle(color: Colors.transparent),
                       isDense: true,
+                      hintText: 'Например, "Бой посуды"',
+                      hintStyle: Theme.of(context).textTheme.caption,
                     ),
                     maxLengthEnforced: true,
                     maxLength: vModel.titleMaxLength,
@@ -69,10 +69,10 @@ class ViewPlain extends StatelessWidget {
               ],
             ),
             Container(
-              margin: EdgeInsets.only(top: 20.0),
+              margin: EdgeInsets.only(top: 40.0),
               padding: EdgeInsets.all(12.0),
               decoration: BoxDecoration(
-                color: Colors.grey[400],
+                color: Colors.grey[300],
                 borderRadius: BorderRadius.circular(6.0),
               ),
               child: Row(
@@ -85,8 +85,11 @@ class ViewPlain extends StatelessWidget {
                           children: <Widget>[
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.only(bottom: 4.0),
-                                child: Text('Пример:'),
+                                padding: const EdgeInsets.only(bottom: 14.0, top: 0.0),
+                                child: Text(
+                                  'Как это будет выглядеть:',
+                                  // style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             ),
                           ],

@@ -3,14 +3,12 @@ import 'package:Staffield/core/penalty_types_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:Staffield/core/models/penalty_mode.dart';
-import 'package:Staffield/utils/string_utils.dart';
 import 'package:get_it/get_it.dart';
-import 'package:print_color/print_color.dart';
 
 final getIt = GetIt.instance;
 
-class DialogPenaltyTypeVModel extends ChangeNotifier {
-  DialogPenaltyTypeVModel(PenaltyType type) {
+class ScreenEditPenaltyTypeVModel extends ChangeNotifier {
+  ScreenEditPenaltyTypeVModel(PenaltyType type) {
     if (type.mode == null)
       this.type = _penaltyTypesRepo.repo.first;
     else
@@ -21,6 +19,13 @@ class DialogPenaltyTypeVModel extends ChangeNotifier {
   final txtCtrlCost = TextEditingController();
   final txtCtrlUnit = TextEditingController();
   PenaltyType type;
+  String initialMode = PenaltyMode.plain;
+
+  String get mode => type.mode;
+  set mode(String mode) {
+    type.mode = mode;
+    notifyListeners();
+  }
 
   final _penaltyTypesRepo = getIt<PenaltyTypesRepository>();
 
@@ -64,7 +69,7 @@ class DialogPenaltyTypeVModel extends ChangeNotifier {
   }
 
   //-----------------------------------------
-  List<DropdownMenuItem> get dropdownItems {
+  List<DropdownMenuItem<String>> get dropdownItems {
     return [
       DropdownMenuItem<String>(child: Text('Простой'), value: PenaltyMode.plain),
       DropdownMenuItem<String>(child: Text('Вычисляемый'), value: PenaltyMode.calc),

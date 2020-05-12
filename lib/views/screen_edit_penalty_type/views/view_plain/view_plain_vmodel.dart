@@ -1,13 +1,12 @@
-import 'package:Staffield/core/models/penalty_mode.dart';
 import 'package:Staffield/utils/format_input_currency.dart';
-import 'package:Staffield/views/dialog_penalty_type/dialog_penalty_type_vmodel.dart';
+import 'package:Staffield/views/screen_edit_penalty_type/screen_edit_penalty_type_vmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:Staffield/utils/string_utils.dart';
 
 class ViewPlainVModel extends ChangeNotifier {
   ViewPlainVModel(this.parentVModel);
-  final DialogPenaltyTypeVModel parentVModel;
+  final ScreenEditPenaltyTypeVModel parentVModel;
 
   var txtCtrlTitle = TextEditingController();
   var txtCtrlDefaultValue = TextEditingController();
@@ -50,11 +49,19 @@ class ViewPlainVModel extends ChangeNotifier {
       return 'проверьте сумму';
     else {
       parentVModel.type.costDefaultValue =
-          double.tryParse(txtCtrlDefaultValue.text.removeSpaces()) ?? 0.0;
+          double.tryParse(txtCtrlDefaultValue.text.removeSpaces) ?? 0.0;
       return null;
     }
   }
 
   final String labelTypeTitle = 'НАЗВАНИЕ';
   final String labelDefaultValue = 'СУММА ПО УМОЛЧАНИЮ';
+
+  @override
+  void dispose() {
+    txtCtrlTitle.dispose();
+    txtCtrlDefaultValue.dispose();
+    txtCtrlExample.dispose();
+    super.dispose();
+  }
 }

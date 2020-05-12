@@ -12,7 +12,6 @@ import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
 import 'package:Staffield/views/edit_entry/view_penalties.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:print_color/print_color.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 // import 'package:Staffield/utils/CurrencyFormatter.dart';

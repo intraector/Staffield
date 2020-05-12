@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Staffield/constants/router_paths.dart';
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entries_repository.dart';
 import 'package:Staffield/core/models/employee.dart';
@@ -8,12 +9,12 @@ import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository.dart';
 import 'package:Staffield/core/utils/calc_total_mixin.dart';
+import 'package:Staffield/services/router.dart';
 import 'package:Staffield/utils/dialog_confirm.dart';
 import 'package:Staffield/utils/format_input_currency.dart';
 import 'package:Staffield/utils/string_utils.dart';
-import 'package:Staffield/views/dialog_penalty_type/dialog_penalty_type.dart';
 import 'package:Staffield/views/edit_employee/dialog_edit_employee.dart';
-import 'package:Staffield/views/edit_entry/dialog_penalty.dart';
+import 'package:Staffield/views/edit_entry/dialog_penalty/dialog_penalty.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -236,7 +237,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
     else if ((double.tryParse(txt) ?? 101) > 100)
       return '!';
     else {
-      entry.interest = double.parse(txtCtrlInterest.text.removeSpaces());
+      entry.interest = double.parse(txtCtrlInterest.text.removeSpaces);
       return null;
     }
   }
@@ -248,7 +249,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
     else if (txt.endsWith('.'))
       return '!';
     else {
-      entry.revenue = double.parse(txtCtrlRevenue.text.removeSpaces());
+      entry.revenue = double.parse(txtCtrlRevenue.text.removeSpaces);
       return null;
     }
   }
@@ -260,7 +261,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
     else if (txt.endsWith('.'))
       return '!';
     else {
-      entry.wage = double.parse(txtCtrlWage.text.removeSpaces());
+      entry.wage = double.parse(txtCtrlWage.text.removeSpaces);
       return null;
     }
   }
@@ -283,12 +284,13 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
 
   //-----------------------------------------
   Future<void> _addPenaltyType(BuildContext context) async {
-    var result = await showDialog<PenaltyType>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) => DialogPenaltyType(penaltyType: PenaltyType()),
-    );
-    if (result != null) _penaltyTypesRepo.addOrUpdate(result);
+    Router.sailor.navigate(RouterPaths.editPenaltyType, params: {'penaltyType': PenaltyType()});
+    // var result = await showDialog<PenaltyType>(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (BuildContext context) => ScreenEditPenaltyType(penaltyType: PenaltyType()),
+    // );
+    // if (result != null) _penaltyTypesRepo.addOrUpdate(result);
 
     notifyListeners();
   }

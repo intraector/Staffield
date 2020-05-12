@@ -1,5 +1,3 @@
-import 'package:Staffield/constants/app_font_family.dart';
-import 'package:Staffield/constants/app_fonts.dart';
 import 'package:Staffield/core/penalty_types_repository.dart';
 import 'package:Staffield/services/services_manager.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_entries_adapter.dart';
@@ -15,7 +13,6 @@ import 'package:get_it/get_it.dart';
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/core/entries_repository.dart';
 import 'package:Staffield/services/router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -95,9 +92,6 @@ final ThemeData _kShrineTheme = _buildShrineTheme();
 //     inputDecorationTheme: InputDecorationTheme(
 //       border: OutlineInputBorder(),
 //     ),
-//     // TODO: Add the text themes (103)
-//     // TODO: Add the icon themes (103)
-//     // TODO: Decorate the inputs (103)
 //   );
 // }
 
@@ -120,7 +114,7 @@ final ThemeData _kShrineTheme = _buildShrineTheme();
 //       );
 // }
 ThemeData _buildShrineTheme() {
-  final ThemeData base = ThemeData.dark();
+  final ThemeData base = ThemeData.light();
   return base.copyWith(
     primaryColor: AppColors.kShrinePurple,
     buttonTheme: base.buttonTheme.copyWith(
@@ -138,10 +132,10 @@ ThemeData _buildShrineTheme() {
 TextTheme _buildShrineTextTheme(TextTheme base) {
   return base
       .copyWith(
-        headline: base.headline.copyWith(
+        headline5: base.headline5.copyWith(
           fontWeight: FontWeight.w500,
         ),
-        title: base.title.copyWith(fontSize: 18.0),
+        headline6: base.headline6.copyWith(fontSize: 18.0),
         caption: base.caption.copyWith(
           fontWeight: FontWeight.w400,
           fontSize: 14.0,

@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository_interface.dart';
-import 'package:print_color/print_color.dart';
 
 class PenaltyTypesRepository {
   PenaltyTypesRepository(this.sqlite) {

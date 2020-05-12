@@ -43,5 +43,5 @@ extension FormatCurrencyDecimal on String {
 }
 
 extension RemoveSpaces on String {
-  String removeSpaces() => this.replaceAll(' ', '');
+  String get removeSpaces => this.replaceAll(' ', '');
 }
