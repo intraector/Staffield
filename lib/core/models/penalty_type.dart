@@ -7,8 +7,8 @@ class PenaltyType {
   String mode;
   String title = '';
   String unitTitle = '';
-  double unitDefaultValue = 0.0;
-  double costDefaultValue = 0.0;
+  double unitDefaultValue;
+  double costDefaultValue;
   bool hide = false;
 
   Map<String, dynamic> get toSqlite => {
@@ -31,8 +31,7 @@ class PenaltyType {
     hide = map[SqliteFieldsPenaltyTypes.hide] == 0 ? false : true;
   }
 
-  PenaltyType get clone => PenaltyType()
-    ..uid = uid
+  PenaltyType get copy => PenaltyType()
     ..mode = mode
     ..title = title
     ..unitTitle = unitTitle
@@ -42,6 +41,6 @@ class PenaltyType {
 
   @override
   String toString() {
-    return 'id: $uid, mode: $mode, title:$title, unitTitle: $unitTitle, hide: $hide';
+    return 'id: $uid, mode: $mode, title:$title, unitTitle: $unitTitle, unitDefaultValue: $unitDefaultValue, costDefaultValue: $costDefaultValue, hide: $hide';
   }
 }

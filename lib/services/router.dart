@@ -1,5 +1,5 @@
 import 'package:Staffield/core/models/penalty_type.dart';
-import 'package:Staffield/views/screen_edit_penalty_type/screen_edit_penalty_type.dart';
+import 'package:Staffield/views/edit_penalty_type/screen_edit_penalty_type.dart';
 import 'package:Staffield/views/employees/screen_employees.dart';
 import 'package:Staffield/views/reports/screen_reports.dart';
 import 'package:flutter/animation.dart';

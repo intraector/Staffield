@@ -6,17 +6,23 @@ import 'package:flutter/services.dart';
 
 class TextFieldHandlerDouble extends TextFieldHandlerBase with Format {
   TextFieldHandlerDouble({
-    void Function() callback,
+    void Function() onChange,
+    void Function() onSave,
+    this.validator,
     int maxLength = 10,
     String label,
     String hint,
+    String defaultValue,
   }) : super(
-          callback: callback,
+          onChange: onChange,
+          onSave: onSave,
           maxLength: maxLength,
           label: label,
           hint: hint,
+          defaultValue: defaultValue,
         );
 
+  String Function(String) validator;
   List<TextInputFormatter> inputFormatters = [WhitelistingTextInputFormatter(regexpDigitsAndDot())];
 
   double get result => double.tryParse(txtCtrl.text.removeSpaces) ?? 0.0;
@@ -24,11 +30,15 @@ class TextFieldHandlerDouble extends TextFieldHandlerBase with Format {
   @override
   String validate() {
     String value = txtCtrl.text.removeSpaces;
-    if (value.isEmpty)
-      return 'Введите';
-    else if (value.endsWith('.'))
-      return 'Ошибка';
-    else
-      return null;
+    if (validator != null) {
+      return validator(value);
+    } else {
+      if (value.isEmpty)
+        return 'Введите';
+      else if (value.endsWith('.'))
+        return 'Ошибка';
+      else
+        return null;
+    }
   }
 }

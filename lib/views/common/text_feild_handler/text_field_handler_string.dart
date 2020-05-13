@@ -2,15 +2,19 @@ import 'package:Staffield/views/common/text_feild_handler/text_field_handler_bas
 
 class TextFieldHandlerString extends TextFieldHandlerBase {
   TextFieldHandlerString({
-    void Function() callback,
+    void Function() onChange,
+    void Function() onSave,
     int maxLength = 40,
     String label,
     String hint,
+    String defaultValue,
   }) : super(
-          callback: callback,
+          onChange: onChange,
+          onSave: onSave,
           maxLength: maxLength,
           label: label,
           hint: hint,
+          defaultValue: defaultValue,
         );
 
   String get result => txtCtrl.text.trim();

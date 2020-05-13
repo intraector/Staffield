@@ -14,15 +14,15 @@ class AdaptedEntryReport {
     date = timeAndDifference(timestamp1: report.timestamp, showDate: true);
     report.timestamp.toString();
     name = report.employeeNameAux;
-    total = report.total.toString().formatCurrencyDecimal();
-    revenue = report.revenue.toString().formatCurrencyDecimal();
-    interest = report.interest.toString().formatCurrency();
-    bonus = report.bonusAux.toString().formatCurrency();
-    wage = report.wage.toString().formatCurrency();
-    penaltiesTotal = report.penaltiesTotalAux.toString().formatCurrency();
+    total = report.total.toString().formatInt;
+    revenue = report.revenue.toString().formatInt;
+    interest = report.interest.toString().formatDouble;
+    bonus = report.bonusAux.toString().formatDouble;
+    wage = report.wage.toString().formatDouble;
+    penaltiesTotal = report.penaltiesTotalAux.toString().formatDouble;
     penalties = report.penalties.map((penalty) => penalty.report).toList();
-    penaltyUnit = report.penaltyUnit.toString().formatCurrencyDecimal();
-    penaltiesCount = report.penaltiesCount.toString().formatCurrencyDecimal();
+    penaltyUnit = report.penaltyUnit.toString().formatInt;
+    penaltiesCount = report.penaltiesCount.toString().formatInt;
   }
   String uid;
   String name;

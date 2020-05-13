@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 
 abstract class TextFieldHandlerBase {
-  TextFieldHandlerBase({this.callback, this.maxLength = 10, this.label, this.hint});
-  final void Function() callback;
+  TextFieldHandlerBase({
+    this.onChange,
+    this.onSave,
+    this.maxLength = 10,
+    this.label,
+    this.hint,
+    String defaultValue,
+  }) {
+    if (defaultValue != null) txtCtrl.text = defaultValue;
+  }
+  final void Function() onChange;
+  final void Function() onSave;
   TextEditingController txtCtrl = TextEditingController();
   final int maxLength;
   String previousInput = '';

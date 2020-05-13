@@ -27,12 +27,15 @@ class PenaltyTypesRepository {
   }
 
   //-----------------------------------------
-  Future<bool> addOrUpdate(PenaltyType type) {
+  Future<bool> addOrUpdate(PenaltyType type) async {
     if (type.uid == null)
-      _repo.add(type);
+      return false;
     else {
       var index = _repo.indexWhere((item) => item.uid == type.uid);
-      _repo[index] = type;
+      if (index < 0)
+        _repo.add(type);
+      else
+        _repo[index] = type;
     }
     return sqlite.addOrUpdate(type);
   }

@@ -11,8 +11,8 @@ import 'package:Staffield/core/penalty_types_repository.dart';
 import 'package:Staffield/core/utils/calc_total_mixin.dart';
 import 'package:Staffield/services/router.dart';
 import 'package:Staffield/utils/dialog_confirm.dart';
-import 'package:Staffield/utils/format_input_currency.dart';
 import 'package:Staffield/utils/string_utils.dart';
+import 'package:Staffield/views/common/text_feild_handler/text_field_handler_double.dart';
 import 'package:Staffield/views/edit_employee/dialog_edit_employee.dart';
 import 'package:Staffield/views/edit_entry/dialog_penalty/dialog_penalty.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,42 +22,45 @@ import 'package:get_it/get_it.dart';
 final getIt = GetIt.instance;
 
 class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
-  //-----------------------------------------
   ScreenEditEntryVModel(String uid) {
     this.entry = uid == null ? Entry() : _entriesRepo.getEntry(uid);
-    txtCtrlRevenue.text =
-        uid == null ? '' : entry.revenue?.roundToDouble().toString()?.formatCurrency();
-    txtCtrlInterest.text = uid == null ? '' : entry.interest?.toString()?.formatCurrency() ?? '';
-    txtCtrlWage.text = uid == null ? '' : entry.wage?.toString()?.formatCurrency() ?? '';
+    wage = TextFieldHandlerDouble(
+      label: 'ОКЛАД',
+      defaultValue: uid == null ? '' : entry.wage?.roundToDouble().toString()?.formatDouble,
+      onChange: calcTotal,
+    );
+    revenue = TextFieldHandlerDouble(
+      label: 'ВЫРУЧКА',
+      defaultValue: uid == null ? '' : entry.revenue?.roundToDouble().toString()?.formatDouble,
+      onChange: calcTotal,
+    );
+    interest = TextFieldHandlerDouble(
+      label: 'ПРОЦЕНТ',
+      maxLength: 5,
+      defaultValue: uid == null ? '' : entry.interest?.roundToDouble().toString()?.formatDouble,
+      onChange: calcTotal,
+      validator: validateInterest,
+    );
     penalties = entry.penalties.map((penalty) => Penalty.fromOther(penalty)).toList();
     entry.penaltiesTotalAux = entry.revenue * entry.interest / 100 ?? 0;
   }
 
   Entry entry;
+  TextFieldHandlerDouble interest;
   String labelBonus = 'БОНУС';
-  String labelInterest = 'ПРОЦЕНТ';
   String labelName = 'СОТРУДНИК';
   String labelPenalties = 'ШТРАФЫ';
-  String labelRevenue = 'ВЫРУЧКА';
-  String labelWage = 'ОКЛАД';
   final int nameMaxLength = 40;
   List<Penalty> penalties;
-  var txtCtrlInterest = TextEditingController();
-  var txtCtrlRevenue = TextEditingController();
-  var txtCtrlWage = TextEditingController();
+  TextFieldHandlerDouble revenue;
+  TextFieldHandlerDouble wage;
 
   final _employeesRepo = getIt<EmployeesRepository>();
   final _entriesRepo = getIt<EntriesRepository>();
-  final int _interestMaxLength = 5;
-  var _interestPreviosInput = '';
   final _penaltyTypesRepo = getIt<PenaltyTypesRepository>();
-  final int _revenueMaxLength = 10;
-  var _revenuePreviosInput = '';
-  final int _wageMaxLength = 10;
-  var _wagePreviosInput = '';
 
   //-----------------------------------------
-  String get bonus => entry.bonusAux.toString().formatCurrency();
+  String get bonus => entry.bonusAux.toString().formatDouble;
 
   //-----------------------------------------
   List<Employee> get employeesItems {
@@ -70,7 +73,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   String get employeeUid => entry.employeeUid.isEmpty ? null : entry.employeeUid;
 
   //-----------------------------------------
-  String get penaltiesTotal => entry.penaltiesTotalAux.toString().formatCurrency();
+  String get penaltiesTotal => entry.penaltiesTotalAux.toString().formatDouble;
 
   //-----------------------------------------
   List<DropdownMenuItem> get penaltyTypesList {
@@ -83,15 +86,16 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   }
 
   //-----------------------------------------
-  String get total => entry.total.toString().formatCurrency();
+  String get total => entry.total.toString().formatDouble;
 
   //-----------------------------------------
   void calcTotal() {
-    var revenue = double.tryParse(txtCtrlRevenue.text.replaceAll(' ', '')) ?? 0;
-    var interest = double.tryParse(txtCtrlInterest.text.replaceAll(' ', '')) ?? 0;
-    var wage = double.tryParse(txtCtrlWage.text.replaceAll(' ', '')) ?? 0;
-    var result =
-        calcTotalAndBonus(revenue: revenue, interest: interest, wage: wage, penalties: penalties);
+    var result = calcTotalAndBonus(
+      revenue: revenue.result,
+      interest: interest.result,
+      wage: wage.result,
+      penalties: penalties,
+    );
     entry.bonusAux = result.bonus;
     entry.total = result.total;
     entry.penaltiesTotalAux = result.penaltiesTotal;
@@ -99,59 +103,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   }
 
   //-----------------------------------------
-  void formatInterest() {
-    var result = formatInputCurrency(
-      newValue: txtCtrlInterest.text,
-      oldValue: _interestPreviosInput,
-      maxLength: _interestMaxLength,
-    );
-    txtCtrlInterest.value = TextEditingValue(
-      text: result,
-      composing: TextRange.empty,
-      selection: TextSelection.collapsed(offset: result.length),
-    );
-    _interestPreviosInput = result;
-    calcTotal();
-  }
-
-  //-----------------------------------------
-  void formatRevenue() {
-    var result = formatInputCurrency(
-      newValue: txtCtrlRevenue.text,
-      oldValue: _revenuePreviosInput,
-      maxLength: _revenueMaxLength,
-      separateThousands: true,
-    );
-    txtCtrlRevenue.value = TextEditingValue(
-      text: result,
-      composing: TextRange.empty,
-      selection: TextSelection.collapsed(offset: result.length),
-    );
-    _revenuePreviosInput = result;
-    calcTotal();
-  }
-
-  //-----------------------------------------
-  void formatWage() {
-    var result = formatInputCurrency(
-      newValue: txtCtrlWage.text,
-      oldValue: _wagePreviosInput,
-      maxLength: _wageMaxLength,
-      separateThousands: true,
-    );
-    txtCtrlWage.value = TextEditingValue(
-      text: result,
-      composing: TextRange.empty,
-      selection: TextSelection.collapsed(offset: result.length),
-    );
-    _wagePreviosInput = result;
-    calcTotal();
-  }
-
-  //-----------------------------------------
-  PenaltyType getPenaltyType(String uid) {
-    return _penaltyTypesRepo.getType(uid);
-  }
+  PenaltyType getPenaltyType(String uid) => _penaltyTypesRepo.getType(uid);
 
   //-----------------------------------------
   Future<void> goBack(BuildContext context) async {
@@ -193,6 +145,9 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   void save() {
     entry.timestamp = DateTime.now().millisecondsSinceEpoch;
     entry.penalties = penalties.toList();
+    entry.wage = wage.result;
+    entry.revenue = revenue.result;
+    entry.interest = interest.result;
     calcTotal();
     _entriesRepo.addOrUpdate([entry]);
   }
@@ -231,37 +186,12 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   //-----------------------------------------
   String validateInterest(String txt) {
     if (txt.isEmpty)
-      return '!';
+      return 'Введите';
     else if (txt.endsWith('.'))
-      return '!';
+      return 'Проверьте';
     else if ((double.tryParse(txt) ?? 101) > 100)
-      return '!';
+      return 'Проверьте';
     else {
-      entry.interest = double.parse(txtCtrlInterest.text.removeSpaces);
-      return null;
-    }
-  }
-
-  //-----------------------------------------
-  String validateRevenue(String txt) {
-    if (txt.isEmpty)
-      return '!';
-    else if (txt.endsWith('.'))
-      return '!';
-    else {
-      entry.revenue = double.parse(txtCtrlRevenue.text.removeSpaces);
-      return null;
-    }
-  }
-
-  //-----------------------------------------
-  String validateWage(String txt) {
-    if (txt.isEmpty)
-      return '!';
-    else if (txt.endsWith('.'))
-      return '!';
-    else {
-      entry.wage = double.parse(txtCtrlWage.text.removeSpaces);
       return null;
     }
   }
@@ -283,15 +213,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   }
 
   //-----------------------------------------
-  Future<void> _addPenaltyType(BuildContext context) async {
+  void _addPenaltyType(BuildContext context) {
     Router.sailor.navigate(RouterPaths.editPenaltyType, params: {'penaltyType': PenaltyType()});
-    // var result = await showDialog<PenaltyType>(
-    //   context: context,
-    //   barrierDismissible: false,
-    //   builder: (BuildContext context) => ScreenEditPenaltyType(penaltyType: PenaltyType()),
-    // );
-    // if (result != null) _penaltyTypesRepo.addOrUpdate(result);
-
-    notifyListeners();
   }
 }

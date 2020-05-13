@@ -17,6 +17,6 @@ mixin Format on TextFieldHandlerBase {
       selection: TextSelection.collapsed(offset: result.length),
     );
     previousInput = result;
-    callback();
+    onChange();
   }
 }

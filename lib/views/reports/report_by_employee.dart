@@ -8,17 +8,16 @@ final getIt = GetIt.instance;
 class ReportByEmployee {
   ReportByEmployee(Report report) {
     name = report.employeeNameAux;
-    total = report.total.toString().formatCurrencyDecimal();
-    totalAverage = report.totalAverage.toString().formatCurrencyDecimal();
+    total = report.total.toString().formatInt;
+    totalAverage = report.totalAverage.toString().formatInt;
     reportsCount = report.reportsCount.toString();
-    revenue = report.revenue.toString().formatCurrencyDecimal();
-    revenueAverage = report.revenueAverage.toString().formatCurrencyDecimal();
-    penaltiesTotal = report.penaltiesTotalAux.toString().formatCurrencyDecimal();
+    revenue = report.revenue.toString().formatInt;
+    revenueAverage = report.revenueAverage.toString().formatInt;
+    penaltiesTotal = report.penaltiesTotalAux.toString().formatInt;
     report.penaltiesTotalByType.forEach((typeId, value) =>
-        penalties[_penaltyTypesRepo.getType(typeId).title] =
-            value.toString().formatCurrencyDecimal());
-    penaltyUnit = report.penaltyUnit.toString().formatCurrencyDecimal();
-    penaltiesCount = report.penaltiesCount.toString().formatCurrencyDecimal();
+        penalties[_penaltyTypesRepo.getType(typeId).title] = value.toString().formatInt);
+    penaltyUnit = report.penaltyUnit.toString().formatInt;
+    penaltiesCount = report.penaltiesCount.toString().formatInt;
   }
   final _penaltyTypesRepo = getIt<PenaltyTypesRepository>();
 

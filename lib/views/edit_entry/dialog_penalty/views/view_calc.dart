@@ -1,9 +1,8 @@
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/app_text_styles.dart';
-import 'package:Staffield/utils/regexp_digits_and_dot.dart';
+import 'package:Staffield/views/common/text_fields/text_field_double.dart';
 import 'package:Staffield/views/edit_entry/dialog_penalty/dialog_penalty_vmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class ViewCalc extends StatelessWidget {
@@ -19,48 +18,22 @@ class ViewCalc extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: TextFormField(
-                  controller: vModel.txtCtrlUnit,
-                  style: AppTextStyles.digitsBold,
-                  decoration: InputDecoration(
-                    labelText: vModel.labelUnit,
-                    counterStyle: TextStyle(color: Colors.transparent),
-                    labelStyle: AppTextStyles.dataChipLabel,
-                  ),
-                  textInputAction: TextInputAction.next,
-                  maxLines: 1,
-                  maxLengthEnforced: true,
-                  maxLength: vModel.maxLengthUnit,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [WhitelistingTextInputFormatter(regexpDigitsAndDot())],
+                child: TextFieldDouble(
+                  vModel.unit,
                   autofocus: true,
-                  validator: (txt) => vModel.validateUnit(),
-                  onChanged: (_) => vModel.formatUnitAndCalcTotal(),
-                  onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(focusCost),
+                  nextFocusNode: focusCost,
                 ),
               ),
             ),
             Icon(Icons.close, color: AppColors.primaryAccent, size: 20),
             Expanded(
               child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: TextFormField(
-                    controller: vModel.txtCtrlCost,
-                    style: AppTextStyles.digitsBold,
-                    decoration: InputDecoration(
-                      labelText: vModel.labelCost,
-                      labelStyle: AppTextStyles.dataChipLabel,
-                      counterStyle: TextStyle(color: Colors.transparent),
-                    ),
-                    maxLines: 1,
-                    maxLengthEnforced: true,
-                    maxLength: vModel.maxLengthCost,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [WhitelistingTextInputFormatter(regexpDigitsAndDot())],
-                    validator: (txt) => vModel.validateCost(),
-                    onChanged: (_) => vModel.formatCostAndCalcTotal(),
-                    focusNode: focusCost,
-                  )),
+                padding: const EdgeInsets.all(10.0),
+                child: TextFieldDouble(
+                  vModel.cost,
+                  focusNode: focusCost,
+                ),
+              ),
             ),
           ],
         ),

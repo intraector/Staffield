@@ -3,9 +3,7 @@ import 'package:Staffield/core/models/employee.dart';
 import 'package:Staffield/views/bottom_navigation.dart';
 import 'package:Staffield/views/common/chip_total.dart';
 import 'package:Staffield/views/common/data_chip.dart';
-import 'package:Staffield/views/edit_entry/views/editable_interest.dart';
-import 'package:Staffield/views/edit_entry/views/editable_revenue.dart';
-import 'package:Staffield/views/edit_entry/views/editable_wage.dart';
+import 'package:Staffield/views/common/text_fields/text_field_double.dart';
 import 'package:Staffield/views/view_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:Staffield/constants/app_colors.dart';
@@ -14,7 +12,6 @@ import 'package:Staffield/views/edit_entry/view_penalties.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
-// import 'package:Staffield/utils/CurrencyFormatter.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -90,12 +87,12 @@ class ScreenEditEntry extends StatelessWidget {
                                                 DropdownButtonFormField(
                                                   decoration: InputDecoration(
                                                     isDense: true,
-                                                    // labelText: vModel.labelName,
-                                                    // labelStyle: AppTextStyles.dataChipLabel,
+                                                    labelText: vModel.labelName,
+                                                    labelStyle: AppTextStyles.dataChipLabel,
                                                     hintStyle: AppTextStyles.dataChipLabel,
                                                   ),
                                                   value: tuple.item1,
-                                                  hint: Text(vModel.labelName),
+                                                  // hint: Text(vModel.labelName),
                                                   isExpanded: true,
                                                   validator: vModel.validateEmployeeUid,
                                                   items: tuple.item2
@@ -118,9 +115,10 @@ class ScreenEditEntry extends StatelessWidget {
                                     children: <Widget>[
                                       Container(
                                         width: MediaQuery.of(context).size.width / 1.5,
-                                        child: EditableWage(
+                                        child: TextFieldDouble(
+                                          vModel.wage,
                                           focusNode: focusWage,
-                                          nextFocus: focusRevenue,
+                                          nextFocusNode: focusRevenue,
                                         ),
                                       ),
                                     ],
@@ -130,17 +128,20 @@ class ScreenEditEntry extends StatelessWidget {
                                     children: <Widget>[
                                       Flexible(
                                         flex: 2,
-                                        child: EditableRevenue(
-                                          focusNode: focusRevenue,
-                                          nextFocus: focusInterest,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(right: 10.0),
+                                          child: TextFieldDouble(
+                                            vModel.revenue,
+                                            focusNode: focusRevenue,
+                                            nextFocusNode: focusInterest,
+                                          ),
                                         ),
                                       ),
                                       Flexible(
                                         flex: 1,
-                                        child: EditablInterest(
-                                          vModel: vModel,
+                                        child: TextFieldDouble(
+                                          vModel.interest,
                                           focusNode: focusInterest,
-                                          nextFocus: null,
                                         ),
                                       ),
                                     ],

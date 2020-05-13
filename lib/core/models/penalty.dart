@@ -35,14 +35,14 @@ class Penalty {
     }
   }
 
-  double cost = 0.0;
+  double cost;
   String mode;
   String parentUid = '';
   int timestamp;
   double total;
   String typeUid;
   String uid = TimeBasedUuidGenerator().generate().toString();
-  double unit = 0.0;
+  double unit;
 
   //-----------------------------------------
   @override
@@ -73,12 +73,12 @@ class Penalty {
 
 class PenaltyReport {
   PenaltyReport.from(Penalty penalty) {
-    total = penalty.total.toString().formatCurrencyDecimal();
+    total = penalty.total.toString().formatInt;
     if (penalty.unit != 0) {
-      time = penalty.unit.toString().formatCurrencyDecimal();
+      time = penalty.unit.toString().formatInt;
     } else
       time = '';
-    cost = penalty.cost?.toString()?.formatCurrencyDecimal() ?? '';
+    cost = penalty.cost?.toString()?.formatInt ?? '';
   }
 
   String cost;

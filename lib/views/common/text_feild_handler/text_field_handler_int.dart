@@ -5,15 +5,19 @@ import 'package:flutter/services.dart';
 
 class TextFieldHandlerInt extends TextFieldHandlerBase with Format {
   TextFieldHandlerInt({
-    void Function() callback,
+    void Function() onChange,
+    void Function() onSave,
     int maxLength = 10,
     String label,
     String hint,
+    String defaultValue,
   }) : super(
-          callback: callback,
+          onChange: onChange,
+          onSave: onSave,
           maxLength: maxLength,
           label: label,
           hint: hint,
+          defaultValue: defaultValue,
         );
 
   int get result => int.tryParse(txtCtrl.text.removeSpaces) ?? 0;
