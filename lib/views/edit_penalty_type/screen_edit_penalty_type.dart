@@ -5,6 +5,7 @@ import 'package:Staffield/views/edit_penalty_type/views/view_calc/view_calc.dart
 import 'package:Staffield/views/edit_penalty_type/views/view_plain/view_plain.dart';
 import 'package:flutter/material.dart';
 import 'package:Staffield/core/models/penalty_mode.dart';
+import 'package:print_color/print_color.dart';
 import 'package:provider/provider.dart';
 
 class ScreenEditPenaltyType extends StatelessWidget {
@@ -19,12 +20,11 @@ class ScreenEditPenaltyType extends StatelessWidget {
         child: Consumer<ScreenEditPenaltyTypeVModel>(
           builder: (_, vModel, __) => SafeArea(
               child: Scaffold(
-            appBar: AppBar(title: Text("Вид штрафа", textAlign: TextAlign.center)),
+            appBar: AppBar(title: Text("ШАБЛОН ШТРАФА", textAlign: TextAlign.center)),
             body: Column(
               children: <Widget>[
                 Expanded(
                   child: ListView(
-                    // shrinkWrap: true,
                     children: <Widget>[
                       Form(
                         key: _formKey,
@@ -33,10 +33,24 @@ class ScreenEditPenaltyType extends StatelessWidget {
                           width: double.maxFinite,
                           child: Column(
                             children: <Widget>[
-                              DropdownButton<String>(
-                                value: vModel.mode,
-                                items: vModel.dropdownItems,
-                                onChanged: (value) => vModel.mode = value,
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Text(
+                                      'ВИД ШТРАФА:',
+                                      style: AppTextStyles.dataChipLabel,
+                                    ),
+                                  ),
+                                  Flexible(
+                                    child: DropdownButton<String>(
+                                      value: vModel.mode,
+                                      items: vModel.dropdownItems,
+                                      onChanged: (value) => vModel.mode = value,
+                                    ),
+                                  ),
+                                ],
                               ),
                               vModel.type.mode == PenaltyMode.plain
                                   ? ViewPlain(vModel)
@@ -67,8 +81,7 @@ class ScreenEditPenaltyType extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(48.0)),
                             child: Text('ОК'),
                             onPressed: () {
-                              vModel.save(_formKey);
-                              Navigator.pop(context);
+                              if (vModel.save(_formKey)) Navigator.pop(context);
                             }),
                       ),
                     ),

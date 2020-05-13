@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository_interface.dart';
+import 'package:print_color/print_color.dart';
 
 class PenaltyTypesRepository {
   PenaltyTypesRepository(this.sqlite) {
@@ -11,6 +13,11 @@ class PenaltyTypesRepository {
   var _repo = <PenaltyType>[];
 
   //-----------------------------------------
+  var _streamCtrlCacheUpdates = StreamController<bool>.broadcast();
+  Stream<bool> get updates => _streamCtrlCacheUpdates.stream;
+  void _notifyRepoUpdates() => _streamCtrlCacheUpdates.sink.add(true);
+
+  //-----------------------------------------
   List<PenaltyType> get repo => _repo;
 
   //-----------------------------------------
@@ -18,6 +25,7 @@ class PenaltyTypesRepository {
   //-----------------------------------------
   Future<void> _fetch() async {
     _repo = await sqlite.fetch();
+    _notifyRepoUpdates();
   }
 
   //-----------------------------------------
@@ -37,9 +45,20 @@ class PenaltyTypesRepository {
       else
         _repo[index] = type;
     }
-    return sqlite.addOrUpdate(type);
+    var result = await sqlite.addOrUpdate(type);
+    Print.yellow('||| type : $type');
+    _notifyRepoUpdates();
+    return result;
   }
 
   //-----------------------------------------
-  Future<int> hideUnHide(PenaltyType type) => sqlite.hideUnhide(uid: type.uid, hide: type.hide);
+  Future<int> hideUnHide(PenaltyType type) async {
+    var result = await sqlite.hideUnhide(uid: type.uid, hide: type.hide);
+    _notifyRepoUpdates();
+    return result;
+  }
+
+  void dispose() {
+    _streamCtrlCacheUpdates.close();
+  }
 }

@@ -24,6 +24,7 @@ class TextFieldString extends StatelessWidget {
       ),
       textInputAction: nextFocusNode == null ? TextInputAction.done : TextInputAction.next,
       maxLines: 1,
+      maxLength: handler.maxLength,
       maxLengthEnforced: true,
       validator: (_) => handler.validate(),
       onSaved: (_) => handler.onSave(),

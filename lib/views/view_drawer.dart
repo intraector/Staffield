@@ -1,4 +1,6 @@
+import 'package:Staffield/constants/router_paths.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sailor/sailor.dart';
 import 'package:Staffield/constants/app_text_styles.dart';
 import 'package:Staffield/services/router.dart';
@@ -31,6 +33,26 @@ class ViewDrawer extends StatelessWidget {
               onTap: () {
                 Router.sailor('ScreenAds',
                     params: {'type': 'junkyard'}, navigationType: NavigationType.pushReplace);
+              },
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0),
+              title: Row(
+                children: <Widget>[
+                  Container(
+                    child: Icon(MdiIcons.bandage),
+                    width: _iconSize,
+                    height: _iconSize,
+                  ),
+                  Expanded(
+                    child: Container(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: Text('ШТРАФЫ', style: AppTextStyles.drawer)),
+                  ),
+                ],
+              ),
+              onTap: () {
+                Router.sailor(RouterPaths.penaltyTypes, navigationType: NavigationType.pushReplace);
               },
             ),
             Spacer(),

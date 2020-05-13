@@ -26,11 +26,13 @@ class ScreenEditPenaltyTypeVModel extends ChangeNotifier {
   final _penaltyTypesRepo = getIt<PenaltyTypesRepository>();
 
   //-----------------------------------------
-  void save(GlobalKey<FormState> formKey) {
+  bool save(GlobalKey<FormState> formKey) {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
       _penaltyTypesRepo.addOrUpdate(type);
-    }
+      return true;
+    } else
+      return false;
   }
 
   //-----------------------------------------
@@ -41,8 +43,8 @@ class ScreenEditPenaltyTypeVModel extends ChangeNotifier {
   //-----------------------------------------
   List<DropdownMenuItem<String>> get dropdownItems {
     return [
-      DropdownMenuItem<String>(child: Text('Простой'), value: PenaltyMode.plain),
-      DropdownMenuItem<String>(child: Text('Вычисляемый'), value: PenaltyMode.calc),
+      DropdownMenuItem<String>(child: Text('ПРОСТОЙ ШТРАФ'), value: PenaltyMode.plain),
+      DropdownMenuItem<String>(child: Text('ЦЕНА ЗА ЕДИНИЦУ'), value: PenaltyMode.calc),
     ];
   }
 }

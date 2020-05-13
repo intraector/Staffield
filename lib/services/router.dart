@@ -1,6 +1,7 @@
 import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:Staffield/views/edit_penalty_type/screen_edit_penalty_type.dart';
 import 'package:Staffield/views/employees/screen_employees.dart';
+import 'package:Staffield/views/penalty_types/screen_penalty_types.dart';
 import 'package:Staffield/views/reports/screen_reports.dart';
 import 'package:flutter/animation.dart';
 import 'package:sailor/sailor.dart';
@@ -33,6 +34,7 @@ class Router {
       ),
       SailorRoute(name: RouterPaths.employees, builder: (_, __, ___) => ScreenEmployees()),
       SailorRoute(name: RouterPaths.reports, builder: (_, __, ___) => ScreenReports()),
+      SailorRoute(name: RouterPaths.penaltyTypes, builder: (_, __, ___) => ScreenPenaltyTypes()),
     ]);
   }
 }

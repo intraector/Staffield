@@ -5,4 +5,5 @@ class RouterPaths {
   static String editEmployee = 'editEmployee';
   static String reports = 'reports';
   static String editPenaltyType = 'editPenaltyType';
+  static String penaltyTypes = 'penaltyTypes';
 }
