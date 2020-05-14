@@ -18,7 +18,7 @@ Future<bool> dialogConfirm(BuildContext context, {String text, String textYes, S
                   },
                 ),
                 SimpleDialogOption(
-                  child: Text(textNo ?? 'Отмена'),
+                  child: Text(textNo ?? 'ОТМЕНА'),
                   onPressed: () {
                     Navigator.pop(context, false);
                   },

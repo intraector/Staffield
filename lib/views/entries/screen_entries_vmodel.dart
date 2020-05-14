@@ -24,9 +24,9 @@ class ScreenEntriesVModel with ChangeNotifier {
   final _repo = getIt<EntriesRepository>();
   var _generateRandomEntries = GenerateRandomEntries();
 
-  // String currentItemDate = '';
-
   int get startTimestamp => _repo.startTimestamp;
+
+  bool get endOfData => _repo.endOfData;
 
   String get startTimestampLabel =>
       'до ' +
@@ -54,12 +54,6 @@ class ScreenEntriesVModel with ChangeNotifier {
   }
 
   //-----------------------------------------
-  // void setCurrentItemDate(int index) {
-  //   currentItemDate = cache[index].date;
-  //   notifyListeners();
-  // }
-
-  //-----------------------------------------
   void updateList() {
     var _currentDate;
     var result = <AdaptedEntryReport>[];
@@ -76,7 +70,6 @@ class ScreenEntriesVModel with ChangeNotifier {
       result.add(AdaptedEntryReport.from(entry.report));
     }
     cache = result;
-    // if (cache.isNotEmpty) currentItemDate = cache.first.date;
     notifyListeners();
   }
 

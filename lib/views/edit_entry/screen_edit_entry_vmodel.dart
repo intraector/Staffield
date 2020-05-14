@@ -6,6 +6,7 @@ import 'package:Staffield/core/entries_repository.dart';
 import 'package:Staffield/core/models/employee.dart';
 import 'package:Staffield/core/models/entry.dart';
 import 'package:Staffield/core/models/penalty.dart';
+import 'package:Staffield/core/models/penalty_mode.dart';
 import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository.dart';
 import 'package:Staffield/core/utils/calc_total_mixin.dart';
@@ -54,6 +55,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   List<Penalty> penalties;
   TextFieldHandlerDouble revenue;
   TextFieldHandlerDouble wage;
+  final dropdownState = GlobalKey<FormFieldState>();
 
   final _employeesRepo = getIt<EmployeesRepository>();
   final _entriesRepo = getIt<EntriesRepository>();
@@ -63,10 +65,13 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   String get bonus => entry.bonusAux.toString().formatDouble;
 
   //-----------------------------------------
-  List<Employee> get employeesItems {
-    var result = _employeesRepo.repo.toList()
+  List<DropdownMenuItem<String>> get employeesItems {
+    var result = _employeesRepo.repoWhereHidden(false)
       ..add(Employee(name: 'Добавить сотрудника...', uid: '111'));
-    return result;
+
+    return result
+        .map((employee) => DropdownMenuItem(value: employee.uid, child: Text(employee.name)))
+        .toList();
   }
 
   //-----------------------------------------
@@ -157,10 +162,12 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
     if (uid != '111')
       entry.employeeUid = uid;
     else {
-      var result = await showDialog(context: context, builder: (context) => DialogEditEmployee());
+      var result =
+          await showDialog<String>(context: context, builder: (context) => DialogEditEmployee());
       if (result != null) {
         entry.employeeUid = result;
         entry.employeeNameAux = _employeesRepo.getEmployee(result).name;
+        dropdownState.currentState.didChange(result);
       }
     }
     notifyListeners();
@@ -214,6 +221,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
 
   //-----------------------------------------
   void _addPenaltyType(BuildContext context) {
-    Router.sailor.navigate(RouterPaths.editPenaltyType, params: {'penaltyType': PenaltyType()});
+    Router.sailor.navigate(RouterPaths.editPenaltyType,
+        params: {'penaltyType': PenaltyType(mode: PenaltyMode.plain)});
   }
 }

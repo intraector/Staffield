@@ -24,6 +24,10 @@ class EmployeesRepository {
   List<Employee> get repo => _repo;
 
   //-----------------------------------------
+  List<Employee> repoWhereHidden(bool value) =>
+      _repo.where((employee) => employee.hide == value).toList();
+
+  //-----------------------------------------
   void _notifyRepoUpdates() => _streamCtrlRepoUpdates.sink.add(true);
 
   //-----------------------------------------

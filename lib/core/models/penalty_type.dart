@@ -2,7 +2,7 @@ import 'package:Staffield/services/sqlite/sqlite_fields.dart';
 import 'package:uuid_type/uuid_type.dart';
 
 class PenaltyType {
-  PenaltyType();
+  PenaltyType({this.mode});
   String uid = TimeBasedUuidGenerator().generate().toString();
   String mode;
   String title = '';
@@ -31,13 +31,13 @@ class PenaltyType {
     hide = map[SqliteFieldsPenaltyTypes.hide] == 0 ? false : true;
   }
 
-  PenaltyType get copy => PenaltyType()
-    ..mode = mode
-    ..title = title
-    ..unitTitle = unitTitle
-    ..unitDefaultValue = unitDefaultValue
-    ..costDefaultValue = costDefaultValue
-    ..hide = hide;
+  // PenaltyType get copy => PenaltyType()
+  //   ..mode = mode
+  //   ..title = title
+  //   ..unitTitle = unitTitle
+  //   ..unitDefaultValue = unitDefaultValue
+  //   ..costDefaultValue = costDefaultValue
+  //   ..hide = hide;
 
   @override
   String toString() {

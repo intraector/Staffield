@@ -1,5 +1,6 @@
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/router_paths.dart';
+import 'package:Staffield/core/models/penalty_mode.dart';
 import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:Staffield/services/router.dart';
 import 'package:Staffield/views/bottom_navigation.dart';
@@ -20,7 +21,7 @@ class ScreenPenaltyTypes extends StatelessWidget {
           child: Icon(Icons.add),
           onPressed: () => Router.sailor.navigate(
             RouterPaths.editPenaltyType,
-            params: {'penaltyType': PenaltyType()},
+            params: {'penaltyType': PenaltyType(mode: PenaltyMode.plain)},
           ),
         ),
         body: NestedScrollView(

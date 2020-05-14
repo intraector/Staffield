@@ -1,6 +1,7 @@
 import 'package:Staffield/views/common/text_feild_handler/text_field_handler_double.dart';
 import 'package:Staffield/views/common/text_feild_handler/text_field_handler_string.dart';
 import 'package:Staffield/views/edit_penalty_type/screen_edit_penalty_type_vmodel.dart';
+import 'package:Staffield/utils/string_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -9,22 +10,28 @@ class ViewCalcVModel extends ChangeNotifier {
     this.title = TextFieldHandlerString(
       label: 'НАЗВАНИЕ ШАБЛОНА',
       hint: 'Например, "Бой посуды"',
+      defaultValue: parentVModel.type.title,
       onChange: notifyListeners,
       onSave: save,
     );
     this.unitLabel = TextFieldHandlerString(
       label: 'НАЗВАНИЕ',
       hint: 'Например, "Штуки"',
+      defaultValue: parentVModel.type.unitTitle,
       onChange: notifyListeners,
       onSave: save,
     );
     this.unitDefault = TextFieldHandlerDouble(
       label: 'ПО УМОЛЧАНИЮ',
+      defaultValue:
+          parentVModel.type.unitDefaultValue?.toString()?.emptyIfZero?.noDotZero?.formatDouble,
       onChange: notifyListeners,
       onSave: save,
     );
     this.costDefault = TextFieldHandlerDouble(
       label: 'ЦЕНА ЗА ЕДИНИЦУ ПО УМОЛЧАНИЮ',
+      defaultValue:
+          parentVModel.type.costDefaultValue?.toString()?.emptyIfZero?.noDotZero?.formatDouble,
       onChange: notifyListeners,
       onSave: save,
     );

@@ -7,7 +7,7 @@ String formatInputCurrency(
     @required int maxLength,
     bool separateThousands = false}) {
   newValue = newValue.removeTrailingDots();
-  if (newValue[0] == '.') newValue = '0' + newValue;
+  if (newValue.startsWith('.')) newValue = '0' + newValue;
   if (separateThousands) {
     var chunks = newValue.split('.');
     chunks[0] = chunks[0].separateThousands();

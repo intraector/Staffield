@@ -17,11 +17,24 @@ class _ViewScreenEntriesBodyState extends State<ViewScreenEntriesBody> {
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Expanded(
-            child: Selector<ScreenEntriesVModel, List<AdaptedEntryReport>>(
-              selector: (context, vModel) => vModel.cache,
-              builder: (_, list, __) => list.length == 0
-                  ? Center(child: CircularProgressIndicator())
-                  : NotificationListener<ScrollNotification>(
+              child: Selector<ScreenEntriesVModel, bool>(
+            selector: (_, vModel) => vModel.endOfData,
+            builder: (context, endOfData, child) {
+              return Selector<ScreenEntriesVModel, List<AdaptedEntryReport>>(
+                selector: (context, vModel) => vModel.cache,
+                builder: (_, list, __) {
+                  if (list.length == 0)
+                    return endOfData
+                        ? Center(
+                            child: Text('Нет записей',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    .copyWith(color: Colors.white)),
+                          )
+                        : Center(child: CircularProgressIndicator());
+                  else
+                    return NotificationListener<ScrollNotification>(
                       onNotification: (notif) {
                         if (notif.metrics.extentAfter < 200)
                           Provider.of<ScreenEntriesVModel>(context, listen: false).fetchNextChunk();
@@ -52,9 +65,11 @@ class _ViewScreenEntriesBodyState extends State<ViewScreenEntriesBody> {
                                   )
                                 : ViewScreenEntriesItem(list[index])),
                       ),
-                    ),
-            ),
-          ),
+                    );
+                },
+              );
+            },
+          )),
         ],
       );
 }

@@ -98,7 +98,7 @@ class ViewExpected extends StatelessWidget {
                                               padding: EdgeInsets.all(0.0),
                                               textColor: Colors.black,
                                               child: Text(
-                                                "Отмена",
+                                                "ОТМЕНА",
                                                 style: TextStyle(fontSize: 9.0),
                                               ),
                                               onPressed: () {},
@@ -117,7 +117,7 @@ class ViewExpected extends StatelessWidget {
                                               shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(8)),
                                               child: Text(
-                                                'Готово',
+                                                'ОК',
                                                 style: TextStyle(fontSize: 9.0),
                                               ),
                                               onPressed: () {},

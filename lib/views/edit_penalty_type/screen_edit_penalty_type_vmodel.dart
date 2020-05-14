@@ -8,12 +8,7 @@ import 'package:get_it/get_it.dart';
 final getIt = GetIt.instance;
 
 class ScreenEditPenaltyTypeVModel extends ChangeNotifier {
-  ScreenEditPenaltyTypeVModel(PenaltyType type) {
-    if (type.mode == null)
-      this.type = _penaltyTypesRepo.repo.first.copy;
-    else
-      this.type = type.copy;
-  }
+  ScreenEditPenaltyTypeVModel(this.type);
 
   PenaltyType type;
 

@@ -5,7 +5,6 @@ import 'package:Staffield/views/edit_penalty_type/views/view_calc/view_calc.dart
 import 'package:Staffield/views/edit_penalty_type/views/view_plain/view_plain.dart';
 import 'package:flutter/material.dart';
 import 'package:Staffield/core/models/penalty_mode.dart';
-import 'package:print_color/print_color.dart';
 import 'package:provider/provider.dart';
 
 class ScreenEditPenaltyType extends StatelessWidget {
@@ -40,7 +39,7 @@ class ScreenEditPenaltyType extends StatelessWidget {
                                     padding: const EdgeInsets.only(right: 8.0),
                                     child: Text(
                                       'ВИД ШТРАФА:',
-                                      style: AppTextStyles.dataChipLabel,
+                                      // style: AppTextStyles.dataChipLabel,
                                     ),
                                   ),
                                   Flexible(

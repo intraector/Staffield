@@ -24,7 +24,7 @@ class DialogPenaltyVModel extends ChangeNotifier {
     } else if (penalty.mode == PenaltyMode.calc) {
       labelTotal = (penalty.total?.toString()?.formatDouble ?? '0.0');
       unit = TextFieldHandlerDouble(
-        label: _type.unitTitle,
+        label: _type.unitTitle.toUpperCase(),
         maxLength: 4,
         defaultValue: penalty.unit?.toString()?.emptyIfZero?.noDotZero?.formatDouble ??
             _type.unitDefaultValue?.toString()?.emptyIfZero?.noDotZero,

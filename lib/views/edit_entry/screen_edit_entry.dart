@@ -1,4 +1,5 @@
 import 'package:Staffield/constants/app_text_styles.dart';
+import 'package:Staffield/constants/router_paths.dart';
 import 'package:Staffield/core/models/employee.dart';
 import 'package:Staffield/views/bottom_navigation.dart';
 import 'package:Staffield/views/common/chip_total.dart';
@@ -10,6 +11,7 @@ import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
 import 'package:Staffield/views/edit_entry/view_penalties.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:print_color/print_color.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -31,7 +33,7 @@ class ScreenEditEntry extends StatelessWidget {
           return SafeArea(
             child: Scaffold(
               drawer: ViewDrawer(),
-              bottomNavigationBar: BottomNavigation('nopath'),
+              bottomNavigationBar: BottomNavigation(RouterPaths.editEntry),
               appBar: AppBar(
                 title: Text('Запись'),
                 actions: <Widget>[
@@ -80,27 +82,21 @@ class ScreenEditEntry extends StatelessWidget {
                                     children: <Widget>[
                                       Expanded(
                                         child: Selector<ScreenEditEntryVModel,
-                                                Tuple2<String, List<Employee>>>(
-                                            selector: (_, _vModel) =>
-                                                Tuple2(_vModel.employeeUid, _vModel.employeesItems),
-                                            builder: (context, tuple, __) =>
+                                                List<DropdownMenuItem<String>>>(
+                                            selector: (_, _vModel) => _vModel.employeesItems,
+                                            builder: (context, employeesItems, __) =>
                                                 DropdownButtonFormField(
+                                                  key: vModel.dropdownState,
                                                   decoration: InputDecoration(
                                                     isDense: true,
                                                     labelText: vModel.labelName,
                                                     labelStyle: AppTextStyles.dataChipLabel,
                                                     hintStyle: AppTextStyles.dataChipLabel,
                                                   ),
-                                                  value: tuple.item1,
-                                                  // hint: Text(vModel.labelName),
+                                                  value: vModel.employeeUid,
                                                   isExpanded: true,
                                                   validator: vModel.validateEmployeeUid,
-                                                  items: tuple.item2
-                                                      .map((employee) => DropdownMenuItem(
-                                                            value: employee.uid,
-                                                            child: Text(employee.name),
-                                                          ))
-                                                      .toList(),
+                                                  items: employeesItems,
                                                   onChanged: (employeeUid) {
                                                     vModel.setEmployeeUid(employeeUid, context);
                                                     FocusScope.of(context).requestFocus(focusWage);
@@ -109,7 +105,7 @@ class ScreenEditEntry extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  Divider(color: Colors.transparent),
+                                  SizedBox(height: 5.0),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
@@ -123,7 +119,7 @@ class ScreenEditEntry extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  Divider(color: Colors.transparent),
+                                  SizedBox(height: 5.0),
                                   Row(
                                     children: <Widget>[
                                       Flexible(
@@ -146,7 +142,7 @@ class ScreenEditEntry extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  Divider(color: Colors.transparent),
+                                  SizedBox(height: 5.0),
                                   Divider(),
                                   Row(
                                     children: <Widget>[

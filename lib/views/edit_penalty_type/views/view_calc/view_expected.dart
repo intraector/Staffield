@@ -37,10 +37,10 @@ class ViewExpected extends StatelessWidget {
                         builder: (context, titleLabel, _) => Text(
                           titleLabel.toUpperCase(),
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: AppFontSize.body1,
-                            fontWeight: FontWeight.w700,
-                          ),
+                          // style: TextStyle(
+                          //   fontSize: AppFontSize.body1,
+                          //   fontWeight: FontWeight.w700,
+                          // ),
                         ),
                       ),
                     ),
@@ -163,7 +163,7 @@ class ViewExpected extends StatelessWidget {
                             padding: EdgeInsets.all(0.0),
                             textColor: Colors.black,
                             child: Text(
-                              "Отмена",
+                              'ОТМЕНА',
                               style: TextStyle(fontSize: 9.0),
                             ),
                             onPressed: () {},
@@ -181,7 +181,7 @@ class ViewExpected extends StatelessWidget {
                             highlightElevation: 3,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                             child: Text(
-                              'Готово',
+                              'ОК',
                               style: TextStyle(fontSize: 9.0),
                             ),
                             onPressed: () {},

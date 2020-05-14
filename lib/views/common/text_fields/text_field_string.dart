@@ -17,8 +17,8 @@ class TextFieldString extends StatelessWidget {
       decoration: InputDecoration(
         isDense: true,
         labelText: handler.label,
+        counter: SizedBox.shrink(),
         labelStyle: AppTextStyles.dataChipLabel,
-        counterStyle: TextStyle(color: Colors.transparent),
         hintText: handler.hint,
         hintStyle: Theme.of(context).textTheme.caption,
       ),

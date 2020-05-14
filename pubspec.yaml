@@ -30,7 +30,7 @@ dependencies:
   path: ^1.6.4
   uuid_type: ^1.1.1
   tuple: ^1.0.3
-  scrollable_positioned_list: ^0.1.5
+  # scrollable_positioned_list: ^0.1.5
   flutter_gradients: ^1.0.0+2
   linear_gradient: ^0.1.12
   google_fonts: ^1.0.0

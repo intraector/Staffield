@@ -48,7 +48,7 @@ class DialogPenalty extends StatelessWidget {
                     if (!isNewPenalty)
                       FlatButton(
                         textColor: AppColors.error,
-                        child: Text("Удалить"),
+                        child: Text("УДАЛИТЬ"),
                         onPressed: () {
                           vModel.remove();
                           Navigator.of(context).pop();
@@ -58,7 +58,7 @@ class DialogPenalty extends StatelessWidget {
                     FlatButton(
                       textColor: Colors.black,
                       // padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                      child: Text("Отмена"),
+                      child: Text("ОТМЕНА"),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -69,7 +69,7 @@ class DialogPenalty extends StatelessWidget {
                       elevation: 3,
                       highlightElevation: 3,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      child: Text('Готово'),
+                      child: Text('ОК'),
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           vModel.save();

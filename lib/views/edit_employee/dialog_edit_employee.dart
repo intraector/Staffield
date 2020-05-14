@@ -40,16 +40,17 @@ class DialogEditEmployee extends StatelessWidget {
                       ),
                     ),
                   ),
-                  CheckboxListTile(
-                    value: vModel.hideEmployee,
-                    title: Text(vModel.labelHideEmployee),
-                    onChanged: (isChecked) => vModel.hideEmployee = isChecked,
-                  ),
+                  if (employeeUid != null)
+                    CheckboxListTile(
+                      value: vModel.hideEmployee,
+                      title: Text(vModel.labelHideEmployee),
+                      onChanged: (isChecked) => vModel.hideEmployee = isChecked,
+                    ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       RaisedButton(
-                          child: Text('ОК'),
+                          child: Text('OK'),
                           onPressed: () {
                             if (_formKey.currentState.validate()) {
                               vModel.save();

@@ -13,7 +13,7 @@ class EntriesRepository {
   var _cache = <Entry>[];
 
   bool _isLoading = false;
-  bool _endOfData = false;
+  bool endOfData = false;
 
   int _startTimestamp;
   int _oldestTimestamp;
@@ -41,8 +41,8 @@ class EntriesRepository {
   //-----------------------------------------
   Future<int> fetchNextChunkToCache({bool restart = false}) async {
     if (_isLoading) return 0;
-    if (restart) _endOfData = false;
-    if (_endOfData) return 0;
+    if (restart) endOfData = false;
+    if (endOfData) return 0;
     _isLoading = true;
     var result = await fetch(
       greaterThan: null,
@@ -50,7 +50,7 @@ class EntriesRepository {
       employeeUid: null,
       limit: limit,
     );
-    if (result.length == 0) _endOfData = true;
+    if (result.length == 0) endOfData = true;
     setOldestTimestampFrom(result);
     restart == false ? _cache.addAll(result) : _cache = result;
     _notifyRepoUpdates();

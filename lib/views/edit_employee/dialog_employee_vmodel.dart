@@ -51,5 +51,5 @@ class DialogEditEmployeeVModel with ChangeNotifier {
   //-----------------------------------------
   String labelName = 'Имя';
   String dialogTitle = 'СОТРУДНИК';
-  String labelHideEmployee = 'Не показывать в списках';
+  String labelHideEmployee = 'В архив';
 }

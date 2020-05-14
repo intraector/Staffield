@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository_interface.dart';
-import 'package:print_color/print_color.dart';
 
 class PenaltyTypesRepository {
   PenaltyTypesRepository(this.sqlite) {
@@ -46,7 +45,6 @@ class PenaltyTypesRepository {
         _repo[index] = type;
     }
     var result = await sqlite.addOrUpdate(type);
-    Print.yellow('||| type : $type');
     _notifyRepoUpdates();
     return result;
   }
@@ -58,6 +56,7 @@ class PenaltyTypesRepository {
     return result;
   }
 
+  //-----------------------------------------
   void dispose() {
     _streamCtrlCacheUpdates.close();
   }

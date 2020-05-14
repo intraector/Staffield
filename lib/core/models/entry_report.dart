@@ -44,7 +44,7 @@ class EntryReport extends Entry with CalcTotal {
 
   int penaltiesCount = 0;
   double bonusAux;
-  double penaltyUnit;
+  double penaltyUnit = 0;
   Map<String, double> penaltiesTotalByType = {};
 
   @override
