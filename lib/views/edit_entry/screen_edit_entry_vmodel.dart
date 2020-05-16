@@ -16,53 +16,55 @@ import 'package:Staffield/utils/string_utils.dart';
 import 'package:Staffield/views/common/text_feild_handler/text_field_handler_double.dart';
 import 'package:Staffield/views/edit_employee/dialog_edit_employee.dart';
 import 'package:Staffield/views/edit_entry/dialog_penalty/dialog_penalty.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
 
 class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
-  ScreenEditEntryVModel(String uid) {
-    this.entry = uid == null ? Entry() : _entriesRepo.getEntry(uid);
-    wage = TextFieldHandlerDouble(
-      label: 'ОКЛАД',
-      defaultValue: uid == null ? '' : entry.wage?.roundToDouble().toString()?.formatDouble,
-      onChange: calcTotal,
-    );
-    revenue = TextFieldHandlerDouble(
-      label: 'ВЫРУЧКА',
-      defaultValue: uid == null ? '' : entry.revenue?.roundToDouble().toString()?.formatDouble,
-      onChange: calcTotal,
-    );
-    interest = TextFieldHandlerDouble(
-      label: 'ПРОЦЕНТ',
-      maxLength: 5,
-      defaultValue: uid == null ? '' : entry.interest?.roundToDouble().toString()?.formatDouble,
-      onChange: calcTotal,
-      validator: validateInterest,
-    );
-    penalties = entry.penalties.map((penalty) => Penalty.fromOther(penalty)).toList();
-    entry.penaltiesTotalAux = entry.revenue * entry.interest / 100 ?? 0;
-  }
-
   Entry entry;
   TextFieldHandlerDouble interest;
   String labelBonus = 'БОНУС';
   String labelName = 'СОТРУДНИК';
   String labelPenalties = 'ШТРАФЫ';
   final int nameMaxLength = 40;
+  double _penaltiesTotal;
+  double _bonusAux;
+
   List<Penalty> penalties;
   TextFieldHandlerDouble revenue;
   TextFieldHandlerDouble wage;
   final dropdownState = GlobalKey<FormFieldState>();
-
   final _employeesRepo = getIt<EmployeesRepository>();
+
   final _entriesRepo = getIt<EntriesRepository>();
   final _penaltyTypesRepo = getIt<PenaltyTypesRepository>();
 
+  ScreenEditEntryVModel(String uid) {
+    this.entry = uid == null ? Entry() : _entriesRepo.getEntry(uid);
+    wage = TextFieldHandlerDouble(
+      label: 'ОКЛАД',
+      defaultValue: uid == null ? '' : entry.wage?.toString()?.formatDouble?.noDotZero,
+      onChange: calcTotalAndNotify,
+    );
+    revenue = TextFieldHandlerDouble(
+      label: 'ВЫРУЧКА',
+      defaultValue: uid == null ? '' : entry.revenue?.toString()?.formatDouble?.noDotZero,
+      onChange: calcTotalAndNotify,
+    );
+    interest = TextFieldHandlerDouble(
+      label: 'ПРОЦЕНТ',
+      maxLength: 5,
+      defaultValue: uid == null ? '' : entry.interest?.toString()?.formatDouble?.noDotZero,
+      onChange: calcTotalAndNotify,
+      validator: validateInterest,
+    );
+    penalties = entry.penalties.map((penalty) => Penalty.fromOther(penalty)).toList();
+    calcTotal();
+  }
+
   //-----------------------------------------
-  String get bonus => entry.bonusAux.toString().formatDouble;
+  String get bonus => _bonusAux.toString().formatDouble;
 
   //-----------------------------------------
   List<DropdownMenuItem<String>> get employeesItems {
@@ -78,7 +80,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   String get employeeUid => entry.employeeUid.isEmpty ? null : entry.employeeUid;
 
   //-----------------------------------------
-  String get penaltiesTotal => entry.penaltiesTotalAux.toString().formatDouble;
+  String get penaltiesTotal => _penaltiesTotal.toString().formatDouble;
 
   //-----------------------------------------
   List<DropdownMenuItem> get penaltyTypesList {
@@ -101,9 +103,14 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
       wage: wage.result,
       penalties: penalties,
     );
-    entry.bonusAux = result.bonus;
+    _bonusAux = result.bonus;
     entry.total = result.total;
-    entry.penaltiesTotalAux = result.penaltiesTotal;
+    _penaltiesTotal = result.penaltiesTotal;
+  }
+
+  //-----------------------------------------
+  void calcTotalAndNotify() {
+    calcTotal();
     notifyListeners();
   }
 
@@ -142,8 +149,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   void removePenalty(Penalty item) {
     var index = penalties.indexOf(item);
     if (index >= 0) penalties.removeAt(index);
-    calcTotal();
-    notifyListeners();
+    calcTotalAndNotify();
   }
 
   //-----------------------------------------
@@ -166,7 +172,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
           await showDialog<String>(context: context, builder: (context) => DialogEditEmployee());
       if (result != null) {
         entry.employeeUid = result;
-        entry.employeeNameAux = _employeesRepo.getEmployee(result).name;
+        entry.employeeName = _employeesRepo.getEmployee(result).name;
         dropdownState.currentState.didChange(result);
       }
     }
@@ -177,8 +183,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   void updatePenalty(Penalty item) {
     var index = penalties.indexOf(item);
     if (index >= 0) penalties[index] = item;
-    calcTotal();
-    notifyListeners();
+    calcTotalAndNotify();
   }
 
   //-----------------------------------------
@@ -215,8 +220,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
       ),
     );
     if (result != null) penalties.add(result);
-    calcTotal();
-    notifyListeners();
+    calcTotalAndNotify();
   }
 
   //-----------------------------------------

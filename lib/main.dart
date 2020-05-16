@@ -10,7 +10,6 @@ import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_employees.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
 import 'package:get_it/get_it.dart';
-import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/core/entries_repository.dart';
 import 'package:Staffield/services/router.dart';
 import 'package:google_fonts/google_fonts.dart';

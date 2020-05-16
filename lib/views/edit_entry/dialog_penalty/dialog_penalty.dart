@@ -20,7 +20,7 @@ class DialogPenalty extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
         create: (_) => DialogPenaltyVModel(penalty: penalty, screenEntryVModel: screenEntryVModel),
-        child: Builder(builder: (context) {
+        builder: (context, _) {
           var vModel = Provider.of<DialogPenaltyVModel>(context, listen: false);
           return SimpleDialog(
             contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 6.0),
@@ -82,6 +82,6 @@ class DialogPenalty extends StatelessWidget {
               ),
             ],
           );
-        }),
+        },
       );
 }

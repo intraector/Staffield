@@ -32,7 +32,7 @@ class GenerateRandomEntries {
       entry.timestamp = date.millisecondsSinceEpoch;
       var _tmp = random.nextInt(_employees.length);
       entry.employeeUid = _employees[_tmp].uid;
-      entry.employeeNameAux = _employeesRepo.getEmployee(entry.employeeUid).name;
+      entry.employeeName = _employeesRepo.getEmployee(entry.employeeUid).name;
       entry.revenue = random.nextDouble() * 20000;
       entry.wage = (200 + random.nextInt(400)).toDouble();
       entry.interest = (1 + random.nextInt(4)).toDouble();

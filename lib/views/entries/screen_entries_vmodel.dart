@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:Staffield/core/generate_random_entries.dart';
+import 'package:Staffield/core/models/entry_report.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
 import 'package:Staffield/utils/time_and_difference.dart';
-import 'package:Staffield/views/reports/adapted_entry_report.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -20,7 +20,7 @@ class ScreenEntriesVModel with ChangeNotifier {
   }
 
   StreamSubscription<bool> _subsc;
-  var cache = <AdaptedEntryReport>[];
+  var cache = <EntryReport>[];
   final _repo = getIt<EntriesRepository>();
   var _generateRandomEntries = GenerateRandomEntries();
 
@@ -56,18 +56,18 @@ class ScreenEntriesVModel with ChangeNotifier {
   //-----------------------------------------
   void updateList() {
     var _currentDate;
-    var result = <AdaptedEntryReport>[];
+    var result = <EntryReport>[];
     if (_repo.cache.isNotEmpty) {
       _currentDate = DateTime.fromMillisecondsSinceEpoch(_repo.cache.first.timestamp);
-      result.add(AdaptedEntryReport.dateLabel(_repo.cache.first));
+      result.add(EntryReport.dateLabel(_repo.cache.first.timestamp));
     }
     for (var entry in _repo.cache) {
       var _nextDate = DateTime.fromMillisecondsSinceEpoch(entry.timestamp);
       if (_nextDate.day != _currentDate.day) {
         _currentDate = _nextDate;
-        result.add(AdaptedEntryReport.dateLabel(entry));
+        result.add(EntryReport.dateLabel(entry.timestamp));
       }
-      result.add(AdaptedEntryReport.from(entry.report));
+      result.add(EntryReport.fromEntry(entry));
     }
     cache = result;
     notifyListeners();

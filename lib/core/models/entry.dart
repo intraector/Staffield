@@ -16,12 +16,12 @@ class Entry {
     interest = json[SqliteFieldsEntries.interest];
   }
 
-  double bonusAux = 0;
-  String employeeNameAux = '';
+  // double bonusAux = 0;
+  String employeeName = '';
   String employeeUid = '';
   double interest = 0;
   var penalties = <Penalty>[];
-  double penaltiesTotalAux = 0;
+  // double penaltiesTotalAux = 0;
   double revenue = 0;
   int timestamp;
   double total = 0;
@@ -31,7 +31,7 @@ class Entry {
   //-----------------------------------------
   @override
   String toString() =>
-      'uid: $uid, employeeName: $employeeNameAux, employeeUid: $employeeUid, total: $total, revenue: $revenue, wage: $wage, interest: $interest';
+      'uid: $uid, employeeName: $employeeName, employeeUid: $employeeUid, total: $total, revenue: $revenue, wage: $wage, interest: $interest';
 
   //-----------------------------------------
   EntryReport get report => EntryReport.fromEntry(this);

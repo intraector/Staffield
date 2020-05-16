@@ -21,12 +21,16 @@ extension RemoveTrailingDots on String {
 }
 
 extension FormatDouble on String {
+  /// 1. removes all dots except for the first one
+  /// 2. separates thousands
+  /// 3. retains only 2 digits after dot
+  /// 4. retans only 1 digit after the dot if both are zeroes
   String get formatDouble {
     if (this == null) return '';
     String text = this.removeTrailingDots();
     if (text[0] == '.') text = '0' + text;
     var chunks = text.split('.');
-    chunks[0] = chunks[0].separateThousands();
+    chunks.first = chunks.first.separateThousands();
     if (chunks.length > 1) {
       var trailingLength = chunks[1].length;
       chunks[1] = chunks[1].substring(0, trailingLength >= 2 ? 2 : trailingLength);
@@ -37,9 +41,11 @@ extension FormatDouble on String {
 }
 
 extension FormatInt on String {
+  /// 1. removes everything after first dot, if any
+  /// 2. separates thousands
   String get formatInt {
     String result = this.formatDouble;
-    return result.split('.')[0];
+    return result.split('.').first;
   }
 }
 
@@ -52,7 +58,7 @@ extension EmptyIfZero on String {
     if (this == null) return '';
     if (this.endsWith('0')) {
       var chunks = this.split('.');
-      var result = int.tryParse(chunks[0]);
+      var result = int.tryParse(chunks.first);
       return result == 0 ? '' : this;
     } else {
       return this;
@@ -61,12 +67,13 @@ extension EmptyIfZero on String {
 }
 
 extension NoDotZero on String {
+  ///cuts first occurence of ".00" and everything after it
   String get noDotZero {
     if (this == null) return '';
     var chunks = this.split('.');
     if (chunks.length > 1) {
       var result = int.tryParse(chunks[1]);
-      return result == 0 ? chunks[0] : this;
+      return result == 0 ? chunks.first : this;
     } else
       return this;
   }

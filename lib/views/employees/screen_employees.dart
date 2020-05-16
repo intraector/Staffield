@@ -1,4 +1,3 @@
-import 'package:Staffield/constants/app_text_styles.dart';
 import 'package:Staffield/constants/router_paths.dart';
 import 'package:Staffield/views/common/sliver_delegate.dart';
 import 'package:Staffield/views/edit_employee/dialog_edit_employee.dart';
@@ -96,7 +95,6 @@ class ScreenEmployees extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                     child: ListView.builder(
-                      // physics: const NeverScrollableScrollPhysics(),
                       itemCount: vModel.list.length,
                       itemBuilder: (context, index) => InkWell(
                         onTap: () => showDialog(
@@ -106,10 +104,7 @@ class ScreenEmployees extends StatelessWidget {
                           child: Padding(
                             padding: EdgeInsets.all(8),
                             child: Row(
-                              children: <Widget>[
-                                Text(vModel.list[index].name),
-                                // Text(employee.uid),
-                              ],
+                              children: <Widget>[Text(vModel.list[index].name)],
                             ),
                           ),
                         ),

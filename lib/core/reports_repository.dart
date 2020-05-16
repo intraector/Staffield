@@ -99,7 +99,7 @@ class ReportsRepository {
   Report _aggregateReport(List<EntryReport> list) {
     var result = Report();
     for (var item in list) {
-      result.employeeNameAux = item.employeeNameAux;
+      result.employeeNameAux = item.employeeName;
       result.revenue += item.revenue;
       result.interest += item.interest;
       result.wage += item.wage;

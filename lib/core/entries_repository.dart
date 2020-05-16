@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:Staffield/core/entries_repository_interface.dart';
 import 'package:Staffield/core/models/entry.dart';
 import 'package:flutter/foundation.dart';
+import 'package:print_color/print_color.dart';
 
 class EntriesRepository {
   EntriesRepository(this.sqlite) {
@@ -36,7 +37,11 @@ class EntriesRepository {
   List<Entry> get cache => _cache;
 
   //-----------------------------------------
-  Entry getEntry(String uid) => _cache.firstWhere((entry) => entry.uid == uid);
+  Entry getEntry(String uid) {
+    var tt = _cache.firstWhere((entry) => entry.uid == uid);
+    Print.yellow('||| tt : $tt');
+    return _cache.firstWhere((entry) => entry.uid == uid);
+  }
 
   //-----------------------------------------
   Future<int> fetchNextChunkToCache({bool restart = false}) async {

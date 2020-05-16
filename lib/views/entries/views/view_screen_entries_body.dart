@@ -1,8 +1,8 @@
 import 'package:Staffield/constants/app_gradients.dart';
 import 'package:Staffield/constants/app_text_styles.dart';
+import 'package:Staffield/core/models/entry_report.dart';
 import 'package:Staffield/views/entries/screen_entries_vmodel.dart';
-import 'package:Staffield/views/entries/view_screen_entries_item.dart';
-import 'package:Staffield/views/reports/adapted_entry_report.dart';
+import 'package:Staffield/views/entries/views/view_screen_entries_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +20,7 @@ class _ViewScreenEntriesBodyState extends State<ViewScreenEntriesBody> {
               child: Selector<ScreenEntriesVModel, bool>(
             selector: (_, vModel) => vModel.endOfData,
             builder: (context, endOfData, child) {
-              return Selector<ScreenEntriesVModel, List<AdaptedEntryReport>>(
+              return Selector<ScreenEntriesVModel, List<EntryReport>>(
                 selector: (context, vModel) => vModel.cache,
                 builder: (_, list, __) {
                   if (list.length == 0)
@@ -61,7 +61,8 @@ class _ViewScreenEntriesBodyState extends State<ViewScreenEntriesBody> {
                                         ),
                                       ],
                                     ),
-                                    child: Text(list[index].date, style: AppTextStyles.dateLabel),
+                                    child:
+                                        Text(list[index].dateLabel, style: AppTextStyles.dateLabel),
                                   )
                                 : ViewScreenEntriesItem(list[index])),
                       ),

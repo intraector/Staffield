@@ -3,14 +3,14 @@ import 'package:Staffield/constants/app_font_family.dart';
 import 'package:Staffield/constants/app_fonts.dart';
 import 'package:Staffield/constants/app_text_styles.dart';
 import 'package:Staffield/constants/router_paths.dart';
+import 'package:Staffield/core/models/entry_report.dart';
 import 'package:Staffield/services/router.dart';
 import 'package:Staffield/views/common/data_chip.dart';
-import 'package:Staffield/views/reports/adapted_entry_report.dart';
 import 'package:flutter/material.dart';
 
 class ViewScreenEntriesItem extends StatelessWidget {
   ViewScreenEntriesItem(this.item);
-  final AdaptedEntryReport item;
+  final EntryReport item;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -31,7 +31,7 @@ class ViewScreenEntriesItem extends StatelessWidget {
                   child: Container(
                     margin: const EdgeInsets.only(left: 15.0, top: 12.0, bottom: 2.0, right: 8.0),
                     child: Text(
-                      item.name,
+                      item.adapted.name,
                       softWrap: false,
                       overflow: TextOverflow.fade,
                       style: TextStyle(
@@ -54,11 +54,11 @@ class ViewScreenEntriesItem extends StatelessWidget {
                       alignment: WrapAlignment.spaceEvenly,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: <Widget>[
-                        DataChip(value: item.wage, label: 'ОКЛАД'),
+                        DataChip(value: item.adapted.wage, label: 'ОКЛАД'),
                         Icon(Icons.add, size: 18.0),
-                        DataChip(value: item.bonus, label: 'БОНУС'),
+                        DataChip(value: item.adapted.bonus, label: 'БОНУС'),
                         Icon(Icons.remove, size: 18.0),
-                        DataChip(value: item.penaltiesTotal, label: 'ШТРАФЫ'),
+                        DataChip(value: item.adapted.penaltiesTotal, label: 'ШТРАФЫ'),
                       ],
                     ),
                   ),
@@ -86,7 +86,7 @@ class ViewScreenEntriesItem extends StatelessWidget {
                             topLeft: Radius.circular(4.0),
                             bottomRight: Radius.circular(4.0),
                           )),
-                      child: Text(item.total, style: AppTextStyles.digitsBold),
+                      child: Text(item.adapted.total, style: AppTextStyles.digitsBold),
                     ),
                   ],
                 ),

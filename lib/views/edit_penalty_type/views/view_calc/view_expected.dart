@@ -32,16 +32,10 @@ class ViewExpected extends StatelessWidget {
                     Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.symmetric(vertical: 20.0),
-                      child: Selector<ViewCalcVModel, String>(
-                        selector: (_, vModel) => vModel.title.txtCtrl.text,
-                        builder: (context, titleLabel, _) => Text(
-                          titleLabel.toUpperCase(),
-                          textAlign: TextAlign.center,
-                          // style: TextStyle(
-                          //   fontSize: AppFontSize.body1,
-                          //   fontWeight: FontWeight.w700,
-                          // ),
-                        ),
+                      child: Text(
+                        context.select<ViewCalcVModel, String>(
+                            (vModel) => vModel.title.txtCtrl.text.toUpperCase()),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                     Row(
@@ -52,31 +46,27 @@ class ViewExpected extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
-                                Selector<ViewCalcVModel, String>(
-                                  selector: (_, vModel) => vModel.unitLabel.txtCtrl.text,
-                                  builder: (context, unitLabel, child) => Text(
-                                    unitLabel.toUpperCase(),
-                                    style: TextStyle(
-                                      fontFamily: AppFontFamily.comfortaa,
-                                      fontSize: AppFontSize.tiny3,
-                                      color: AppColors.black,
-                                    ),
+                                Text(
+                                  context.select<ViewCalcVModel, String>(
+                                      (vModel) => vModel.unitLabel.txtCtrl.text.toUpperCase()),
+                                  style: TextStyle(
+                                    fontFamily: AppFontFamily.comfortaa,
+                                    fontSize: AppFontSize.tiny3,
+                                    color: AppColors.black,
                                   ),
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(bottom: 10.0, top: 10.0),
                                   decoration:
                                       BoxDecoration(border: Border(bottom: BorderSide(width: 1.0))),
-                                  child: Selector<ViewCalcVModel, String>(
-                                    selector: (_, vModel) => vModel.unitDefault.txtCtrl.text,
-                                    builder: (_, unitDefault, __) => Text(
-                                      unitDefault,
-                                      style: TextStyle(
-                                        fontFamily: AppFontFamily.ptsans,
-                                        fontSize: AppFontSize.small1,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  child: Text(
+                                    context.select<ViewCalcVModel, String>(
+                                        (vModel) => vModel.unitDefault.txtCtrl.text.toUpperCase()),
+                                    style: TextStyle(
+                                      fontFamily: AppFontFamily.ptsans,
+                                      fontSize: AppFontSize.small1,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
@@ -103,16 +93,14 @@ class ViewExpected extends StatelessWidget {
                                   margin: EdgeInsets.only(bottom: 10.0, top: 10.0),
                                   decoration:
                                       BoxDecoration(border: Border(bottom: BorderSide(width: 1.0))),
-                                  child: Selector<ViewCalcVModel, String>(
-                                    selector: (_, vModel) => vModel.costDefault.txtCtrl.text,
-                                    builder: (_, costDefault, __) => Text(
-                                      costDefault,
-                                      style: TextStyle(
-                                        fontFamily: AppFontFamily.ptsans,
-                                        fontSize: AppFontSize.small1,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  child: Text(
+                                    context.select<ViewCalcVModel, String>(
+                                        (vModel) => vModel.costDefault.txtCtrl.text),
+                                    style: TextStyle(
+                                      fontFamily: AppFontFamily.ptsans,
+                                      fontSize: AppFontSize.small1,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
@@ -136,16 +124,13 @@ class ViewExpected extends StatelessWidget {
                               color: AppColors.black,
                             ),
                           ),
-                          Selector<ViewCalcVModel, String>(
-                            selector: (_, vModel) => vModel.sum,
-                            builder: (_, sum, __) => Text(
-                              sum,
-                              style: TextStyle(
-                                fontFamily: AppFontFamily.ptsans,
-                                fontSize: AppFontSize.small1,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          Text(
+                            context.select<ViewCalcVModel, String>((vModel) => vModel.sum),
+                            style: TextStyle(
+                              fontFamily: AppFontFamily.ptsans,
+                              fontSize: AppFontSize.small1,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],

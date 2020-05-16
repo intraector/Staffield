@@ -44,13 +44,12 @@ class ViewCalc extends StatelessWidget {
               vModel.labelTotalPrefix,
               style: AppTextStyles.dataChipLabel,
             ),
-            Selector<DialogPenaltyVModel, String>(
-              selector: (_, vModel) => vModel.labelTotal,
-              builder: (context, labelTotal, child) => Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: Text(labelTotal, style: AppTextStyles.digitsBold),
-              ),
-            )
+            Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: Text(
+                  context.select<DialogPenaltyVModel, String>((vModel) => vModel.labelTotal),
+                  style: AppTextStyles.digitsBold),
+            ),
           ],
         )
       ],

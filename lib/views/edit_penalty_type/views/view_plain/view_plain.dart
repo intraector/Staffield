@@ -14,7 +14,7 @@ class ViewPlain extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ViewPlainVModel>(
       create: (context) => ViewPlainVModel(vModelParent),
-      child: Builder(builder: (context) {
+      builder: (context, _) {
         var vModel = Provider.of<ViewPlainVModel>(context, listen: false);
         return Column(
           children: <Widget>[
@@ -39,7 +39,7 @@ class ViewPlain extends StatelessWidget {
             ),
           ],
         );
-      }),
+      },
     );
   }
 }

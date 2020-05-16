@@ -16,7 +16,7 @@ class ViewCalc extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ViewCalcVModel>(
       create: (context) => ViewCalcVModel(vModelParent),
-      child: Builder(builder: (context) {
+      builder: (context, _) {
         var vModel = Provider.of<ViewCalcVModel>(context, listen: false);
         return SingleChildScrollView(
           child: Column(
@@ -103,7 +103,7 @@ class ViewCalc extends StatelessWidget {
             ],
           ),
         );
-      }),
+      },
     );
   }
 }
