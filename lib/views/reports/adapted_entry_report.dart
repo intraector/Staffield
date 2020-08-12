@@ -1,12 +1,12 @@
 import 'package:Staffield/core/models/entry_report.dart';
 import 'package:Staffield/core/models/penalty.dart';
-import 'package:Staffield/utils/time_and_difference.dart';
 import 'package:Staffield/utils/string_utils.dart';
+import 'package:jiffy/jiffy.dart';
 
-class AdaptedEntryReport {
-  AdaptedEntryReport.from(EntryReport report) {
+class EntryReportStrings {
+  EntryReportStrings.from(EntryReport report) {
     uid = report.uid;
-    date = timeAndDifference(timestamp1: report.timestamp, showDate: true);
+    date = Jiffy(DateTime.fromMillisecondsSinceEpoch(report.timestamp)).MMMMd;
     report.timestamp.toString();
     name = report.employeeName;
     total = report.total.toString().formatDouble.noDotZero;
@@ -14,8 +14,8 @@ class AdaptedEntryReport {
     interest = report.interest.toString().formatDouble.noDotZero;
     bonus = report.bonus.toString().formatDouble.noDotZero;
     wage = report.wage.toString().formatDouble.noDotZero;
-    penaltiesTotal = report.penaltiesTotalAux.toString().formatDouble.noDotZero;
-    penalties = report.penalties.map((penalty) => penalty.report).toList();
+    penaltiesTotal = report.penaltiesTotal.toString().formatDouble.noDotZero;
+    penalties = report.penalties.map((penalty) => penalty.strings).toList();
     penaltyUnit = report.penaltyUnit.toString().formatDouble.noDotZero;
     penaltiesCount = report.penaltiesCount.toString().formatInt;
   }
@@ -30,7 +30,7 @@ class AdaptedEntryReport {
   String penaltiesCount;
   String date;
   String penaltyUnit;
-  var penalties = <PenaltyReport>[];
+  var penalties = <PenaltyStrings>[];
   bool isDateLabel = false;
 
   @override

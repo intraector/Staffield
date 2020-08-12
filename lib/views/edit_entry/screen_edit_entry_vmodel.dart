@@ -11,8 +11,8 @@ import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository.dart';
 import 'package:Staffield/core/utils/calc_total_mixin.dart';
 import 'package:Staffield/services/router.dart';
-import 'package:Staffield/utils/dialog_confirm.dart';
 import 'package:Staffield/utils/string_utils.dart';
+import 'package:Staffield/views/common/dialog_confirm.dart';
 import 'package:Staffield/views/common/text_feild_handler/text_field_handler_double.dart';
 import 'package:Staffield/views/edit_employee/dialog_edit_employee.dart';
 import 'package:Staffield/views/edit_entry/dialog_penalty/dialog_penalty.dart';
@@ -165,9 +165,10 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
 
   //-----------------------------------------
   Future<void> setEmployeeUid(String uid, BuildContext context) async {
-    if (uid != '111')
+    if (uid != '111') {
       entry.employeeUid = uid;
-    else {
+      entry.employeeName = _employeesRepo.getEmployee(uid).name;
+    } else {
       var result =
           await showDialog<String>(context: context, builder: (context) => DialogEditEmployee());
       if (result != null) {
@@ -212,7 +213,6 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   Future<void> _addPenalty(BuildContext context, String typeUid) async {
     var result = await showDialog<Penalty>(
       context: context,
-      barrierDismissible: false,
       builder: (BuildContext context) => DialogPenalty(
         penalty: Penalty(typeUid: typeUid, parentUid: entry.uid),
         isNewPenalty: true,

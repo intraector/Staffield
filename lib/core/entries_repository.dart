@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:Staffield/core/entries_repository_interface.dart';
 import 'package:Staffield/core/models/entry.dart';
 import 'package:flutter/foundation.dart';
-import 'package:print_color/print_color.dart';
 
 class EntriesRepository {
   EntriesRepository(this.sqlite) {
@@ -37,11 +36,10 @@ class EntriesRepository {
   List<Entry> get cache => _cache;
 
   //-----------------------------------------
-  Entry getEntry(String uid) {
-    var tt = _cache.firstWhere((entry) => entry.uid == uid);
-    Print.yellow('||| tt : $tt');
-    return _cache.firstWhere((entry) => entry.uid == uid);
-  }
+  int get newestTimestamp => _cache.first.timestamp;
+
+  //-----------------------------------------
+  Entry getEntry(String uid) => _cache.firstWhere((entry) => entry.uid == uid);
 
   //-----------------------------------------
   Future<int> fetchNextChunkToCache({bool restart = false}) async {
@@ -69,13 +67,16 @@ class EntriesRepository {
     @required int lessThan,
     @required String employeeUid,
     int limit,
-  }) =>
-      sqlite.fetch(
-        greaterThan: greaterThan,
-        lessThan: lessThan,
-        employeeUid: employeeUid,
-        limit: limit,
-      );
+  }) async {
+    var result = await sqlite.fetch(
+      greaterThan: greaterThan,
+      lessThan: lessThan,
+      employeeUid: employeeUid,
+      limit: limit,
+    );
+    // Print.yellow('||| result : $result');
+    return result;
+  }
 
   //-----------------------------------------
   Future<bool> addOrUpdate(List<Entry> entries) {

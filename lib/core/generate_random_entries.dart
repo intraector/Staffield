@@ -21,7 +21,7 @@ class GenerateRandomEntries {
   void generateRandomEntries({int days, int recordsPerDay}) {
     var _employees = _employeesRepo.repo;
     if (_employees.length == 0) {
-      Print.red('||| Employees list is empty');
+      Print.red('Employees list is empty');
       return;
     }
     var _dates = generateRandomDatesOverPeriod(days: days, recordsPerDay: recordsPerDay);
@@ -81,14 +81,16 @@ class GenerateRandomEntries {
     var random = Random();
     var count = random.nextInt(maxCount + 1);
     for (int i = 0; i < count; i++) {
-      var penalty = Penalty(parentUid: parentUid, typeUid: _penaltyTypesRepo.getRandom().uid);
+      var randomType = _penaltyTypesRepo.getRandom();
+      var penalty = Penalty(parentUid: parentUid, typeUid: randomType.uid, mode: randomType.mode);
       penalty.timestamp = timestamp;
-      penalty.unit = 1 + random.nextInt(20).toDouble();
-      penalty.cost = 10;
       if (penalty.mode == PenaltyMode.plain)
         penalty.total = 10 * random.nextInt(21).toDouble();
-      else
-        penalty.total = penalty.unit.toDouble() * penalty.cost.toDouble();
+      else {
+        penalty.units = 1 + random.nextInt(20).toDouble();
+        penalty.cost = 10;
+        penalty.total = penalty.units.toDouble() * penalty.cost.toDouble();
+      }
       result.add(penalty);
     }
     return result;

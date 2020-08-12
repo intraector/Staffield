@@ -1,11 +1,10 @@
 import 'package:Staffield/services/sqlite/sqlite_fields.dart';
 import 'package:flutter/foundation.dart';
-import 'package:Staffield/core/models/penalty_mode.dart';
 import 'package:uuid_type/uuid_type.dart';
 import 'package:Staffield/utils/string_utils.dart';
 
 class Penalty {
-  Penalty({@required this.parentUid, @required this.typeUid});
+  Penalty({@required this.parentUid, @required this.typeUid, this.mode});
 
   //-----------------------------------------
   Penalty.fromOther(Penalty penalty) {
@@ -15,10 +14,8 @@ class Penalty {
     typeUid = penalty.typeUid;
     timestamp = penalty.timestamp;
     total = penalty.total;
-    if (penalty.mode == PenaltyMode.calc) {
-      unit = penalty.unit;
-      cost = penalty.cost;
-    }
+    units = penalty.units;
+    cost = penalty.cost;
   }
 
   //-----------------------------------------
@@ -29,10 +26,8 @@ class Penalty {
     typeUid = json[SqliteFieldsPenalties.typeId];
     timestamp = json[SqliteFieldsPenalties.timestamp];
     total = json[SqliteFieldsPenalties.total];
-    if (mode == PenaltyMode.calc) {
-      unit = json[SqliteFieldsPenalties.unit];
-      cost = json[SqliteFieldsPenalties.cost];
-    }
+    units = json[SqliteFieldsPenalties.unit];
+    cost = json[SqliteFieldsPenalties.cost];
   }
 
   double cost;
@@ -42,46 +37,40 @@ class Penalty {
   double total;
   String typeUid;
   String uid = TimeBasedUuidGenerator().generate().toString();
-  double unit;
+  double units;
 
   //-----------------------------------------
-  @override
+  @override //typeUid: $typeUid,
   String toString() {
-    return '$total mode: $mode typeUid: $typeUid parentUid: $parentUid ';
+    return 'mode: $mode, total: $total, units: $units, cost: $cost';
   }
 
   //-----------------------------------------
-  Map<String, dynamic> toSqlite() {
-    var result = {
-      SqliteFieldsPenalties.uid: uid,
-      SqliteFieldsPenalties.parentUid: parentUid,
-      SqliteFieldsPenalties.mode: mode,
-      SqliteFieldsPenalties.typeId: typeUid,
-      SqliteFieldsPenalties.timestamp: timestamp ?? DateTime.now().millisecondsSinceEpoch,
-      SqliteFieldsPenalties.total: total,
-    };
-    if (this.mode == PenaltyMode.calc) {
-      result[SqliteFieldsPenalties.unit] = unit;
-      result[SqliteFieldsPenalties.cost] = cost;
-    }
-    return result;
-  }
+  Map<String, dynamic> toSqlite() => {
+        SqliteFieldsPenalties.uid: uid,
+        SqliteFieldsPenalties.parentUid: parentUid,
+        SqliteFieldsPenalties.mode: mode,
+        SqliteFieldsPenalties.typeId: typeUid,
+        SqliteFieldsPenalties.timestamp: timestamp ?? DateTime.now().millisecondsSinceEpoch,
+        SqliteFieldsPenalties.total: total,
+        SqliteFieldsPenalties.unit: units,
+        SqliteFieldsPenalties.cost: cost,
+      };
 
   //-----------------------------------------
-  PenaltyReport get report => PenaltyReport.from(this);
+  PenaltyStrings get strings => PenaltyStrings.from(this);
 }
 
-class PenaltyReport {
-  PenaltyReport.from(Penalty penalty) {
-    total = penalty.total.toString().formatInt;
-    if (penalty.unit != 0) {
-      time = penalty.unit.toString().formatInt;
-    } else
-      time = '';
-    cost = penalty.cost?.toString()?.formatInt ?? '';
+class PenaltyStrings {
+  PenaltyStrings.from(Penalty penalty) {
+    typeUid = penalty.typeUid;
+    units = penalty.units?.toString()?.formatDouble?.noDotZero ?? '';
+    total = penalty.total.toString().formatDouble.noDotZero;
   }
 
-  String cost;
-  String time;
+  String typeUid;
+  String units;
   String total;
+  String typeTitle;
+  String unitTitle;
 }

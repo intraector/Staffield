@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 class TableEntries extends StatelessWidget {
   TableEntries(this.list);
-  final List<AdaptedEntryReport> list;
+  final List<EntryReportStrings> list;
 
   @override
   Widget build(BuildContext context) {

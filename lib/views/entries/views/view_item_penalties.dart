@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class ViewItemPenalties extends StatelessWidget {
   ViewItemPenalties(this.item);
-  final AdaptedEntryReport item;
+  final EntryReportStrings item;
   @override
   Widget build(BuildContext context) => Column(
         children: <Widget>[
@@ -41,7 +41,7 @@ class ViewItemPenalties extends StatelessWidget {
                       Container(
                           alignment: Alignment.centerRight,
                           // width: 50,
-                          child: Text(penalty.time, style: AppTextStyles.small1Light)),
+                          child: Text(penalty.units, style: AppTextStyles.small1Light)),
                   ],
                 ),
               ),
@@ -50,9 +50,9 @@ class ViewItemPenalties extends StatelessWidget {
         ],
       );
 
-  bool containsTime(AdaptedEntryReport report) =>
-      report.penalties.any((penalty) => penalty.time != '');
+  bool containsTime(EntryReportStrings report) =>
+      report.penalties.any((penalty) => penalty.units != '');
 
-  bool isLastItem(AdaptedEntryReport report, PenaltyReport penalty) =>
+  bool isLastItem(EntryReportStrings report, PenaltyStrings penalty) =>
       report.penalties.indexOf(penalty) == report.penalties.length - 1;
 }

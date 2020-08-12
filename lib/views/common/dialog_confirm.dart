@@ -12,7 +12,7 @@ Future<bool> dialogConfirm(BuildContext context, {String text, String textYes, S
               ),
               actions: <Widget>[
                 SimpleDialogOption(
-                  child: Text(textYes ?? 'Да'),
+                  child: Text(textYes ?? 'ОК'),
                   onPressed: () {
                     Navigator.pop(context, true);
                   },

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class ListEmployees extends StatelessWidget {
   ListEmployees(this.list);
-  final List<AdaptedEntryReport> list;
+  final List<EntryReportStrings> list;
   @override
   Widget build(BuildContext context) => Row(
         children: <Widget>[
@@ -131,7 +131,7 @@ class ListEmployees extends StatelessWidget {
                                           Container(
                                               alignment: Alignment.centerRight,
                                               width: 50,
-                                              child: Text(penalty.time)),
+                                              child: Text(penalty.units)),
                                       ],
                                     ),
                                   ),
@@ -148,9 +148,9 @@ class ListEmployees extends StatelessWidget {
         ],
       );
 
-  bool containsTime(AdaptedEntryReport report) =>
-      report.penalties.any((penalty) => penalty.time != '');
+  bool containsTime(EntryReportStrings report) =>
+      report.penalties.any((penalty) => penalty.units != '');
 
-  bool isLastItem(AdaptedEntryReport report, PenaltyReport penalty) =>
+  bool isLastItem(EntryReportStrings report, PenaltyStrings penalty) =>
       report.penalties.indexOf(penalty) == report.penalties.length - 1;
 }

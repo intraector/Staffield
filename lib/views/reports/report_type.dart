@@ -1,8 +1,7 @@
 enum ReportType {
+  allEmployees,
+  singleEmployeeOverPeriod,
   listEmployees,
-  tableData,
-  tableEmployees,
-  tableOneEmployeeByMonth,
   tableEntries,
 }
 
@@ -10,17 +9,14 @@ extension Title on ReportType {
   String get title {
     String result;
     switch (this) {
+      case ReportType.allEmployees:
+        result = 'по всем сотрудникам';
+        break;
+      case ReportType.singleEmployeeOverPeriod:
+        result = 'по одному сотруднику';
+        break;
       case ReportType.listEmployees:
         result = 'список по сотрудникам';
-        break;
-      case ReportType.tableData:
-        result = 'таблица';
-        break;
-      case ReportType.tableEmployees:
-        result = 'отчет по сотрудникам';
-        break;
-      case ReportType.tableOneEmployeeByMonth:
-        result = 'отчет по одному сотруднику';
         break;
       case ReportType.tableEntries:
         result = 'список записей';

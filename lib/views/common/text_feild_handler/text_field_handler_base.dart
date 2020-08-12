@@ -10,12 +10,13 @@ abstract class TextFieldHandlerBase {
     String defaultValue,
   }) {
     if (defaultValue != null) txtCtrl.text = defaultValue;
+    previousInput = txtCtrl.text;
   }
   final void Function() onChange;
   final void Function() onSave;
   TextEditingController txtCtrl = TextEditingController();
   final int maxLength;
-  String previousInput = '';
+  String previousInput;
   String label;
   String hint;
 

@@ -20,6 +20,7 @@ class SqliteEntriesAdapater implements EntriesRepositoryInterface {
       employeeUid: employeeUid,
       limit: limit,
     );
+
     var penaltiesFuture = _srvcSqliteEntries.fetchPenalties(
       greaterThan: greaterThan,
       lessThan: lessThan,
@@ -33,6 +34,7 @@ class SqliteEntriesAdapater implements EntriesRepositoryInterface {
       entry.penalties = foundPenalties;
       entry.employeeName = _employeesRepo.getEmployee(entry.employeeUid).name;
     }
+    // Print.yellow('||| result : $result');
     return result;
   }
 

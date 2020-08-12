@@ -57,7 +57,7 @@ class _ViewScreenEntriesBodyState extends State<ViewScreenEntriesBody> {
                                           color: Colors.black,
                                           spreadRadius: 0,
                                           blurRadius: 2,
-                                          offset: Offset(0, 2), // changes position of shadow
+                                          offset: Offset(0, 1), // changes position of shadow
                                         ),
                                       ],
                                     ),

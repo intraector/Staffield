@@ -45,6 +45,7 @@ class PrepareQuery {
 
   //-----------------------------------------
   void _addEntriesLessThan(int lessThan) {
+    // lessThan = null;
     if (lessThan == null) return;
     _whereClause += _whereClause.isEmpty ? ' WHERE' : ' AND';
     _whereClause += ' ${SqliteFieldsEntries.timestamp} < $lessThan';

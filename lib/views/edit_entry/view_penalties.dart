@@ -27,12 +27,12 @@ class ViewPenaltiesItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 1,
       color: AppColors.primaryBlend,
       child: InkWell(
         onTap: () async {
           var res = await showDialog<Penalty>(
             context: context,
-            barrierDismissible: false,
             builder: (BuildContext context) =>
                 DialogPenalty(penalty: penalty, screenEntryVModel: vModel),
           );
@@ -50,18 +50,19 @@ class ViewPenaltiesItem extends StatelessWidget {
                     vModel.getPenaltyType(penalty.typeUid).title.toUpperCase(),
                     overflow: TextOverflow.fade,
                     softWrap: false,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12.0,
-                    ),
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(penalty.total.toString().formatInt),
+                    child: Text(
+                      penalty.total.toString().formatInt,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
                   ),
                 ],
               ),
             ),
+            Icon(Icons.chevron_right, color: Theme.of(context).primaryColor),
           ]),
         ),
       ),

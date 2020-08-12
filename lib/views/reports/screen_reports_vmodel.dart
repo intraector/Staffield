@@ -4,17 +4,17 @@ import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/models/employee.dart';
 import 'package:Staffield/core/reports_repository.dart';
 import 'package:Staffield/views/reports/adapted_entry_report.dart';
-import 'package:Staffield/views/reports/report_by_employee.dart';
 import 'package:Staffield/views/reports/report_type.dart';
+import 'package:Staffield/views/reports/views/all_amployees/table_data.dart';
+import 'package:Staffield/views/reports/views/all_amployees/table_employees.dart';
 import 'package:Staffield/views/reports/views/list_employees.dart';
-import 'package:Staffield/views/reports/views/data_table.dart';
-import 'package:Staffield/views/reports/views/table_employees.dart';
+import 'package:Staffield/views/reports/views/single_employee/table_one_employee.dart';
 import 'package:Staffield/views/reports/views/table_entries.dart';
-import 'package:Staffield/views/reports/views/table_one_employee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:Staffield/utils/time_and_difference.dart';
 import 'package:get_it/get_it.dart';
+import 'package:jiffy/jiffy.dart';
+import 'package:print_color/print_color.dart';
 
 final getIt = GetIt.instance;
 
@@ -25,11 +25,13 @@ class ScreenReportsVModel extends ChangeNotifier {
   }
   final _reportsRepo = ReportsRepository();
   final _employeesRepo = getIt<EmployeesRepository>();
-  DateTime _endDate = DateTime(2019, 8, 1);
+  DateTime _endDate = DateTime(2020, 2, 1);
+  int chartLessThan;
 
   DateTime _startDate = currentDay;
 
-  ReportType _reportType = ReportType.listEmployees;
+  ReportType _reportType = ReportType.allEmployees;
+  Units period = Units.MONTH;
   Employee _employee;
   Widget view = Center(child: CircularProgressIndicator());
   var _dummy = Employee(name: 'Нет сотрудников', uid: '111');
@@ -55,14 +57,15 @@ class ScreenReportsVModel extends ChangeNotifier {
   //-----------------------------------------
   static DateTime get currentDay {
     var now = DateTime.now();
-    return DateTime(now.year, now.month, now.day);
+    // return DateTime(now.year, now.month, now.day);
+    return now;
   }
 
   //-----------------------------------------
-  String get endDate => timeAndDifference(date1: _endDate, showDate: true);
+  String get endDate => Jiffy(_endDate).MMMMd;
 
   //-----------------------------------------
-  String get startDate => timeAndDifference(date1: _startDate, showDate: true);
+  String get startDate => Jiffy(_startDate).MMMMd;
 
   //-----------------------------------------
   Future<void> pickEndDate(BuildContext context) async {
@@ -75,7 +78,6 @@ class ScreenReportsVModel extends ChangeNotifier {
     if (date != null) {
       _endDate = date;
       fetchReportData();
-      notifyListeners();
     }
   }
 
@@ -90,7 +92,6 @@ class ScreenReportsVModel extends ChangeNotifier {
     if (date != null) {
       _startDate = date;
       fetchReportData();
-      notifyListeners();
     }
   }
 
@@ -105,32 +106,33 @@ class ScreenReportsVModel extends ChangeNotifier {
           var entryReports = await _reportsRepo.fetchEntriesList(
               greaterThan: _endDate, lessThan: _startDate, employeeUid: null);
           var result =
-              entryReports.map((entryReport) => AdaptedEntryReport.from(entryReport)).toList();
+              entryReports.map((entryReport) => EntryReportStrings.from(entryReport)).toList();
           view = ListEmployees(result);
         }
         break;
-      case ReportType.tableData:
+      case ReportType.allEmployees:
         {
-          var reports =
-              await _reportsRepo.fetchByEmployee(greaterThan: _endDate, lessThan: _startDate);
-          var result = reports.map((report) => ReportByEmployee(report)).toList();
-          view = TableData(result);
+          var reports = await _reportsRepo.fetchAllEmployees(
+            period: period,
+            periodsAmount: 1,
+            lessThan: chartLessThan,
+          );
+          var tableData = await Future<TableData>.value(TableData(reports));
+          view = TableEmployees(tableData);
+          chartLessThan = reports.last.periodTimestamp - 1;
         }
         break;
-      case ReportType.tableEmployees:
+      case ReportType.singleEmployeeOverPeriod:
         {
-          var reports =
-              await _reportsRepo.fetchByEmployee(greaterThan: _endDate, lessThan: _startDate);
-          var result = reports.map((report) => ReportByEmployee(report)).toList();
-          view = TableEmployees(result);
-        }
-        break;
-      case ReportType.tableOneEmployeeByMonth:
-        {
-          var reports = await _reportsRepo.fetchOneEmployeeByMonth(
-              greaterThan: _endDate, lessThan: _startDate, employeeUid: _employee.uid);
-          var result = reports.map((month, report) => MapEntry(month, ReportByEmployee(report)));
-          view = TableOneEmployee(result);
+          var reports = await _reportsRepo.fetchSingleEmployeeOverPeriod(
+            greaterThan: _endDate,
+            lessThan: _startDate,
+            employeeUid: _employee.uid,
+            period: period,
+          );
+          var result = reports.map((report) => report.strings).toList();
+
+          view = TableSingleEmployee(result);
         }
         break;
       case ReportType.tableEntries:
@@ -138,7 +140,7 @@ class ScreenReportsVModel extends ChangeNotifier {
           var entryReports = await _reportsRepo.fetchEntriesList(
               greaterThan: _endDate, lessThan: _startDate, employeeUid: null);
           var result =
-              entryReports.map((entryReport) => AdaptedEntryReport.from(entryReport)).toList();
+              entryReports.map((entryReport) => EntryReportStrings.from(entryReport)).toList();
           view = TableEntries(result);
         }
         break;

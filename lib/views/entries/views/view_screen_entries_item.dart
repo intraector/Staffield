@@ -31,7 +31,7 @@ class ViewScreenEntriesItem extends StatelessWidget {
                   child: Container(
                     margin: const EdgeInsets.only(left: 15.0, top: 12.0, bottom: 2.0, right: 8.0),
                     child: Text(
-                      item.adapted.name,
+                      item.strings.name,
                       softWrap: false,
                       overflow: TextOverflow.fade,
                       style: TextStyle(
@@ -54,11 +54,11 @@ class ViewScreenEntriesItem extends StatelessWidget {
                       alignment: WrapAlignment.spaceEvenly,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: <Widget>[
-                        DataChip(value: item.adapted.wage, label: 'ОКЛАД'),
+                        DataChip(value: item.strings.wage, label: 'ОКЛАД'),
                         Icon(Icons.add, size: 18.0),
-                        DataChip(value: item.adapted.bonus, label: 'БОНУС'),
+                        DataChip(value: item.strings.bonus, label: 'БОНУС'),
                         Icon(Icons.remove, size: 18.0),
-                        DataChip(value: item.adapted.penaltiesTotal, label: 'ШТРАФЫ'),
+                        DataChip(value: item.strings.penaltiesTotal, label: 'ШТРАФЫ'),
                       ],
                     ),
                   ),
@@ -86,7 +86,7 @@ class ViewScreenEntriesItem extends StatelessWidget {
                             topLeft: Radius.circular(4.0),
                             bottomRight: Radius.circular(4.0),
                           )),
-                      child: Text(item.adapted.total, style: AppTextStyles.digitsBold),
+                      child: Text(item.strings.total, style: AppTextStyles.digitsBold),
                     ),
                   ],
                 ),

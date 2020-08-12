@@ -1,5 +1,6 @@
 import 'package:Staffield/core/models/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository.dart';
+import 'package:Staffield/views/common/dialog_confirm.dart';
 import 'package:Staffield/views/common/text_feild_handler/text_field_handler_double.dart';
 import 'package:flutter/widgets.dart';
 import 'package:Staffield/core/models/penalty_mode.dart';
@@ -26,7 +27,7 @@ class DialogPenaltyVModel extends ChangeNotifier {
       unit = TextFieldHandlerDouble(
         label: _type.unitTitle.toUpperCase(),
         maxLength: 4,
-        defaultValue: penalty.unit?.toString()?.emptyIfZero?.noDotZero?.formatDouble ??
+        defaultValue: penalty.units?.toString()?.emptyIfZero?.noDotZero?.formatDouble ??
             _type.unitDefaultValue?.toString()?.emptyIfZero?.noDotZero,
         onChange: _calcPenaltyTotal,
       );
@@ -64,14 +65,18 @@ class DialogPenaltyVModel extends ChangeNotifier {
     if (penalty.mode == PenaltyMode.plain)
       penalty.total = plainSum.result;
     else if (penalty.mode == PenaltyMode.calc) {
-      penalty.unit = unit.result;
+      penalty.units = unit.result;
       penalty.cost = cost.result;
-      penalty.total = penalty.unit * penalty.cost;
+      penalty.total = penalty.units * penalty.cost;
     }
   }
 
   //-----------------------------------------
-  void remove() {
-    screenEntryVModel.removePenalty(penalty);
+  Future<void> remove({@required BuildContext context}) async {
+    var isConfirmed = await dialogConfirm(context, text: ('Удалить этот штраф?'));
+    if (isConfirmed ?? false) {
+      screenEntryVModel.removePenalty(penalty);
+      Navigator.of(context).pop();
+    }
   }
 }

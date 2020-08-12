@@ -13,8 +13,10 @@ import 'package:get_it/get_it.dart';
 import 'package:Staffield/core/entries_repository.dart';
 import 'package:Staffield/services/router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jiffy/jiffy.dart';
 
 Future<void> main() async {
+  await Jiffy.locale("ru_RU");
   WidgetsFlutterBinding.ensureInitialized();
   Router.createRoutes();
   final getIt = GetIt.instance;
@@ -25,6 +27,7 @@ Future<void> main() async {
   getIt.registerSingleton<EmployeesRepository>(EmployeesRepository(SrvcSqliteEmployees()));
   getIt.registerSingleton<EntriesRepository>(EntriesRepository(SqliteEntriesAdapater()));
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   runApp(
     MaterialApp(
       title: 'Staffield',
@@ -32,6 +35,7 @@ Future<void> main() async {
       onGenerateRoute: Router.sailor.generator(),
       home: ScreenEntries(),
       theme: ThemeData(
+        brightness: Brightness.light,
         textTheme: TextTheme(
           headline1:
               GoogleFonts.manrope(fontSize: 95, fontWeight: FontWeight.w300, letterSpacing: -1.5),
@@ -58,6 +62,33 @@ Future<void> main() async {
           overline:
               GoogleFonts.manrope(fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
         ),
+        primaryTextTheme: TextTheme(
+          headline1:
+              GoogleFonts.manrope(fontSize: 95, fontWeight: FontWeight.w300, letterSpacing: -1.5),
+          headline2:
+              GoogleFonts.manrope(fontSize: 59, fontWeight: FontWeight.w300, letterSpacing: -0.5),
+          headline3: GoogleFonts.manrope(fontSize: 48, fontWeight: FontWeight.w400),
+          headline4:
+              GoogleFonts.manrope(fontSize: 34, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+          headline5: GoogleFonts.manrope(fontSize: 24, fontWeight: FontWeight.w400),
+          headline6:
+              GoogleFonts.manrope(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+          subtitle1:
+              GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.15),
+          subtitle2:
+              GoogleFonts.manrope(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
+          bodyText2:
+              GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
+          bodyText1:
+              GoogleFonts.manrope(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+          button:
+              GoogleFonts.manrope(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
+          caption:
+              GoogleFonts.manrope(fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
+          overline:
+              GoogleFonts.manrope(fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+        ),
+        // primaryTextTheme:
       ),
     ),
   );

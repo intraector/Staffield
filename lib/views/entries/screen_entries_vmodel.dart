@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:Staffield/core/generate_random_entries.dart';
 import 'package:Staffield/core/models/entry_report.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
-import 'package:Staffield/utils/time_and_difference.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:Staffield/core/entries_repository.dart';
+import 'package:jiffy/jiffy.dart';
 
 final getIt = GetIt.instance;
 
@@ -30,11 +30,15 @@ class ScreenEntriesVModel with ChangeNotifier {
 
   String get startTimestampLabel =>
       'до ' +
-      timeAndDifference(
-          timestamp1: startTimestamp ?? DateTime.now().millisecondsSinceEpoch,
-          showDate: true,
-          spellToday: false,
-          spellTodayAdditional: true);
+      Jiffy(startTimestamp != null
+              ? DateTime.fromMillisecondsSinceEpoch(startTimestamp)
+              : DateTime.now())
+          .MMMMd;
+  // timeAndDifference(
+  //     timestamp1: startTimestamp ?? DateTime.now().millisecondsSinceEpoch,
+  //     showDate: true,
+  //     spellToday: false,
+  //     spellTodayAdditional: true);
 
   //-----------------------------------------
   void setEndTimestamp({@required BuildContext context}) async {

@@ -105,14 +105,18 @@ class ScreenEditEntry extends StatelessWidget {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
-                                    Container(
-                                      width: MediaQuery.of(context).size.width / 1.5,
-                                      child: TextFieldDouble(
-                                        vModel.wage,
-                                        focusNode: focusWage,
-                                        nextFocusNode: focusRevenue,
+                                    Expanded(
+                                      flex: 2,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(right: 10.0),
+                                        child: TextFieldDouble(
+                                          vModel.wage,
+                                          focusNode: focusWage,
+                                          nextFocusNode: focusRevenue,
+                                        ),
                                       ),
                                     ),
+                                    Expanded(flex: 1, child: SizedBox.shrink()),
                                   ],
                                 ),
                                 SizedBox(height: 5.0),
@@ -163,29 +167,28 @@ class ScreenEditEntry extends StatelessWidget {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: <Widget>[
-                                    ChipTotal(
-                                      title: 'ИТОГО: ',
-                                      value: context.select<ScreenEditEntryVModel, String>(
-                                          (vModel) => vModel.total),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    Container(
-                                        margin: const EdgeInsets.only(top: 20.0),
-                                        child: DropdownButton<String>(
-                                            // icon: Icon(Icons.add),
-                                            iconSize: 36,
-                                            hint: Text('Добавить штраф'),
-                                            items: vModel.penaltyTypesList,
-                                            onChanged: (typeUid) {
-                                              return vModel.handlePenalty(context, typeUid);
-                                            })),
+                                    DropdownButton<String>(
+                                        hint: Text('Добавить штраф'),
+                                        items: vModel.penaltyTypesList,
+                                        onChanged: (typeUid) {
+                                          return vModel.handlePenalty(context, typeUid);
+                                        }),
                                   ],
                                 ),
                                 ViewPenalties(Provider.of<ScreenEditEntryVModel>(context)),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: <Widget>[
+                                      ChipTotal(
+                                        title: 'ИТОГО: ',
+                                        value: context.select<ScreenEditEntryVModel, String>(
+                                            (vModel) => vModel.total),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                                 Center(
                                   child: Row(
                                     children: <Widget>[
@@ -202,8 +205,6 @@ class ScreenEditEntry extends StatelessWidget {
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: RaisedButton(
-                                              shape: ContinuousRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(48.0)),
                                               child: Text('ОК'),
                                               onPressed: () {
                                                 if (_formKey.currentState.validate()) {

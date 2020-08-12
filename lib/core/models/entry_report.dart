@@ -1,14 +1,17 @@
+import 'package:Staffield/core/models/penalty.dart';
 import 'package:Staffield/core/models/penalty_mode.dart';
+import 'package:Staffield/core/models/penalty_report.dart';
 import 'package:Staffield/core/utils/calc_total_mixin.dart';
 import 'package:Staffield/core/models/entry.dart';
-import 'package:Staffield/utils/time_and_difference.dart';
 import 'package:Staffield/views/reports/adapted_entry_report.dart';
+import 'package:jiffy/jiffy.dart';
 
 class EntryReport extends Entry with CalcTotal {
   EntryReport();
   EntryReport.dateLabel(int timestamp) {
     isDateLabel = true;
-    dateLabel = timeAndDifference(timestamp1: timestamp, showDate: true);
+    dateLabel = Jiffy(DateTime.fromMillisecondsSinceEpoch(timestamp)).MMMMd;
+    // dateLabel = timeAndDifference(timestamp1: timestamp, showDate: true, showYear: true);
   }
 
   bool isDateLabel = false;
@@ -16,6 +19,7 @@ class EntryReport extends Entry with CalcTotal {
   EntryReport.fromEntry(Entry entry) {
     uid = entry.uid;
     employeeName = entry.employeeName;
+    employeeUid = entry.employeeUid;
     revenue = entry.revenue;
     interest = entry.interest;
     bonus = revenue * interest / 100;
@@ -27,11 +31,12 @@ class EntryReport extends Entry with CalcTotal {
     var calcTotalResult =
         calcTotalAndBonus(revenue: revenue, interest: interest, wage: wage, penalties: penalties);
 
-    penaltiesTotalAux = calcTotalResult.penaltiesTotal;
+    penaltiesTotal = calcTotalResult.penaltiesTotal;
     total = calcTotalResult.total;
     bonus = calcTotalResult.bonus;
 
     for (var penalty in penalties) {
+      addToPenaltiesReports(penalty);
       switch (penalty.mode) {
         case PenaltyMode.plain:
           {
@@ -42,32 +47,42 @@ class EntryReport extends Entry with CalcTotal {
         case PenaltyMode.calc:
           {
             penaltiesTotalByType[penalty.typeUid] =
-                (penaltiesTotalByType[penalty.typeUid] ?? 0.0) + (penalty.unit * penalty.cost);
-            penaltyUnit += penalty.unit;
+                (penaltiesTotalByType[penalty.typeUid] ?? 0.0) + (penalty.units * penalty.cost);
+            penaltyUnit += penalty.units;
           }
           break;
       }
       penaltiesCount++;
     }
 
-    _adapted = AdaptedEntryReport.from(this);
+    _strings = EntryReportStrings.from(this);
   }
 
+  var penaltiesReports = <PenaltyReport>[];
   int penaltiesCount = 0;
   double bonus;
   double penaltyUnit = 0;
   Map<String, double> penaltiesTotalByType = {};
-  double penaltiesTotalAux = 0.0;
-  AdaptedEntryReport _adapted;
+  double penaltiesTotal = 0.0;
+  EntryReportStrings _strings;
 
-  AdaptedEntryReport get adapted {
-    _adapted ??= AdaptedEntryReport.from(this);
-    return _adapted;
+  EntryReportStrings get strings {
+    _strings ??= EntryReportStrings.from(this);
+    return _strings;
   }
 
   @override
   String toString() {
     return super.toString() +
         ' penaltiesCount: $penaltiesCount, penaltiesTotalByType: $penaltiesTotalByType';
+  }
+
+  void addToPenaltiesReports(Penalty penalty) {
+    var index = penaltiesReports.indexWhere((element) => element.typeUid == penalty.typeUid);
+    if (index >= 0) {
+      penaltiesReports[index] += PenaltyReport.from(penalty);
+    } else {
+      penaltiesReports.add(PenaltyReport.from(penalty));
+    }
   }
 }

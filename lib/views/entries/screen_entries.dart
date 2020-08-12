@@ -44,8 +44,8 @@ class ScreenEntries extends StatelessWidget {
                                 BoxShadow(
                                   color: Colors.black,
                                   spreadRadius: 0,
-                                  blurRadius: 3,
-                                  offset: Offset(0, 3),
+                                  blurRadius: 2,
+                                  offset: Offset(0, 2),
                                 ),
                               ],
                             ),

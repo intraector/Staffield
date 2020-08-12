@@ -1,3 +1,4 @@
+import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/router_paths.dart';
 import 'package:Staffield/views/bottom_navigation.dart';
 import 'package:Staffield/views/reports/report_type.dart';
@@ -22,58 +23,72 @@ class ScreenReports extends StatelessWidget {
               body: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Selector<ScreenReportsVModel, String>(
-                                selector: (context, vModel) => vModel.endDate,
-                                builder: (context, startDate, _) => Row(
-                                  children: <Widget>[
-                                    Text('НАЧАЛО: '),
-                                    InkWell(
-                                      child: Text(vModel.endDate),
-                                      onTap: () => vModel.pickEndDate(context),
-                                    ),
-                                  ],
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryAccent,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black,
+                          spreadRadius: 0,
+                          blurRadius: 2,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        Padding(padding: EdgeInsets.only(top: 10.0)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Text('НАЧАЛО: ', style: TextStyle(color: Colors.white)),
+                                InkWell(
+                                  child:
+                                      Text(vModel.endDate, style: TextStyle(color: Colors.white)),
+                                  onTap: () => vModel.pickEndDate(context),
                                 ),
-                              ),
-                              Selector<ScreenReportsVModel, String>(
-                                selector: (context, vModel) => vModel.startDate,
-                                builder: (context, startDate, _) => Row(
-                                  children: <Widget>[
-                                    Text('КОНЕЦ: '),
-                                    InkWell(
-                                      child: Text(vModel.startDate),
-                                      onTap: () => vModel.pickStartDate(context),
-                                    ),
-                                  ],
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Text('КОНЕЦ: ', style: TextStyle(color: Colors.white)),
+                                InkWell(
+                                  child:
+                                      Text(vModel.startDate, style: TextStyle(color: Colors.white)),
+                                  onTap: () => vModel.pickStartDate(context),
                                 ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Text('Вид:', style: TextStyle(color: Colors.white)),
+                            ),
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                style: Theme.of(context).primaryTextTheme.bodyText2,
+                                iconEnabledColor: Colors.white,
+                                dropdownColor: AppColors.primary,
+                                items: ReportType.values
+                                    .map((type) => DropdownMenuItem<ReportType>(
+                                          value: type,
+                                          child: Text(type.title),
+                                        ))
+                                    .toList(),
+                                onChanged: (type) => vModel.reportType = type,
+                                value: context.select<ScreenReportsVModel, ReportType>(
+                                    (vModel) => vModel.reportType),
                               ),
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Selector<ScreenReportsVModel, ReportType>(
-                                  selector: (context, vModel) => vModel.reportType,
-                                  builder: (context, reportType, _) => DropdownButton(
-                                        items: ReportType.values
-                                            .map((type) => DropdownMenuItem<ReportType>(
-                                                  value: type,
-                                                  child: Text(type.title),
-                                                ))
-                                            .toList(),
-                                        onChanged: (type) => vModel.reportType = type,
-                                        value: reportType,
-                                      )),
-                            ],
-                          )
-                        ],
-                      ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
                   ),
                   Expanded(
