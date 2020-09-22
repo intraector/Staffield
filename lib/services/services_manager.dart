@@ -1,11 +1,9 @@
 import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
-import 'package:get_it/get_it.dart';
-
-final getIt = GetIt.instance;
+import 'package:get/get.dart';
 
 class ServicesManager {
   ServicesManager() {
-    var sqlite = getIt<SrvcSqliteInit>();
+    var sqlite = Get.find<SrvcSqliteInit>();
     sqlite.init();
   }
 }

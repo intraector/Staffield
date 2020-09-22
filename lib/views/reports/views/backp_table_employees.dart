@@ -1,11 +1,11 @@
 import 'package:Staffield/constants/app_colors.dart';
-import 'package:Staffield/core/models/report.dart';
+import 'package:Staffield/views/reports/period_report_ui_adapted.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class BckpTableEmployees extends StatelessWidget {
   BckpTableEmployees(this.list);
-  final List<ReportStrings> list;
+  final List<PeriodReportUiAdapted> list;
   @override
   Widget build(BuildContext context) {
     final columnWidth = MediaQuery.of(context).size.shortestSide / 4.5;

@@ -1,8 +1,7 @@
-import 'package:Staffield/core/models/report.dart';
-import 'package:print_color/print_color.dart';
+import 'package:Staffield/core/entities/period_report.dart';
 
 class TableData {
-  TableData(List<Report> list) {
+  TableData(List<PeriodReport> list) {
     var periodTimestamps = list.map((e) => e.periodTimestamp).toSet().toList()
       ..sort((a, b) => b.compareTo(a));
     for (var periodTimestamp in periodTimestamps) {
@@ -10,7 +9,6 @@ class TableData {
       var title = tempList.first.periodTitle;
       data[title] = tempList;
     }
-    Print.cyan('||| {data.keys} : ${data.keys}');
   }
-  Map<String, List<Report>> data = {};
+  Map<String, List<PeriodReport>> data = {};
 }

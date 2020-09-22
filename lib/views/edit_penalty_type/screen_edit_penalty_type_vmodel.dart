@@ -1,11 +1,9 @@
-import 'package:Staffield/core/models/penalty_type.dart';
+import 'package:Staffield/core/entities/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:Staffield/core/models/penalty_mode.dart';
-import 'package:get_it/get_it.dart';
-
-final getIt = GetIt.instance;
+import 'package:Staffield/core/entities/penalty_mode.dart';
+import 'package:get/get.dart';
 
 class ScreenEditPenaltyTypeVModel extends ChangeNotifier {
   ScreenEditPenaltyTypeVModel(this.type);
@@ -18,7 +16,7 @@ class ScreenEditPenaltyTypeVModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  final _penaltyTypesRepo = getIt<PenaltyTypesRepository>();
+  final _penaltyTypesRepo = Get.find<PenaltyTypesRepository>();
 
   //-----------------------------------------
   bool save(GlobalKey<FormState> formKey) {

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:Staffield/core/models/penalty_type.dart';
+import 'package:Staffield/core/entities/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository_interface.dart';
 
 class PenaltyTypesRepository {

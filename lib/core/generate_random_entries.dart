@@ -2,21 +2,19 @@ import 'dart:math';
 
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entries_repository.dart';
-import 'package:Staffield/core/models/entry.dart';
-import 'package:Staffield/core/models/penalty.dart';
-import 'package:Staffield/core/models/penalty_mode.dart';
+import 'package:Staffield/core/entities/entry.dart';
+import 'package:Staffield/core/entities/penalty.dart';
+import 'package:Staffield/core/entities/penalty_mode.dart';
 import 'package:Staffield/core/penalty_types_repository.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
+import 'package:get/get.dart';
 import 'package:print_color/print_color.dart';
-
-var getIt = GetIt.instance;
 
 class GenerateRandomEntries {
   //-----------------------------------------
-  var _employeesRepo = getIt<EmployeesRepository>();
-  var _entriesRepo = getIt<EntriesRepository>();
-  var _penaltyTypesRepo = getIt<PenaltyTypesRepository>();
+  var _employeesRepo = Get.find<EmployeesRepository>();
+  var _entriesRepo = Get.find<EntriesRepository>();
+  var _penaltyTypesRepo = Get.find<PenaltyTypesRepository>();
 
   void generateRandomEntries({int days, int recordsPerDay}) {
     var _employees = _employeesRepo.repo;
@@ -53,14 +51,14 @@ class GenerateRandomEntries {
     for (var i = 1; i <= days; i++) {
       var timestampMin = timestampNow.subtract(Duration(days: i));
       var timestampMax = timestampMin.add(Duration(days: 1));
-      list.addAll(generateRandomDatesBetweenPointsInTime(
-          min: timestampMin, max: timestampMax, count: recordsPerDay));
+      list.addAll(
+          generateRandomDatesBetween(min: timestampMin, max: timestampMax, count: recordsPerDay));
     }
     return list;
   }
 
   //-----------------------------------------
-  List<DateTime> generateRandomDatesBetweenPointsInTime({DateTime min, DateTime max, int count}) {
+  List<DateTime> generateRandomDatesBetween({DateTime min, DateTime max, int count}) {
     var minInt = min.millisecondsSinceEpoch;
     var maxnInt = max.millisecondsSinceEpoch;
     var random = Random();

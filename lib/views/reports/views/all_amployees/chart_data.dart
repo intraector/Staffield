@@ -1,73 +1,71 @@
-import 'package:Staffield/core/models/report.dart';
-import 'package:bezier_chart/bezier_chart.dart';
-import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:Staffield/core/entities/period_report.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:jiffy/jiffy.dart';
+import 'package:print_color/print_color.dart';
+// import 'package:charts_flutter/flutter.dart' as charts;
 
 class ChartData {
-  ChartData(List<Report> list) {
-    Set<int> _dates = {};
-    for (var report in list) {
-      _dates.add(report.periodTimestamp);
-      if (reportsByEmployee[report.employeeName] == null) {
-        reportsByEmployee[report.employeeName] = [report];
+  ChartData(List<PeriodReport> periodReports) {
+    periodReports.forEach((element) {
+      Print.yellow('||| element : $element');
+    });
+    periodReports.sort((a, b) => a.periodTimestamp.compareTo(b.periodTimestamp));
+
+    var firstDate = Jiffy(DateTime.fromMillisecondsSinceEpoch(periodReports.first.periodTimestamp));
+    var lastDate = Jiffy(DateTime.fromMillisecondsSinceEpoch(periodReports.last.periodTimestamp));
+    var difference = lastDate.diff(firstDate, Units.MONTH);
+
+    Print.cyan('||| difference : $difference');
+
+    int iteratorMonth = firstDate.month;
+    int iteratorYear = firstDate.year;
+    for (double i = 0; i <= difference; i++) {
+      var bv = BottomValue(value: i, month: iteratorMonth, year: iteratorYear);
+      bottomValues.add(bv);
+      if (iteratorMonth < 12) {
+        iteratorMonth++;
       } else {
-        reportsByEmployee[report.employeeName].add(report);
+        iteratorMonth = 0;
+        iteratorYear++;
       }
     }
-    dates = _dates.map((e) => DateTime.fromMillisecondsSinceEpoch(e)).toList()..sort();
-    generateBezierLines();
-    // generateLines();
-  }
+    for (var periodReport in periodReports) {
+      var date = Jiffy(DateTime.fromMillisecondsSinceEpoch(periodReport.periodTimestamp));
+      var bv = bottomValues.firstWhere(
+          (item) => (item.month == date.month && item.year == date.year),
+          orElse: () => BottomValue());
+      bv.periodReports[periodReport.employeeUid] = FlSpot(bv.value, periodReport.total);
+    }
 
-  void generateBezierLines() {
-    int counter = 0;
-    reportsByEmployee.forEach((employeeName, reports) {
-      var bLine = BezierLine(
-        lineColor: counter == 0 ? Colors.purple : Colors.yellow,
-        label: employeeName,
-        data: reports.map((e) {
-          // Print.green('|||  $employeeName, value: ${e.total}, xAxis: ${e.periodTimestamp.toDouble()}');
-          return DataPoint<DateTime>(
-              value: e.total, xAxis: DateTime.fromMillisecondsSinceEpoch(e.periodTimestamp));
-        }).toList(),
-      );
-      bezierLines.add(bLine);
-      counter++;
+    Set<String> employees = periodReports.map<String>((item) => item.employeeUid).toSet();
+
+    employees.forEach((uid) {
+      spots[uid] = [];
+      for (var bv in bottomValues) {
+        if (bv.periodReports[uid] != null) {
+          spots[uid].add(bv.periodReports[uid]);
+        }
+      }
     });
   }
 
-  // void generateLines() {
-  //   reportsByEmployee.forEach((employeeName, reports) {
-  //     var next = charts.Series<Report, DateTime>(
-  //       id: employeeName,
-  //       colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-  //       domainFn: (Report report, _) => DateTime.fromMillisecondsSinceEpoch(report.periodTimestamp),
-  //       measureFn: (Report report, _) => report.total,
-  //       data: reports,
-  //     );
-  //     lines.add(next);
-  //   });
-  // }
+  Map<String, List<FlSpot>> spots = {};
+  var sideValues = <double>[];
+  var bottomValues = <BottomValue>[];
+  var timestamps = <int>[];
+}
 
-  List<charts.Series<Report, DateTime>> lines = [];
-  Map<String, List<Report>> reportsByEmployee = {};
-  List<BezierLine> bezierLines = [];
-  List<DateTime> dates;
-
-  DateTime get first => dates.first;
-  DateTime get last {
-    if (dates.length > 1)
-      return dates.last;
-    else
-      return dates.first.add(Duration(days: 1));
+class BottomValue {
+  BottomValue({this.value, this.month, this.year}) {
+    if (month != null && year != null) this.title = Jiffy(DateTime(year, month)).MMM;
   }
-
-  int minTimestamp = 0;
-  int maxTimestamp = 0;
-  double minRevenue = 0.0;
-  double maxRevenue = 0.0;
-  double minBonus = 0.0;
-  double maxBonus = 0.0;
-  double minTotal = 0.0;
-  double maxTotal = 0.0;
+  double value;
+  int month;
+  int year;
+  String title;
+  Map<String, FlSpot> periodReports = {};
+  @override
+  String toString() {
+    return '| value: $value, month: $month, title: $title, year: $year, periodReports: ${periodReports.keys.length} ';
+  }
 }

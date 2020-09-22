@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sailor/sailor.dart';
 import 'package:Staffield/constants/app_text_styles.dart';
-import 'package:Staffield/services/router.dart';
+import 'package:Staffield/services/routes.dart';
 
 class ViewDrawer extends StatelessWidget {
   @override
@@ -31,7 +31,7 @@ class ViewDrawer extends StatelessWidget {
                 ],
               ),
               onTap: () {
-                Router.sailor('ScreenAds',
+                Routes.sailor('ScreenAds',
                     params: {'type': 'junkyard'}, navigationType: NavigationType.pushReplace);
               },
             ),
@@ -52,7 +52,7 @@ class ViewDrawer extends StatelessWidget {
                 ],
               ),
               onTap: () {
-                Router.sailor(RouterPaths.penaltyTypes, navigationType: NavigationType.pushReplace);
+                Routes.sailor(RouterPaths.penaltyTypes, navigationType: NavigationType.pushReplace);
               },
             ),
             Spacer(),

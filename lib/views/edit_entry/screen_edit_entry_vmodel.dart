@@ -3,25 +3,23 @@ import 'dart:async';
 import 'package:Staffield/constants/router_paths.dart';
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entries_repository.dart';
-import 'package:Staffield/core/models/employee.dart';
-import 'package:Staffield/core/models/entry.dart';
-import 'package:Staffield/core/models/penalty.dart';
-import 'package:Staffield/core/models/penalty_mode.dart';
-import 'package:Staffield/core/models/penalty_type.dart';
+import 'package:Staffield/core/entities/employee.dart';
+import 'package:Staffield/core/entities/entry.dart';
+import 'package:Staffield/core/entities/penalty.dart';
+import 'package:Staffield/core/entities/penalty_mode.dart';
+import 'package:Staffield/core/entities/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository.dart';
 import 'package:Staffield/core/utils/calc_total_mixin.dart';
-import 'package:Staffield/services/router.dart';
+import 'package:Staffield/services/routes.dart';
 import 'package:Staffield/utils/string_utils.dart';
 import 'package:Staffield/views/common/dialog_confirm.dart';
 import 'package:Staffield/views/common/text_feild_handler/text_field_handler_double.dart';
 import 'package:Staffield/views/edit_employee/dialog_edit_employee.dart';
 import 'package:Staffield/views/edit_entry/dialog_penalty/dialog_penalty.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:get/get.dart';
 
-final getIt = GetIt.instance;
-
-class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
+class ScreenEditEntryVModel with ChangeNotifier {
   Entry entry;
   TextFieldHandlerDouble interest;
   String labelBonus = 'БОНУС';
@@ -35,10 +33,10 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
   TextFieldHandlerDouble revenue;
   TextFieldHandlerDouble wage;
   final dropdownState = GlobalKey<FormFieldState>();
-  final _employeesRepo = getIt<EmployeesRepository>();
+  final _employeesRepo = Get.find<EmployeesRepository>();
 
-  final _entriesRepo = getIt<EntriesRepository>();
-  final _penaltyTypesRepo = getIt<PenaltyTypesRepository>();
+  final _entriesRepo = Get.find<EntriesRepository>();
+  final _penaltyTypesRepo = Get.find<PenaltyTypesRepository>();
 
   ScreenEditEntryVModel(String uid) {
     this.entry = uid == null ? Entry() : _entriesRepo.getEntry(uid);
@@ -59,7 +57,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
       onChange: calcTotalAndNotify,
       validator: validateInterest,
     );
-    penalties = entry.penalties.map((penalty) => Penalty.fromOther(penalty)).toList();
+    penalties = entry.penalties.map((penalty) => Penalty.copy(penalty)).toList();
     calcTotal();
   }
 
@@ -97,7 +95,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
 
   //-----------------------------------------
   void calcTotal() {
-    var result = calcTotalAndBonus(
+    var result = CalcTotal(
       revenue: revenue.result,
       interest: interest.result,
       wage: wage.result,
@@ -225,7 +223,7 @@ class ScreenEditEntryVModel with ChangeNotifier, CalcTotal {
 
   //-----------------------------------------
   void _addPenaltyType(BuildContext context) {
-    Router.sailor.navigate(RouterPaths.editPenaltyType,
+    Routes.sailor.navigate(RouterPaths.editPenaltyType,
         params: {'penaltyType': PenaltyType(mode: PenaltyMode.plain)});
   }
 }

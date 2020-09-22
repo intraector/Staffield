@@ -1,22 +1,23 @@
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entries_repository.dart';
-import 'package:Staffield/core/models/entry.dart';
-import 'package:Staffield/core/models/entry_report.dart';
-import 'package:Staffield/core/models/report.dart';
+import 'package:Staffield/core/entities/entity_convert.dart';
+import 'package:Staffield/core/entities/entry.dart';
+import 'package:Staffield/core/entities/report.dart';
+import 'package:Staffield/core/entities/period_report.dart';
 import 'package:Staffield/core/penalty_types_repository.dart';
+import 'package:Staffield/views/reports/vmodel_view_reports.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
+import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
-
-final getIt = GetIt.instance;
+import 'package:print_color/print_color.dart';
 
 class ReportsRepository {
-  final _entriesRepo = getIt<EntriesRepository>();
-  final _employeesRepo = getIt<EmployeesRepository>();
-  final _penaltyTypesRepo = getIt<PenaltyTypesRepository>();
+  final _entriesRepo = Get.find<EntriesRepository>();
+  final _employeesRepo = Get.find<EmployeesRepository>();
+  final _penaltyTypesRepo = Get.find<PenaltyTypesRepository>();
 
   //-----------------------------------------
-  Future<List<EntryReport>> fetchEntriesList({
+  Future<List<Report>> fetchEntriesList({
     @required DateTime greaterThan,
     @required DateTime lessThan,
     @required String employeeUid,
@@ -26,17 +27,17 @@ class ReportsRepository {
       lessThan: lessThan.millisecondsSinceEpoch,
       employeeUid: employeeUid,
     );
-    return reports.map((entry) => entry.report).toList();
+    return reports.map((entry) => EntityConvert.entryToReport(entry)).toList();
   }
 
   //-----------------------------------------
   /// default periodsAmount = 1
   ///
   /// lessThan ??= _entriesRepo.newestTimestamp
-  Future<List<Report>> fetchAllEmployees(
+  Future<List<PeriodReport>> fetchAllEmployees(
       {@required Units period, int periodsAmount = 1, int lessThan}) async {
     var futures = <Future>[];
-    var output = <Report>[];
+    var output = <PeriodReport>[];
     lessThan ??= _entriesRepo.newestTimestamp;
     for (int i = 0; i < periodsAmount; i++) {
       var greaterThan = getFirstDayOf(lessThan, period);
@@ -67,24 +68,27 @@ class ReportsRepository {
   }
 
   //-----------------------------------------
-  Future<List<Report>> fetchSingleEmployeeOverPeriod({
+  Future<List<PeriodReport>> fetchSingleEmployeeOverPeriod({
     @required DateTime greaterThan,
     @required DateTime lessThan,
     @required String employeeUid,
     @required Units period,
   }) async {
+    Print.yellow('||| fired fetch start');
     var entries = await _entriesRepo.fetch(
       greaterThan: greaterThan.millisecondsSinceEpoch,
       lessThan: lessThan.millisecondsSinceEpoch,
       employeeUid: employeeUid,
     );
+    Print.yellow('||| fired fetch end');
     var result = _aggregateByPeriod(entries, period: period);
+    Print.yellow('||| aggregation finished');
     return result;
   }
 
   //-----------------------------------------
-  List<Report> _aggregateByPeriod(List<Entry> entries, {@required Units period}) {
-    var reportsOverPeriod = <Report>[];
+  List<PeriodReport> _aggregateByPeriod(List<Entry> entries, {@required Units period}) {
+    var periodReports = <PeriodReport>[];
     if (entries.isEmpty) return [];
     int newest = entries
         .reduce((current, next) => current.timestamp > next.timestamp ? current : next)
@@ -98,19 +102,20 @@ class ReportsRepository {
       var result = entries
           .where((entry) =>
               (entry.timestamp <= lastDayOfPeriod) && (entry.timestamp >= firstDayOfPeriod))
-          .map((entry) => entry.report)
+          .map((entry) => EntityConvert.entryToReport(entry))
           .toList();
       if (result.isNotEmpty) {
-        reportsOverPeriod.add(Report(
+        var periodReport = PeriodReport(
           result,
           types: _penaltyTypesRepo.repo,
           period: period,
           periodTimestamp: firstDayOfPeriod,
-        ));
+        );
+        periodReports.add(periodReport);
       }
       lastDayOfPeriod = firstDayOfPeriod - 1;
     }
-    return reportsOverPeriod;
+    return periodReports;
   }
 
   //-----------------------------------------

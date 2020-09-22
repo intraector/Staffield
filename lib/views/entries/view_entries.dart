@@ -6,18 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:Staffield/views/bottom_navigation.dart';
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/router_paths.dart';
-import 'package:Staffield/services/router.dart';
-import 'package:Staffield/views/entries/screen_entries_vmodel.dart';
+import 'package:Staffield/services/routes.dart';
+import 'package:Staffield/views/entries/view_entries_vmodel.dart';
 import 'package:Staffield/views/view_drawer.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
-class ScreenEntries extends StatelessWidget {
+class ViewEntries extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (context) => ScreenEntriesVModel(),
-        builder: (context, _) {
-          var vModel = Provider.of<ScreenEntriesVModel>(context, listen: false);
+    return GetBuilder<VModelViewEntries>(
+        init: VModelViewEntries(),
+        builder: (vmodel) {
           return SafeArea(
             child: Scaffold(
               drawer: ViewDrawer(),
@@ -25,12 +24,12 @@ class ScreenEntries extends StatelessWidget {
               floatingActionButton: FloatingActionButton(
                 child: Icon(Icons.add),
                 onPressed: () =>
-                    Router.sailor.navigate(RouterPaths.editEntry, params: {'entry_uid': null}),
+                    Routes.sailor.navigate(RouterPaths.editEntry, params: {'entry_uid': null}),
               ),
               backgroundColor: AppColors.primaryAccent,
               body: NestedScrollView(
                 headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) => <Widget>[
-                  EntriesSliverAppBar(vModel: vModel),
+                  EntriesSliverAppBar(vModel: vmodel),
                   SliverPersistentHeader(
                       pinned: true,
                       delegate: SliverAppBarDelegate(
@@ -54,11 +53,9 @@ class ScreenEntries extends StatelessWidget {
                               children: <Widget>[
                                 OutlineButton(
                                   borderSide: BorderSide(color: AppColors.primaryMiddle),
-                                  child: Text(
-                                      context.select<ScreenEntriesVModel, String>(
-                                          (vModel) => vModel.startTimestampLabel),
-                                      style: AppTextStyles.button),
-                                  onPressed: () => vModel.setEndTimestamp(context: context),
+                                  child:
+                                      Text(vmodel.startTimestampLabel, style: AppTextStyles.button),
+                                  onPressed: () => vmodel.setEndTimestamp(context: context),
                                 ),
                               ],
                             ),

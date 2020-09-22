@@ -1,4 +1,4 @@
-import 'package:Staffield/core/models/penalty_type.dart';
+import 'package:Staffield/core/entities/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository_interface.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_penalty_types.dart';
 

@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:Staffield/core/models/penalty_mode.dart';
-import 'package:Staffield/core/models/penalty_type.dart';
+import 'package:Staffield/core/entities/penalty_mode.dart';
+import 'package:Staffield/core/entities/penalty_type.dart';
 import 'package:Staffield/services/sqlite/sqlite_fields.dart';
 import 'package:path/path.dart';
 import 'package:print_color/print_color.dart';

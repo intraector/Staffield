@@ -1,12 +1,12 @@
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/app_text_styles.dart';
-import 'package:Staffield/core/models/penalty.dart';
-import 'package:Staffield/views/reports/adapted_entry_report.dart';
+import 'package:Staffield/core/entities/penalty.dart';
+import 'package:Staffield/views/reports/report_ui_adapted.dart';
 import 'package:flutter/material.dart';
 
 class ListEmployees extends StatelessWidget {
   ListEmployees(this.list);
-  final List<EntryReportStrings> list;
+  final List<ReportUiAdapted> list;
   @override
   Widget build(BuildContext context) => Row(
         children: <Widget>[
@@ -148,9 +148,9 @@ class ListEmployees extends StatelessWidget {
         ],
       );
 
-  bool containsTime(EntryReportStrings report) =>
+  bool containsTime(ReportUiAdapted report) =>
       report.penalties.any((penalty) => penalty.units != '');
 
-  bool isLastItem(EntryReportStrings report, PenaltyStrings penalty) =>
+  bool isLastItem(ReportUiAdapted report, PenaltyStrings penalty) =>
       report.penalties.indexOf(penalty) == report.penalties.length - 1;
 }

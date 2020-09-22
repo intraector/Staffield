@@ -1,4 +1,4 @@
-import 'package:Staffield/core/models/employee.dart';
+import 'package:Staffield/core/entities/employee.dart';
 
 abstract class EmployeesRepositoryInterface {
   Future<List<Employee>> fetch();

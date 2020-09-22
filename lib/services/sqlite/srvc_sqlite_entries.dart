@@ -1,16 +1,14 @@
+import 'package:Staffield/core/exceptions/e_insert_entry.dart';
 import 'package:Staffield/services/sqlite/prepare_query.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
+import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:Staffield/services/sqlite/sqlite_tables.dart';
-import 'package:Staffield/core/exceptions/e_insert_entry.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
-
-final getIt = GetIt.instance;
 
 class SrvcSqliteEntries {
   SrvcSqliteEntries() {
-    final init = getIt<SrvcSqliteInit>();
+    final init = Get.find<SrvcSqliteInit>();
     initComplete = init.initComplete;
     initComplete.whenComplete(() {
       dbEntries = init.db;
@@ -34,7 +32,7 @@ class SrvcSqliteEntries {
       limit: limit,
     );
     await initComplete;
-    return dbEntries.rawQuery(preparedString.string);
+    return _rawQuery(dbEntries, preparedString.string);
   }
 
   //-----------------------------------------
@@ -60,13 +58,17 @@ class SrvcSqliteEntries {
       @required Iterable<Map<String, dynamic>> penalties}) async {
     await initComplete;
     var batch = dbEntries.batch();
-    for (var entry in entries)
+    for (var entry in entries) {
       batch.insert(SqliteTable.entries, entry, conflictAlgorithm: ConflictAlgorithm.replace);
-    for (var penalty in penalties)
+    }
+    for (var penalty in penalties) {
       batch.insert(SqliteTable.penalties, penalty, conflictAlgorithm: ConflictAlgorithm.replace);
-    var results = await batch.commit();
-
-    if (results.any((result) => result <= 0)) throw EInsertEntry('Can\'t insert SrvcSqliteEntries');
+    }
+    try {
+      await batch.commit(noResult: true);
+    } catch (e) {
+      throw EInsertEntry('Can\'t insert SrvcSqliteEntries');
+    }
     return true;
   }
 
@@ -85,3 +87,7 @@ class SrvcSqliteEntries {
     );
   }
 }
+
+//-----------------------------------------
+Future<List<Map<String, dynamic>>> _rawQuery(Database db, String query) =>
+    compute(db.rawQuery, query);

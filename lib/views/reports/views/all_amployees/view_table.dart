@@ -1,8 +1,8 @@
 import 'package:Staffield/constants/app_gradients.dart';
-import 'package:Staffield/core/models/report.dart';
+import 'package:Staffield/core/entities/period_report.dart';
+import 'package:Staffield/views/reports/period_report_ui_adapted.dart';
 import 'package:Staffield/views/reports/views/all_amployees/table_data.dart';
 import 'package:flutter/material.dart';
-import 'package:print_color/print_color.dart';
 
 class ViewTable extends StatelessWidget {
   ViewTable(this.data);
@@ -37,15 +37,13 @@ class ViewTable extends StatelessWidget {
     );
   }
 
-  List<DataRow> generateRows(Map<String, List<Report>> data) {
+  List<DataRow> generateRows(Map<String, List<PeriodReport>> data) {
     var output = <DataRow>[];
     var reports = data.values.first;
     for (var report in reports) {
-      var strings = report.strings;
-      Print.yellow('||| {strings.employeeName} : ${strings.employeeName}');
-      Print.yellow('||| {strings.total} : ${strings.total}');
-      var row =
-          DataRow(cells: [DataCell(Text(strings.employeeName)), DataCell(Text(strings.total))]);
+      var reportAdapted = PeriodReportUiAdapted(report);
+      var row = DataRow(
+          cells: [DataCell(Text(reportAdapted.employeeName)), DataCell(Text(reportAdapted.total))]);
       output.add(row);
     }
     return output;

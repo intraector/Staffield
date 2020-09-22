@@ -23,7 +23,9 @@ class TextFieldHandlerDouble extends TextFieldHandlerBase with Format {
         );
 
   String Function(String) validator;
-  List<TextInputFormatter> inputFormatters = [WhitelistingTextInputFormatter(regexpDigitsAndDot())];
+  List<TextInputFormatter> inputFormatters = [
+    FilteringTextInputFormatter.allow(regexpDigitsAndDot())
+  ];
 
   double get result => double.tryParse(txtCtrl.text.removeSpaces) ?? 0.0;
 

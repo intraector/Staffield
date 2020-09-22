@@ -1,15 +1,13 @@
-import 'package:Staffield/core/models/penalty_type.dart';
+import 'package:Staffield/core/entities/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository.dart';
 import 'package:Staffield/views/common/dialog_confirm.dart';
 import 'package:Staffield/views/common/text_feild_handler/text_field_handler_double.dart';
 import 'package:flutter/widgets.dart';
-import 'package:Staffield/core/models/penalty_mode.dart';
-import 'package:Staffield/core/models/penalty.dart';
+import 'package:Staffield/core/entities/penalty_mode.dart';
+import 'package:Staffield/core/entities/penalty.dart';
 import 'package:Staffield/utils/string_utils.dart';
 import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
-import 'package:get_it/get_it.dart';
-
-final getIt = GetIt.instance;
+import 'package:get/get.dart';
 
 class DialogPenaltyVModel extends ChangeNotifier {
   DialogPenaltyVModel({@required this.penalty, @required this.screenEntryVModel}) {
@@ -51,7 +49,7 @@ class DialogPenaltyVModel extends ChangeNotifier {
   TextFieldHandlerDouble unit;
   TextFieldHandlerDouble cost;
 
-  final _penaltyTypesRepo = getIt<PenaltyTypesRepository>();
+  final _penaltyTypesRepo = Get.find<PenaltyTypesRepository>();
 
   //-----------------------------------------
   void _calcPenaltyTotal() {

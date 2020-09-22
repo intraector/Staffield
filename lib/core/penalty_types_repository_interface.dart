@@ -1,4 +1,4 @@
-import 'package:Staffield/core/models/penalty_type.dart';
+import 'package:Staffield/core/entities/penalty_type.dart';
 import 'package:flutter/foundation.dart';
 
 abstract class PenaltyTypeRepositoryInterface {

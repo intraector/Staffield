@@ -1,11 +1,9 @@
 import 'dart:async';
 
-import 'package:Staffield/core/models/penalty_type.dart';
+import 'package:Staffield/core/entities/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get_it/get_it.dart';
-
-final getIt = GetIt.instance;
+import 'package:get/get.dart';
 
 class PenaltyTypesVModel extends ChangeNotifier {
   PenaltyTypesVModel() {
@@ -14,7 +12,7 @@ class PenaltyTypesVModel extends ChangeNotifier {
       updateList();
     });
   }
-  final _penaltyTypesRepo = getIt<PenaltyTypesRepository>();
+  final _penaltyTypesRepo = Get.find<PenaltyTypesRepository>();
   List<PenaltyType> cache;
   StreamSubscription<bool> _subsc;
 

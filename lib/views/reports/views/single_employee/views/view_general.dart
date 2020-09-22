@@ -1,10 +1,10 @@
 import 'package:Staffield/constants/app_colors.dart';
-import 'package:Staffield/core/models/report.dart';
+import 'package:Staffield/views/reports/period_report_ui_adapted.dart';
 import 'package:flutter/material.dart';
 
 class ViewGeneral extends StatelessWidget {
   ViewGeneral(this.list);
-  final List<ReportStrings> list;
+  final List<PeriodReportUiAdapted> list;
   final headerCellHeight = 40.0;
   final headerCellWidth = 100.0;
   final cellHeight = 30.0;

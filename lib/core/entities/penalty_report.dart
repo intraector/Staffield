@@ -1,5 +1,5 @@
-import 'package:Staffield/core/models/penalty.dart';
-import 'package:Staffield/core/models/penalty_mode.dart';
+import 'package:Staffield/core/entities/penalty.dart';
+import 'package:Staffield/core/entities/penalty_mode.dart';
 import 'package:Staffield/utils/string_utils.dart';
 
 class PenaltyReport {

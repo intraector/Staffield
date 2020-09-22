@@ -1,10 +1,10 @@
 import 'package:Staffield/constants/app_text_styles.dart';
-import 'package:Staffield/core/models/penalty_type.dart';
+import 'package:Staffield/core/entities/penalty_type.dart';
 import 'package:Staffield/views/edit_penalty_type/screen_edit_penalty_type_vmodel.dart';
 import 'package:Staffield/views/edit_penalty_type/views/view_calc/view_calc.dart';
 import 'package:Staffield/views/edit_penalty_type/views/view_plain/view_plain.dart';
 import 'package:flutter/material.dart';
-import 'package:Staffield/core/models/penalty_mode.dart';
+import 'package:Staffield/core/entities/penalty_mode.dart';
 import 'package:provider/provider.dart';
 
 class ScreenEditPenaltyType extends StatelessWidget {

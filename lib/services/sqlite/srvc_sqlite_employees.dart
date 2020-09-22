@@ -1,16 +1,15 @@
-import 'package:get_it/get_it.dart';
+import 'package:Staffield/services/sqlite/sqlite_convert.dart';
+import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:Staffield/services/sqlite/sqlite_tables.dart';
 import 'package:Staffield/core/employees_repository_interface.dart';
 import 'package:Staffield/core/exceptions/e_insert_employee.dart';
-import 'package:Staffield/core/models/employee.dart';
+import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
-
-final getIt = GetIt.instance;
 
 class SrvcSqliteEmployees implements EmployeesRepositoryInterface {
   SrvcSqliteEmployees() {
-    final init = getIt<SrvcSqliteInit>();
+    final init = Get.find<SrvcSqliteInit>();
 
     initComplete = init.initComplete;
     initComplete.whenComplete(() {
@@ -26,7 +25,7 @@ class SrvcSqliteEmployees implements EmployeesRepositoryInterface {
   Future<bool> addOrUpdate(Employee employee) async {
     await initComplete;
 
-    var result = await db.insert(SqliteTable.employees, employee.toSqlite(),
+    var result = await db.insert(SqliteTable.employees, SqliteConvert.employeeToMap(employee),
         conflictAlgorithm: ConflictAlgorithm.replace);
     if (result <= 0)
       throw EInsertEmployee('Can\'t insert SrvcSqliteEmployees');
@@ -39,7 +38,7 @@ class SrvcSqliteEmployees implements EmployeesRepositoryInterface {
   Future<List<Employee>> fetch() async {
     await initComplete;
     var employeesJsons = await db.query(SqliteTable.employees);
-    var result = employeesJsons.map((json) => Employee.fromSqlite(json)).toList();
+    var result = employeesJsons.map((json) => SqliteConvert.mapToEmployee(json)).toList();
     return result;
   }
 
@@ -48,7 +47,7 @@ class SrvcSqliteEmployees implements EmployeesRepositoryInterface {
   Future<Employee> getEmployee(String uid) async {
     await initComplete;
     var result = await db.query(SqliteTable.employees, where: 'uid = ?', whereArgs: [uid]);
-    return Employee.fromSqlite(result.first);
+    return SqliteConvert.mapToEmployee(result.first);
   }
 
   //-----------------------------------------

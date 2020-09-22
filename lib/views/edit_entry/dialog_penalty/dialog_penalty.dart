@@ -4,8 +4,8 @@ import 'package:Staffield/views/edit_entry/dialog_penalty/views/view_plain.dart'
 import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:Staffield/constants/app_colors.dart';
-import 'package:Staffield/core/models/penalty_mode.dart';
-import 'package:Staffield/core/models/penalty.dart';
+import 'package:Staffield/core/entities/penalty_mode.dart';
+import 'package:Staffield/core/entities/penalty.dart';
 import 'package:provider/provider.dart';
 
 final _formKey = GlobalKey<FormState>();

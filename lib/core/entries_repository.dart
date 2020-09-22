@@ -1,15 +1,17 @@
 import 'dart:async';
 import 'package:Staffield/core/entries_repository_interface.dart';
-import 'package:Staffield/core/models/entry.dart';
+import 'package:Staffield/core/entities/entry.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+import 'package:get/state_manager.dart';
 
-class EntriesRepository {
+class EntriesRepository extends GetxController {
   EntriesRepository(this.sqlite) {
     fetchNextChunkToCache();
   }
 
   final EntriesRepositoryInterface sqlite;
-
+  static EntriesRepository get find => Get.find();
   var _cache = <Entry>[];
 
   bool _isLoading = false;
@@ -19,18 +21,18 @@ class EntriesRepository {
   int _oldestTimestamp;
   int limit = 100;
 
+  StreamController _updates = StreamController<bool>.broadcast();
+  void notify() => _updates.sink.add(true);
+  Stream<bool> get updates => _updates.stream;
+
   //-----------------------------------------
   int get startTimestamp => _startTimestamp;
 
   set startTimestamp(int timestamp) {
     _startTimestamp = timestamp;
     fetchNextChunkToCache(restart: true);
+    notify();
   }
-
-  //-----------------------------------------
-  var _streamCtrlCacheUpdates = StreamController<bool>.broadcast();
-  Stream<bool> get updates => _streamCtrlCacheUpdates.stream;
-  void _notifyRepoUpdates() => _streamCtrlCacheUpdates.sink.add(true);
 
   //-----------------------------------------
   List<Entry> get cache => _cache;
@@ -56,7 +58,7 @@ class EntriesRepository {
     if (result.length == 0) endOfData = true;
     setOldestTimestampFrom(result);
     restart == false ? _cache.addAll(result) : _cache = result;
-    _notifyRepoUpdates();
+    notify();
     _isLoading = false;
     return result.length;
   }
@@ -74,7 +76,6 @@ class EntriesRepository {
       employeeUid: employeeUid,
       limit: limit,
     );
-    // Print.yellow('||| result : $result');
     return result;
   }
 
@@ -87,7 +88,7 @@ class EntriesRepository {
       else
         _cache.insert(0, entry);
     }
-    _notifyRepoUpdates();
+    notify();
     return sqlite.addOrUpdate(entries);
   }
 
@@ -95,8 +96,8 @@ class EntriesRepository {
   void remove(String uid) {
     var index = _cache.indexWhere((entry) => entry.uid == uid);
     if (index >= 0) _cache.removeAt(index);
+    notify();
     sqlite.remove(uid);
-    _notifyRepoUpdates();
   }
 
   //-----------------------------------------
@@ -108,8 +109,9 @@ class EntriesRepository {
     if (_oldest != null) _oldestTimestamp = _oldest;
   }
 
-  //-----------------------------------------
-  dispose() {
-    _streamCtrlCacheUpdates.close();
+  @override
+  FutureOr onClose() {
+    _updates.close();
+    return super.onClose();
   }
 }

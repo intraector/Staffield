@@ -22,7 +22,7 @@ class TextFieldHandlerInt extends TextFieldHandlerBase with Format {
 
   int get result => int.tryParse(txtCtrl.text.removeSpaces) ?? 0;
 
-  List<TextInputFormatter> inputFormatters = [WhitelistingTextInputFormatter.digitsOnly];
+  List<TextInputFormatter> inputFormatters = [FilteringTextInputFormatter.digitsOnly];
 
   @override
   String validate() {

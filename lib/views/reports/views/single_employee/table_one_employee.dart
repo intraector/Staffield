@@ -1,7 +1,7 @@
-import 'package:Staffield/core/models/employee.dart';
-import 'package:Staffield/core/models/report.dart';
+import 'package:Staffield/core/entities/employee.dart';
+import 'package:Staffield/views/reports/period_report_ui_adapted.dart';
 import 'package:Staffield/views/reports/report_type.dart';
-import 'package:Staffield/views/reports/screen_reports_vmodel.dart';
+import 'package:Staffield/views/reports/vmodel_view_reports.dart';
 import 'package:Staffield/views/reports/views/single_employee/views/view_general.dart';
 import 'package:Staffield/views/reports/views/single_employee/views/view_penalties.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 class TableSingleEmployee extends StatelessWidget {
   TableSingleEmployee(this.list);
-  final List<ReportStrings> list;
+  final List<PeriodReportUiAdapted> list;
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +41,14 @@ class TableSingleEmployee extends StatelessWidget {
                             selected: vModel.period == Units.MONTH,
                             onSelected: (bool selected) {
                               vModel.period = Units.MONTH;
-                              vModel.reportType = ReportType.singleEmployeeOverPeriod;
+                              // vModel.reportType = ReportType.singleEmployeeOverPeriod;
                             }),
                         ChoiceChip(
                             label: Text('Неделя'),
                             selected: vModel.period == Units.WEEK,
                             onSelected: (bool selected) {
                               vModel.period = Units.WEEK;
-                              vModel.reportType = ReportType.singleEmployeeOverPeriod;
+                              // vModel.reportType = ReportType.singleEmployeeOverPeriod;
                             }),
                       ],
                     ),

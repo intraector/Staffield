@@ -1,9 +1,7 @@
 import 'package:Staffield/core/employees_repository.dart';
-import 'package:Staffield/core/models/employee.dart';
+import 'package:Staffield/core/entities/employee.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get_it/get_it.dart';
-
-final getIt = GetIt.instance;
+import 'package:get/get.dart';
 
 class DialogEditEmployeeVModel with ChangeNotifier {
   DialogEditEmployeeVModel(String uid) {
@@ -13,7 +11,7 @@ class DialogEditEmployeeVModel with ChangeNotifier {
     }
   }
 
-  final repo = getIt<EmployeesRepository>();
+  final repo = Get.find<EmployeesRepository>();
   Employee employee = Employee();
 
   final int nameMaxLength = 40;

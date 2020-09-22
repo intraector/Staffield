@@ -2,17 +2,16 @@ import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/router_paths.dart';
 import 'package:Staffield/views/bottom_navigation.dart';
 import 'package:Staffield/views/reports/report_type.dart';
-import 'package:Staffield/views/reports/screen_reports_vmodel.dart';
+import 'package:Staffield/views/reports/vmodel_view_reports.dart';
 import 'package:Staffield/views/view_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
-class ScreenReports extends StatelessWidget {
+class ViewReports extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider(
-        create: (context) => ScreenReportsVModel(),
-        builder: (context, _) {
-          var vModel = Provider.of<ScreenReportsVModel>(context, listen: false);
+  Widget build(BuildContext context) => GetBuilder<ScreenReportsVModel>(
+        init: ScreenReportsVModel(),
+        builder: (vmodel) {
           return SafeArea(
             child: Scaffold(
               drawer: ViewDrawer(),
@@ -46,8 +45,8 @@ class ScreenReports extends StatelessWidget {
                                 Text('НАЧАЛО: ', style: TextStyle(color: Colors.white)),
                                 InkWell(
                                   child:
-                                      Text(vModel.endDate, style: TextStyle(color: Colors.white)),
-                                  onTap: () => vModel.pickEndDate(context),
+                                      Text(vmodel.endDate, style: TextStyle(color: Colors.white)),
+                                  onTap: () => vmodel.pickEndDate(context),
                                 ),
                               ],
                             ),
@@ -56,8 +55,8 @@ class ScreenReports extends StatelessWidget {
                                 Text('КОНЕЦ: ', style: TextStyle(color: Colors.white)),
                                 InkWell(
                                   child:
-                                      Text(vModel.startDate, style: TextStyle(color: Colors.white)),
-                                  onTap: () => vModel.pickStartDate(context),
+                                      Text(vmodel.startDate, style: TextStyle(color: Colors.white)),
+                                  onTap: () => vmodel.pickStartDate(context),
                                 ),
                               ],
                             ),
@@ -81,9 +80,8 @@ class ScreenReports extends StatelessWidget {
                                           child: Text(type.title),
                                         ))
                                     .toList(),
-                                onChanged: (type) => vModel.reportType = type,
-                                value: context.select<ScreenReportsVModel, ReportType>(
-                                    (vModel) => vModel.reportType),
+                                onChanged: (type) => vmodel.reportType = type,
+                                value: vmodel.reportType,
                               ),
                             ),
                           ],
@@ -91,8 +89,7 @@ class ScreenReports extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Expanded(
-                      child: context.select<ScreenReportsVModel, Widget>((vModel) => vModel.view)),
+                  Expanded(child: vmodel.view),
                 ],
               ),
             ),

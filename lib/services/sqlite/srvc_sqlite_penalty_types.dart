@@ -1,16 +1,14 @@
 import 'package:Staffield/core/exceptions/e_insert_penalty_type.dart';
 import 'package:Staffield/services/sqlite/sqlite_fields.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
+import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:Staffield/services/sqlite/sqlite_tables.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
 
-final getIt = GetIt.instance;
-
 class SrvcSqlitePenaltyTypes {
   SrvcSqlitePenaltyTypes() {
-    final init = getIt<SrvcSqliteInit>();
+    final init = Get.find<SrvcSqliteInit>();
     initComplete = init.initComplete;
     initComplete.whenComplete(() {
       db = init.db;

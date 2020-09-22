@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sailor/sailor.dart';
 import 'package:Staffield/constants/app_colors.dart';
-import 'package:Staffield/services/router.dart';
+import 'package:Staffield/services/routes.dart';
 import 'package:Staffield/constants/router_paths.dart';
 
 class BottomNavigation extends StatelessWidget {
@@ -24,7 +24,7 @@ class BottomNavigation extends StatelessWidget {
       color: _inactiveColor,
       onPressed: _index == RouterPaths.entries
           ? null
-          : () => Router.sailor
+          : () => Routes.sailor
               .navigate(RouterPaths.entries, navigationType: NavigationType.pushReplace),
     );
 
@@ -37,7 +37,7 @@ class BottomNavigation extends StatelessWidget {
       onPressed: _index == RouterPaths.employees
           ? null
           : () {
-              return Router.sailor
+              return Routes.sailor
                   .navigate(RouterPaths.employees, navigationType: NavigationType.pushReplace);
             },
     );
@@ -51,7 +51,7 @@ class BottomNavigation extends StatelessWidget {
       onPressed: _index == RouterPaths.reports
           ? null
           : () {
-              return Router.sailor
+              return Routes.sailor
                   .navigate(RouterPaths.reports, navigationType: NavigationType.pushReplace);
             },
     );

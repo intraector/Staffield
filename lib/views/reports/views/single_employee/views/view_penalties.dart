@@ -1,13 +1,12 @@
-import 'package:Staffield/core/models/report.dart';
+import 'package:Staffield/views/reports/period_report_ui_adapted.dart';
 import 'package:flutter/material.dart';
 
 class ViewPenalties extends StatelessWidget {
   ViewPenalties(this.list);
-  final List<ReportStrings> list;
+  final List<PeriodReportUiAdapted> list;
   final cellPadding = EdgeInsets.only(left: 10.0);
   @override
   Widget build(BuildContext context) {
-    // Print.yellow('||| list : $list');
     return ListView(
       shrinkWrap: true,
       children: <Widget>[...list.map((e) => _MonthPenalties(e))],
@@ -17,7 +16,7 @@ class ViewPenalties extends StatelessWidget {
 
 class _MonthPenalties extends StatelessWidget {
   _MonthPenalties(this.report);
-  final ReportStrings report;
+  final PeriodReportUiAdapted report;
   final cellHeight = 30.0;
   final cellPadding = EdgeInsets.symmetric(horizontal: 8.0);
   final headerCellHeight = 40.0;

@@ -1,27 +1,29 @@
 import 'dart:async';
 
 import 'package:Staffield/core/generate_random_entries.dart';
-import 'package:Staffield/core/models/entry_report.dart';
+import 'package:Staffield/core/entities/entity_convert.dart';
+import 'package:Staffield/core/entities/report.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
+import 'package:Staffield/views/reports/report_ui_adapted.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:Staffield/core/entries_repository.dart';
+import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 
-final getIt = GetIt.instance;
-
-class ScreenEntriesVModel with ChangeNotifier {
-  ScreenEntriesVModel() {
-    updateList();
-    _subsc = _repo.updates.listen((data) {
-      updateList();
+class VModelViewEntries extends GetxController {
+  @override
+  void onInit() {
+    _updateList();
+    _subsc = _repo.updates.listen((event) {
+      _updateList();
     });
+    super.onInit();
   }
 
   StreamSubscription<bool> _subsc;
-  var cache = <EntryReport>[];
-  final _repo = getIt<EntriesRepository>();
+  var cache = <ReportUiAdapted>[];
+  final _repo = EntriesRepository.find;
   var _generateRandomEntries = GenerateRandomEntries();
 
   int get startTimestamp => _repo.startTimestamp;
@@ -58,34 +60,30 @@ class ScreenEntriesVModel with ChangeNotifier {
   }
 
   //-----------------------------------------
-  void updateList() {
+  void _updateList() {
     var _currentDate;
-    var result = <EntryReport>[];
+    var result = <Report>[];
     if (_repo.cache.isNotEmpty) {
       _currentDate = DateTime.fromMillisecondsSinceEpoch(_repo.cache.first.timestamp);
-      result.add(EntryReport.dateLabel(_repo.cache.first.timestamp));
+      result.add(Report.dateLabel(_repo.cache.first.timestamp));
     }
     for (var entry in _repo.cache) {
       var _nextDate = DateTime.fromMillisecondsSinceEpoch(entry.timestamp);
       if (_nextDate.day != _currentDate.day) {
         _currentDate = _nextDate;
-        result.add(EntryReport.dateLabel(entry.timestamp));
+        result.add(Report.dateLabel(entry.timestamp));
       }
-      result.add(EntryReport.fromEntry(entry));
+      result.add(EntityConvert.entryToReport(entry));
     }
-    cache = result;
-    notifyListeners();
+    cache.clear();
+    for (var report in result) {
+      cache.add(ReportUiAdapted.from(report));
+    }
+    update();
   }
 
   //-----------------------------------------
   Future<int> fetchNextChunk() => _repo.fetchNextChunkToCache();
-
-  //-----------------------------------------
-  @override
-  void dispose() {
-    _subsc.cancel();
-    super.dispose();
-  }
 
   //-----------------------------------------
   void generateRandomEntries({int days, int recordsPerDay}) =>
@@ -93,8 +91,14 @@ class ScreenEntriesVModel with ChangeNotifier {
 
   //-----------------------------------------
   Future<void> refreshDb() async {
-    var sqliteInit = getIt<SrvcSqliteInit>();
+    var sqliteInit = Get.find<SrvcSqliteInit>();
     await sqliteInit.deleteDb();
     await sqliteInit.init();
+  }
+
+  @override
+  FutureOr onClose() {
+    _subsc.cancel();
+    return super.onClose();
   }
 }

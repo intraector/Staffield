@@ -1,10 +1,15 @@
-import 'package:Staffield/core/models/entry_report.dart';
-import 'package:Staffield/core/models/penalty.dart';
+import 'package:Staffield/core/entities/report.dart';
+import 'package:Staffield/core/entities/penalty.dart';
 import 'package:Staffield/utils/string_utils.dart';
 import 'package:jiffy/jiffy.dart';
 
-class EntryReportStrings {
-  EntryReportStrings.from(EntryReport report) {
+class ReportUiAdapted {
+  ReportUiAdapted.from(Report report) {
+    if (report.isDateLabel) {
+      isDateLabel = true;
+      date = report.dateLabel;
+      return;
+    }
     uid = report.uid;
     date = Jiffy(DateTime.fromMillisecondsSinceEpoch(report.timestamp)).MMMMd;
     report.timestamp.toString();
