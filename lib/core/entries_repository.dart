@@ -52,7 +52,7 @@ class EntriesRepository extends GetxController {
     var result = await fetch(
       greaterThan: null,
       lessThan: restart ? _startTimestamp : _oldestTimestamp,
-      employeeUid: null,
+      employeeUids: null,
       limit: limit,
     );
     if (result.length == 0) endOfData = true;
@@ -67,17 +67,15 @@ class EntriesRepository extends GetxController {
   Future<List<Entry>> fetch({
     @required int greaterThan,
     @required int lessThan,
-    @required String employeeUid,
+    @required List<String> employeeUids,
     int limit,
-  }) async {
-    var result = await sqlite.fetch(
-      greaterThan: greaterThan,
-      lessThan: lessThan,
-      employeeUid: employeeUid,
-      limit: limit,
-    );
-    return result;
-  }
+  }) async =>
+      sqlite.fetch(
+        greaterThan: greaterThan,
+        lessThan: lessThan,
+        employeeUid: employeeUids,
+        limit: limit,
+      );
 
   //-----------------------------------------
   Future<bool> addOrUpdate(List<Entry> entries) {

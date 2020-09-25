@@ -3,17 +3,20 @@ import 'package:Staffield/core/entities/employee.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-class DialogEditEmployeeVModel with ChangeNotifier {
-  DialogEditEmployeeVModel(String uid) {
-    if (uid != null) {
-      employee = repo.getEmployee(uid);
-      txtCtrlName.text = employee.name;
-    }
+class VModelEditEmployee extends GetxController {
+  VModelEditEmployee(this.employee);
+  double errorIsVisible = 0.0;
+
+  //-----------------------------------------
+  @override
+  void onInit() {
+    employee = repo.getEmployeeByUid(employee?.uid);
+    txtCtrlName.text = employee.name;
+    super.onInit();
   }
 
   final repo = Get.find<EmployeesRepository>();
-  Employee employee = Employee();
-
+  Employee employee;
   final int nameMaxLength = 40;
   final txtCtrlName = TextEditingController();
 
@@ -23,7 +26,7 @@ class DialogEditEmployeeVModel with ChangeNotifier {
   //-----------------------------------------
   set hideEmployee(bool hide) {
     employee.hide = hide;
-    notifyListeners();
+    update();
   }
 
   //-----------------------------------------
@@ -36,9 +39,23 @@ class DialogEditEmployeeVModel with ChangeNotifier {
   }
 
   //-----------------------------------------
-  void save() {
-    employee.name = txtCtrlName.text.trim();
-    repo.addOrUpdate(employee);
+  void changeColor(Color color) {
+    if (color != null) {
+      employee.color = color;
+      update();
+    }
+  }
+
+  //-----------------------------------------
+  void save(BuildContext context) {
+    if (txtCtrlName.text.trim().isEmpty) {
+      errorIsVisible = 1.0;
+      update();
+    } else {
+      employee.name = txtCtrlName.text.trim();
+      repo.addOrUpdate(employee);
+      Navigator.of(context).pop(employee);
+    }
   }
 
   //-----------------------------------------
@@ -47,7 +64,7 @@ class DialogEditEmployeeVModel with ChangeNotifier {
   }
 
   //-----------------------------------------
-  String labelName = 'Имя';
-  String dialogTitle = 'СОТРУДНИК';
-  String labelHideEmployee = 'В архив';
+  String labelName = 'Имя сотрудника';
+  // String dialogTitle = 'СОТРУДНИК';
+  String labelHideEmployee = 'Скрыть';
 }

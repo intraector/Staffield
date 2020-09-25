@@ -1,68 +1,126 @@
-import 'package:Staffield/views/edit_employee/dialog_employee_vmodel.dart';
+import 'dart:io';
+
+import 'package:Staffield/constants/app_colors.dart';
+import 'package:Staffield/core/entities/employee.dart';
+import 'package:Staffield/views/edit_employee/vmodel_edit_employee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-
-final _formKey = GlobalKey<FormState>();
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:get/get.dart';
 
 class DialogEditEmployee extends StatelessWidget {
-  DialogEditEmployee([this.employeeUid]);
+  DialogEditEmployee([this.employee]);
 
-  final String employeeUid;
+  final Employee employee;
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider(
-        create: (_) => DialogEditEmployeeVModel(employeeUid),
-        child: Consumer<DialogEditEmployeeVModel>(
-          builder: (_, vModel, __) => AlertDialog(
-            title: Text(vModel.dialogTitle, textAlign: TextAlign.center),
-            contentPadding: EdgeInsets.symmetric(horizontal: 5.0),
-            content: Container(
-              width: double.maxFinite,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Form(
-                    key: _formKey,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
-                      child: TextFormField(
-                        textInputAction: TextInputAction.next,
-                        controller: vModel.txtCtrlName,
-                        decoration: InputDecoration(
-                          labelText: vModel.labelName,
-                          counterStyle: TextStyle(color: Colors.transparent),
-                        ),
-                        maxLines: 1,
-                        maxLengthEnforced: true,
-                        maxLength: vModel.nameMaxLength,
-                        autofocus: true,
-                        validator: (_) => vModel.validateName(),
-                      ),
+  Widget build(BuildContext context) => GetBuilder<VModelEditEmployee>(
+        init: VModelEditEmployee(employee),
+        builder: (vmodel) => PlatformAlertDialog(
+          // title: Text(vmodel.dialogTitle, textAlign: TextAlign.center),
+          content: Container(
+            width: double.maxFinite,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                PlatformTextField(
+                  cupertino: (_, __) => CupertinoTextFieldData(
+                    placeholder: vmodel.labelName,
+                    autofocus: true,
+                  ),
+                  material: (_, __) => MaterialTextFieldData(
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      counter: Container(),
+                      labelText: vmodel.labelName,
+                      counterStyle: TextStyle(color: Colors.transparent),
                     ),
                   ),
-                  if (employeeUid != null)
-                    CheckboxListTile(
-                      value: vModel.hideEmployee,
-                      title: Text(vModel.labelHideEmployee),
-                      onChanged: (isChecked) => vModel.hideEmployee = isChecked,
-                    ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      RaisedButton(
-                          child: Text('OK'),
-                          onPressed: () {
-                            if (_formKey.currentState.validate()) {
-                              vModel.save();
-                              Navigator.of(context).pop(vModel.employee.uid);
-                            }
-                          }),
+                  textInputAction: TextInputAction.next,
+                  controller: vmodel.txtCtrlName,
+                  maxLines: 1,
+                  maxLengthEnforced: true,
+                  maxLength: vmodel.nameMaxLength,
+                  autofocus: true,
+                  // validator: (_) => vmodel.validateName(),
+                ),
+                AnimatedOpacity(
+                  opacity: vmodel.errorIsVisible,
+                  duration: Duration(milliseconds: 500),
+                  child: Column(
+                    children: [
+                      if (Platform.isIOS) SizedBox(height: 5.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Flexible(
+                              child: Text(
+                            'Укажите имя сотрудника',
+                            style: TextStyle(color: AppColors.error, fontSize: 14.0),
+                          ))
+                        ],
+                      ),
                     ],
-                  )
-                ],
-              ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text('Выберите цвет: '),
+                    Material(
+                      child: InkWell(
+                        child: Container(
+                          width: 30.0,
+                          height: 30.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: vmodel.employee.color,
+                          ),
+                        ),
+                        onTap: () async {
+                          var color = await showDialog<Color>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: SingleChildScrollView(
+                                  child: BlockPicker(
+                                    availableColors: AppColors.colors,
+                                    pickerColor: Colors.lime,
+                                    onColorChanged: (color) {
+                                      Navigator.of(context).pop(color);
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                          vmodel.changeColor(color);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                if (employee != null)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(vmodel.labelHideEmployee),
+                      PlatformSwitch(
+                        onChanged: (isChecked) => vmodel.hideEmployee = isChecked,
+                        value: vmodel.hideEmployee,
+                      ),
+                    ],
+                  ),
+              ],
             ),
           ),
+          actions: [
+            PlatformDialogAction(
+              child: PlatformText('Отмена'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            PlatformDialogAction(child: Text('OK'), onPressed: () => vmodel.save(context)),
+          ],
         ),
       );
 }

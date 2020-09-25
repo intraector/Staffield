@@ -9,8 +9,8 @@ import 'package:get/get.dart';
 
 class ViewReports extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => GetBuilder<ScreenReportsVModel>(
-        init: ScreenReportsVModel(),
+  Widget build(BuildContext context) => GetBuilder<VModelViewReports>(
+        init: VModelViewReports(),
         builder: (vmodel) {
           return SafeArea(
             child: Scaffold(
@@ -89,7 +89,11 @@ class ViewReports extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Expanded(child: vmodel.view),
+                  Expanded(
+                      child: ListView(
+                    children: [vmodel.view],
+                    shrinkWrap: true,
+                  )),
                 ],
               ),
             ),

@@ -2,12 +2,10 @@ import 'dart:async';
 
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entities/employee.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ScreenEmployeesVModel with ChangeNotifier {
-  ScreenEmployeesVModel() {
+class VModelEmployees extends GetxController {
+  VModelEmployees() {
     updateList();
     _subsc = _repo.updates.listen((data) {
       updateList();
@@ -18,27 +16,27 @@ class ScreenEmployeesVModel with ChangeNotifier {
   var list = <Employee>[];
   int recordsPerScreen = 10;
   final _repo = Get.find<EmployeesRepository>();
-  bool showHidedEmployees = false;
+  bool isShowingHiddenEmployees = false;
 
   //-----------------------------------------
-  bool get mode => showHidedEmployees;
+  bool get mode => isShowingHiddenEmployees;
   void switchMode() {
-    showHidedEmployees = !showHidedEmployees;
+    isShowingHiddenEmployees = !isShowingHiddenEmployees;
     updateList();
   }
 
   //-----------------------------------------
   void updateList() {
-    list = _repo.repoWhereHidden(showHidedEmployees);
-    notifyListeners();
+    list = _repo.repoWhereHidden(isShowingHiddenEmployees);
+    update();
   }
 
-  String get modeButtonLabel => showHidedEmployees ? 'АРХИВ' : 'АКТИВНЫЕ';
+  String get modeButtonLabel => isShowingHiddenEmployees ? 'АРХИВ' : 'АКТИВНЫЕ';
 
   //-----------------------------------------
   @override
-  void dispose() {
+  FutureOr onClose() {
     _subsc.cancel();
-    super.dispose();
+    return super.onClose();
   }
 }

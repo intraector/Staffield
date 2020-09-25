@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class AppColors {
@@ -27,4 +29,23 @@ class AppColors {
 
   static Color kShrinePurple = Color(0xFF5D1049);
   static Color kShrineBlack = Color(0xFF000000);
+  static final colors = <Color>[
+    Colors.redAccent,
+    Colors.pinkAccent,
+    Colors.lightBlueAccent,
+    Colors.cyanAccent,
+    Colors.orange,
+    Colors.yellowAccent,
+    Colors.limeAccent,
+    Colors.greenAccent,
+    Colors.teal,
+    Colors.purpleAccent,
+    Colors.deepPurpleAccent,
+    Colors.indigoAccent,
+    Colors.grey.shade200,
+  ];
+  static final _rand = Random();
+  static Color get getRandomColor {
+    return colors[_rand.nextInt(colors.length - 1)];
+  }
 }

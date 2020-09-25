@@ -1,6 +1,6 @@
 import 'package:Staffield/core/entities/penalty_type.dart';
 import 'package:Staffield/views/edit_penalty_type/screen_edit_penalty_type.dart';
-import 'package:Staffield/views/employees/screen_employees.dart';
+import 'package:Staffield/views/employees/view_employees.dart';
 import 'package:Staffield/views/penalty_types/screen_penalty_types.dart';
 import 'package:Staffield/views/reports/view_reports.dart';
 import 'package:flutter/animation.dart';
@@ -32,7 +32,7 @@ class Routes {
         builder: (_, __, params) => ScreenEditPenaltyType(params.param<PenaltyType>('penaltyType')),
         params: [SailorParam<PenaltyType>(name: 'penaltyType')],
       ),
-      SailorRoute(name: RouterPaths.employees, builder: (_, __, ___) => ScreenEmployees()),
+      SailorRoute(name: RouterPaths.employees, builder: (_, __, ___) => ViewEmployees()),
       SailorRoute(name: RouterPaths.reports, builder: (_, __, ___) => ViewReports()),
       SailorRoute(name: RouterPaths.penaltyTypes, builder: (_, __, ___) => ScreenPenaltyTypes()),
     ]);

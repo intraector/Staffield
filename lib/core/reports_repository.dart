@@ -1,15 +1,14 @@
 import 'package:Staffield/core/employees_repository.dart';
+import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/core/entries_repository.dart';
 import 'package:Staffield/core/entities/entity_convert.dart';
 import 'package:Staffield/core/entities/entry.dart';
 import 'package:Staffield/core/entities/report.dart';
 import 'package:Staffield/core/entities/period_report.dart';
 import 'package:Staffield/core/penalty_types_repository.dart';
-import 'package:Staffield/views/reports/vmodel_view_reports.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:print_color/print_color.dart';
 
 class ReportsRepository {
   final _entriesRepo = Get.find<EntriesRepository>();
@@ -20,12 +19,12 @@ class ReportsRepository {
   Future<List<Report>> fetchEntriesList({
     @required DateTime greaterThan,
     @required DateTime lessThan,
-    @required String employeeUid,
+    @required List<String> employeeUid,
   }) async {
     var reports = await _entriesRepo.fetch(
       greaterThan: greaterThan.millisecondsSinceEpoch,
       lessThan: lessThan.millisecondsSinceEpoch,
-      employeeUid: employeeUid,
+      employeeUids: employeeUid,
     );
     return reports.map((entry) => EntityConvert.entryToReport(entry)).toList();
   }
@@ -34,24 +33,31 @@ class ReportsRepository {
   /// default periodsAmount = 1
   ///
   /// lessThan ??= _entriesRepo.newestTimestamp
-  Future<List<PeriodReport>> fetchAllEmployees(
-      {@required Units period, int periodsAmount = 1, int lessThan}) async {
+  Future<List<PeriodReport>> fetch(
+      {@required Units period,
+      List<Employee> employees,
+      int periodsAmount = 1,
+      int lessThan}) async {
     var futures = <Future>[];
     var output = <PeriodReport>[];
     lessThan ??= _entriesRepo.newestTimestamp;
     for (int i = 0; i < periodsAmount; i++) {
       var greaterThan = getFirstDayOf(lessThan, period);
-
       var entriesFuture = _entriesRepo.fetch(
         greaterThan: greaterThan,
         lessThan: lessThan,
-        employeeUid: null,
+        employeeUids: employees?.map((employee) => employee.uid),
       );
       futures.add(entriesFuture);
-
       var entries = await entriesFuture;
       if (entries.isNotEmpty) {
-        for (var employee in _employeesRepo.repo) {
+        List<Employee> employeesList;
+        if (employees == null || employees.isNull) {
+          employeesList = _employeesRepo.repo;
+        } else {
+          employeesList = employees;
+        }
+        for (var employee in employeesList) {
           var entriesFound = entries.where((entry) => entry.employeeUid == employee.uid).toList();
           if (entriesFound.isNotEmpty) {
             output.addAll(_aggregateByPeriod(entriesFound, period: period));
@@ -67,24 +73,26 @@ class ReportsRepository {
     return output;
   }
 
-  //-----------------------------------------
-  Future<List<PeriodReport>> fetchSingleEmployeeOverPeriod({
-    @required DateTime greaterThan,
-    @required DateTime lessThan,
-    @required String employeeUid,
-    @required Units period,
-  }) async {
-    Print.yellow('||| fired fetch start');
-    var entries = await _entriesRepo.fetch(
-      greaterThan: greaterThan.millisecondsSinceEpoch,
-      lessThan: lessThan.millisecondsSinceEpoch,
-      employeeUid: employeeUid,
-    );
-    Print.yellow('||| fired fetch end');
-    var result = _aggregateByPeriod(entries, period: period);
-    Print.yellow('||| aggregation finished');
-    return result;
-  }
+  // //-----------------------------------------
+  // Future<List<PeriodReport>> fetchSingleEmployeeOverPeriod({
+  //   @required DateTime greaterThan,
+  //   @required DateTime lessThan,
+  //   @required List<String> employeeUid,
+  //   @required Units period,
+  // }) async {
+  //   return Future<List<PeriodReport>>(() {
+  //     var entries = _entriesRepo.fetch(
+  //       greaterThan: greaterThan.millisecondsSinceEpoch,
+  //       lessThan: lessThan.millisecondsSinceEpoch,
+  //       employeeUid: employeeUid,
+  //     );
+  //     var list = entries.then((value) {
+  //       var result = _aggregateByPeriod(value, period: period);
+  //       return result;
+  //     });
+  //     return list;
+  //   });
+  // }
 
   //-----------------------------------------
   List<PeriodReport> _aggregateByPeriod(List<Entry> entries, {@required Units period}) {

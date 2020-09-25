@@ -1,6 +1,6 @@
 import 'package:Staffield/views/reports/views/all_amployees/chart_data.dart';
 
-import 'package:charts_flutter/flutter.dart' as charts;
+// import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
 class AreaChartsFlutter extends StatelessWidget {

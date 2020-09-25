@@ -18,7 +18,13 @@ class EmployeesRepository {
   Stream<bool> get updates => _streamCtrlRepoUpdates.stream;
 
   //-----------------------------------------
-  Employee getEmployee(String uid) => repo.firstWhere((employee) => employee.uid == uid);
+  Employee getEmployeeByUid(String uid) => repo.firstWhere(
+        (employee) => employee.uid == uid,
+        orElse: () => Employee(),
+      );
+
+  // //-----------------------------------------
+  // Employee getEmployee(String uid) => repo.firstWhere((employee) => employee.uid == uid);
 
   //-----------------------------------------
   List<Employee> get repo => _repo;

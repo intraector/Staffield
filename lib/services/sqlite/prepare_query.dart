@@ -6,12 +6,12 @@ class PrepareQuery {
   PrepareQuery.forEntries(
       {@required int greaterThan,
       @required int lessThan,
-      @required String employeeUid,
+      @required List<String> employeeUids,
       @required int limit}) {
     _from += ' FROM ${SqliteTable.entries}';
     _addEntriesGreaterThan(greaterThan);
     _addEntriesLessThan(lessThan);
-    _addEntriesEmployeeUid(employeeUid);
+    _addEntriesEmployeeUids(employeeUids);
     _orderBy = ' ORDER BY timestamp DESC';
     _addLimit(limit);
   }
@@ -52,11 +52,19 @@ class PrepareQuery {
   }
 
   //-----------------------------------------
-  void _addEntriesEmployeeUid(String employeeUid) {
-    if (employeeUid == null) return;
+  void _addEntriesEmployeeUids(List<String> employeeUids) {
+    if (employeeUids == null || employeeUids.isEmpty) return;
+    String employees = employeeUids.join("', '");
+    print('||| employeesList : $employees');
     _whereClause += _whereClause.isEmpty ? ' WHERE' : ' AND';
-    _whereClause += ' ${SqliteFieldsEntries.employeeUid} = \'$employeeUid\'';
+    _whereClause += ' ${SqliteFieldsEntries.employeeUid} IN  (\'$employees\')';
   }
+  // //-----------------------------------------
+  // void _addEntriesEmployeeUid(String employeeUid) {
+  //   if (employeeUid == null) return;
+  //   _whereClause += _whereClause.isEmpty ? ' WHERE' : ' AND';
+  //   _whereClause += ' ${SqliteFieldsEntries.employeeUid} = \'$employeeUid\'';
+  // }
 
   //-----------------------------------------
   void _addPenaltiesGreaterThan(int greaterThan) {

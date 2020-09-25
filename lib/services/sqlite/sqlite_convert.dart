@@ -59,6 +59,7 @@ class SqliteConvert {
         uid: map[SqliteFieldsEmployees.uid],
         name: map[SqliteFieldsEmployees.name],
         hide: map[SqliteFieldsEmployees.hide] == 1 ? true : false,
+        color: map[SqliteFieldsEmployees.color],
       );
 
   //-----------------------------------------
@@ -67,6 +68,7 @@ class SqliteConvert {
       SqliteFieldsEmployees.uid: employee.uid,
       SqliteFieldsEmployees.name: employee.name,
       SqliteFieldsEmployees.hide: employee.hide ? 1 : 0,
+      SqliteFieldsEmployees.color: employee.color,
     };
   }
 }

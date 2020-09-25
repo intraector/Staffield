@@ -3,25 +3,18 @@ import 'dart:async';
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/core/reports_repository.dart';
-import 'package:Staffield/views/reports/period_report_ui_adapted.dart';
-import 'package:Staffield/views/reports/report_ui_adapted.dart';
 import 'package:Staffield/views/reports/report_type.dart';
 import 'package:Staffield/views/reports/views/all_amployees/area_fl_charts.dart';
 import 'package:Staffield/views/reports/views/all_amployees/chart_data.dart';
-import 'package:Staffield/views/reports/views/all_amployees/table_data.dart';
-import 'package:Staffield/views/reports/views/all_amployees/table_employees.dart';
-import 'package:Staffield/views/reports/views/list_employees.dart';
-import 'package:Staffield/views/reports/views/single_employee/table_one_employee.dart';
-import 'package:Staffield/views/reports/views/table_entries.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:print_color/print_color.dart';
 
-class ScreenReportsVModel extends GetxController {
-  ScreenReportsVModel() {
+class VModelViewReports extends GetxController {
+  VModelViewReports() {
     _employee = employeesList.first;
+    _employees.addAll(employeesList);
     fetchReportData();
   }
   final _reportsRepo = ReportsRepository();
@@ -33,7 +26,6 @@ class ScreenReportsVModel extends GetxController {
 
   ReportType _reportType = ReportType.fl_charts;
   Units period = Units.MONTH;
-  Employee _employee;
   Widget view = Center(child: CircularProgressIndicator());
   var _dummy = Employee(name: 'Нет сотрудников', uid: '111');
 
@@ -42,11 +34,21 @@ class ScreenReportsVModel extends GetxController {
       _employeesRepo.repo.isNotEmpty ? _employeesRepo.repo : [_dummy];
 
   //-----------------------------------------
+  Employee _employee;
   Employee get employee => _employee;
   set employee(Employee employee) {
     _employee = employee;
     fetchReportData();
   }
+
+  //-----------------------------------------
+  List<Employee> _employees = [];
+  List<Employee> get employees => employees;
+  // set employees() => employees;
+  List<int> selectedItems = [];
+  List<DropdownMenuItem> get items => employeesList
+      .map((employee) => DropdownMenuItem(value: employee, child: Text(employee.name)))
+      .toList();
 
   //-----------------------------------------
   ReportType get reportType => _reportType;
@@ -104,18 +106,22 @@ class ScreenReportsVModel extends GetxController {
     switch (_reportType) {
       case ReportType.fl_charts:
         {
-          Print.green('||| fired start');
-          var reports = await _reportsRepo.fetchSingleEmployeeOverPeriod(
-            greaterThan: _endDate,
-            lessThan: _startDate,
-            employeeUid: _employee.uid,
+          var reports = _reportsRepo.fetch(
+            periodsAmount: 6,
             period: period,
           );
-          Print.green('||| fired reports');
-          var chartData = ChartData(reports);
-          Print.green('||| fired chartData');
-          view = AreaFlCharts(chartData);
-          Print.green('||| fired view');
+          // var reports = _reportsRepo.fetchSingleEmployeeOverPeriod(
+          //   greaterThan: _endDate,
+          //   lessThan: _startDate,
+          //   employeeUid: [_employee.uid],
+          //   period: period,
+          // );
+          reports.then((reports) {
+            ChartData.build(reports).then((data) {
+              view = AreaFlCharts(data);
+              update();
+            });
+          });
         }
       // case ReportType.listEmployees:
       //   {
@@ -161,6 +167,5 @@ class ScreenReportsVModel extends GetxController {
       //   }
       //   break;
     }
-    update();
   }
 }

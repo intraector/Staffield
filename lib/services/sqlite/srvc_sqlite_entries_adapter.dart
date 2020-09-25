@@ -1,8 +1,11 @@
 import 'package:Staffield/core/employees_repository.dart';
+import 'package:Staffield/core/entities/employee.dart';
+import 'package:Staffield/core/entities/penalty.dart';
 import 'package:Staffield/core/entries_repository_interface.dart';
 import 'package:Staffield/core/entities/entry.dart';
 import 'package:Staffield/services/sqlite/sqlite_convert.dart';
 import 'package:Staffield/services/sqlite/srvc_sqlite_entries.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class SqliteEntriesAdapater implements EntriesRepositoryInterface {
@@ -11,29 +14,44 @@ class SqliteEntriesAdapater implements EntriesRepositoryInterface {
 
   //-----------------------------------------
   @override
-  Future<List<Entry>> fetch({int greaterThan, int lessThan, String employeeUid, int limit}) async {
-    var entriesMaps = await _srvcSqliteEntries.fetchEntries(
+  Future<List<Entry>> fetch(
+      {int greaterThan, int lessThan, List<String> employeeUid, int limit}) async {
+    var futureEntriesMaps = _srvcSqliteEntries.fetchEntries(
       greaterThan: greaterThan,
       lessThan: lessThan,
-      employeeUid: employeeUid,
+      employeeUids: employeeUid,
       limit: limit,
     );
 
-    var penaltiesFuture = _srvcSqliteEntries.fetchPenalties(
+    var futurePenaltiesMaps = _srvcSqliteEntries.fetchPenalties(
       greaterThan: greaterThan,
       lessThan: lessThan,
       parentUid: null,
       limit: null,
     );
-    var result = entriesMaps.map((entryMap) => SqliteConvert.mapToEntry(entryMap)).toList();
-    var penalties =
-        (await penaltiesFuture).map((penaltyMap) => SqliteConvert.mapToPenalty(penaltyMap));
-    for (var entry in result) {
-      var foundPenalties = penalties.where((penalty) => penalty.parentUid == entry.uid).toList();
-      entry.penalties = foundPenalties;
-      entry.employeeName = _employeesRepo.getEmployee(entry.employeeUid).name;
-    }
-    return result;
+    List<Entry> entries;
+    var futureEntries = Future<List<Entry>>(() {
+      return futureEntriesMaps.then((value) {
+        return entries = value.map((entryMap) => SqliteConvert.mapToEntry(entryMap)).toList();
+      });
+    });
+    List<Penalty> penalties;
+    var futurePenalties = Future<Iterable<Penalty>>(() {
+      return futurePenaltiesMaps.then((value) {
+        return penalties =
+            value.map((penaltyMap) => SqliteConvert.mapToPenalty(penaltyMap)).toList();
+      });
+    });
+
+    return Future.wait([futureEntries, futurePenalties]).then((_) {
+      var args = ComputeArgs(
+        entries: entries,
+        penalties: penalties,
+        employeesRepo: _employeesRepo.repo,
+      );
+      return linkEntriesAndPenalties(args);
+      // return compute<ComputeArgs, List<Entry>>(linkEntriesAndPenalties, args);
+    });
   }
 
   //-----------------------------------------
@@ -49,4 +67,26 @@ class SqliteEntriesAdapater implements EntriesRepositoryInterface {
 
   //-----------------------------------------
   Future<void> remove(String uid) => _srvcSqliteEntries.remove(uid);
+}
+
+List<Entry> linkEntriesAndPenalties(ComputeArgs args) {
+  for (var entry in args.entries) {
+    var foundPenalties = args.penalties.where((penalty) => penalty.parentUid == entry.uid).toList();
+    entry.penalties = foundPenalties;
+    entry.employeeName =
+        args.employeesRepo.firstWhere((employee) => employee.uid == entry.employeeUid).name;
+  }
+  return args.entries;
+}
+
+class ComputeArgs {
+  ComputeArgs({
+    @required this.entries,
+    @required this.penalties,
+    @required this.employeesRepo,
+  });
+
+  List<Entry> entries;
+  List<Penalty> penalties;
+  List<Employee> employeesRepo;
 }

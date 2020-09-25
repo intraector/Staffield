@@ -1,6 +1,5 @@
 import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/views/reports/period_report_ui_adapted.dart';
-import 'package:Staffield/views/reports/report_type.dart';
 import 'package:Staffield/views/reports/vmodel_view_reports.dart';
 import 'package:Staffield/views/reports/views/single_employee/views/view_general.dart';
 import 'package:Staffield/views/reports/views/single_employee/views/view_penalties.dart';
@@ -14,7 +13,7 @@ class TableSingleEmployee extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var vModel = Provider.of<ScreenReportsVModel>(context, listen: false);
+    var vModel = Provider.of<VModelViewReports>(context, listen: false);
     return Column(
       children: <Widget>[
         Expanded(

@@ -26,6 +26,7 @@ class SqliteFieldsEmployees {
   static const uid = 'uid';
   static const name = 'name';
   static const hide = 'hide';
+  static const color = 'color';
 }
 
 class SqliteFieldsPenaltyTypes {

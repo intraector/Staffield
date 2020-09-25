@@ -75,7 +75,8 @@ class SrvcSqliteInit {
               ${SqliteFieldsEmployees.id} INTEGER PRIMARY KEY AUTOINCREMENT,
               ${SqliteFieldsEmployees.uid} TEXT,
               ${SqliteFieldsEmployees.name} TEXT,
-              ${SqliteFieldsEmployees.hide} INTEGER NOT NULL
+              ${SqliteFieldsEmployees.hide} INTEGER NOT NULL,
+              ${SqliteFieldsEmployees.color} INTEGER NOT NULL
             )''');
 
 //-----------------------------------------

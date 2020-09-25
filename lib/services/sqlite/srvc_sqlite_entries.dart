@@ -22,17 +22,18 @@ class SrvcSqliteEntries {
   Future<List<Map<String, dynamic>>> fetchEntries({
     @required int greaterThan,
     @required int lessThan,
-    @required String employeeUid,
+    @required List<String> employeeUids,
     @required int limit,
   }) async {
     var preparedString = PrepareQuery.forEntries(
       greaterThan: greaterThan,
       lessThan: lessThan,
-      employeeUid: employeeUid,
+      employeeUids: employeeUids,
       limit: limit,
     );
     await initComplete;
-    return _rawQuery(dbEntries, preparedString.string);
+    var result = dbEntries.rawQuery(preparedString.string);
+    return result;
   }
 
   //-----------------------------------------
@@ -87,7 +88,3 @@ class SrvcSqliteEntries {
     );
   }
 }
-
-//-----------------------------------------
-Future<List<Map<String, dynamic>>> _rawQuery(Database db, String query) =>
-    compute(db.rawQuery, query);

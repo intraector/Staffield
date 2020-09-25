@@ -12,7 +12,7 @@ class TableEntries extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var vModel = Provider.of<ScreenReportsVModel>(context, listen: false);
+    var vModel = Provider.of<VModelViewReports>(context, listen: false);
     final columnWidth = MediaQuery.of(context).size.shortestSide / 4.5;
     final rowHeight = MediaQuery.of(context).size.shortestSide / 11;
     final tableHeaderHeight = MediaQuery.of(context).size.shortestSide / 7.0;
