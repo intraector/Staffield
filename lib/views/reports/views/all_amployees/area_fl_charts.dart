@@ -129,7 +129,7 @@ List<LineChartBarData> buildLines(ChartData data) {
       LineChartBarData(
         spots: data.spots[key],
         isCurved: true,
-        colors: [],
+        colors: [key.color],
         barWidth: 5,
         isStrokeCapRound: true,
         dotData: FlDotData(

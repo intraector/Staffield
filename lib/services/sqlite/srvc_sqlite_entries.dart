@@ -1,22 +1,11 @@
 import 'package:Staffield/core/exceptions/e_insert_entry.dart';
 import 'package:Staffield/services/sqlite/prepare_query.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:Staffield/services/sqlite/sqlite_tables.dart';
-import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
 
-class SrvcSqliteEntries {
-  SrvcSqliteEntries() {
-    final init = Get.find<SrvcSqliteInit>();
-    initComplete = init.initComplete;
-    initComplete.whenComplete(() {
-      dbEntries = init.db;
-    });
-  }
-
-  Future<void> initComplete;
-  Database dbEntries;
+class EntriesSqliteSrvc {
+  Database db;
 
   //-----------------------------------------
   Future<List<Map<String, dynamic>>> fetchEntries({
@@ -31,8 +20,7 @@ class SrvcSqliteEntries {
       employeeUids: employeeUids,
       limit: limit,
     );
-    await initComplete;
-    var result = dbEntries.rawQuery(preparedString.string);
+    var result = db.rawQuery(preparedString.string);
     return result;
   }
 
@@ -49,16 +37,14 @@ class SrvcSqliteEntries {
       parentUid: parentUid,
       limit: limit,
     );
-    await initComplete;
-    return dbEntries.rawQuery(preparedString.string);
+    return db.rawQuery(preparedString.string);
   }
 
   //-----------------------------------------
   Future<bool> addOrUpdate(
       {@required Iterable<Map<String, dynamic>> entries,
       @required Iterable<Map<String, dynamic>> penalties}) async {
-    await initComplete;
-    var batch = dbEntries.batch();
+    var batch = db.batch();
     for (var entry in entries) {
       batch.insert(SqliteTable.entries, entry, conflictAlgorithm: ConflictAlgorithm.replace);
     }
@@ -75,13 +61,12 @@ class SrvcSqliteEntries {
 
   //-----------------------------------------
   Future<void> remove(String uid) async {
-    await initComplete;
-    dbEntries.delete(
+    db.delete(
       SqliteTable.entries,
       where: 'uid = ?',
       whereArgs: [uid],
     );
-    dbEntries.delete(
+    db.delete(
       SqliteTable.penalties,
       where: 'parentUid = ?',
       whereArgs: [uid],

@@ -99,7 +99,7 @@ class TableEntries extends StatelessWidget {
                                           Container(
                                               width: columnWidth,
                                               padding: EdgeInsets.all(cellPadding),
-                                              child: Text(report.name)),
+                                              child: Text(report.employee.name)),
                                           Container(
                                               width: columnWidth,
                                               padding: EdgeInsets.all(cellPadding),

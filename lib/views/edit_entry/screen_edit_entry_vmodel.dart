@@ -75,7 +75,7 @@ class ScreenEditEntryVModel with ChangeNotifier {
   }
 
   //-----------------------------------------
-  String get employeeUid => entry.employeeUid.isEmpty ? null : entry.employeeUid;
+  String get employeeUid => entry.employee.uid.isEmpty ? null : entry.employee.uid;
 
   //-----------------------------------------
   String get penaltiesTotal => _penaltiesTotal.toString().formatDouble;
@@ -164,14 +164,12 @@ class ScreenEditEntryVModel with ChangeNotifier {
   //-----------------------------------------
   Future<void> setEmployeeUid(String uid, BuildContext context) async {
     if (uid != '111') {
-      entry.employeeUid = uid;
-      entry.employeeName = _employeesRepo.getEmployeeByUid(uid).name;
+      entry.employee = _employeesRepo.getEmployeeByUid(uid);
     } else {
       var result =
           await showDialog<String>(context: context, builder: (context) => DialogEditEmployee());
       if (result != null) {
-        entry.employeeUid = result;
-        entry.employeeName = _employeesRepo.getEmployeeByUid(result).name;
+        entry.employee = _employeesRepo.getEmployeeByUid(result);
         dropdownState.currentState.didChange(result);
       }
     }

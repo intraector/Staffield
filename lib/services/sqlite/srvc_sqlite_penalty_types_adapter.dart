@@ -1,9 +1,10 @@
 import 'package:Staffield/core/entities/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository_interface.dart';
-import 'package:Staffield/services/sqlite/srvc_sqlite_penalty_types.dart';
+import 'package:Staffield/services/sqlite/penalty_types_sqlite_srvc.dart';
+import 'package:get/get.dart';
 
-class SrvcSqlitePenaltyTypesAdapter implements PenaltyTypeRepositoryInterface {
-  final _srvcSqlitePenaltyTypes = SrvcSqlitePenaltyTypes();
+class PenaltyTypesAdapter implements PenaltyTypeRepositoryInterface {
+  final PenaltyTypesSqliteSrvc _srvcSqlitePenaltyTypes = Get.find();
 
   //-----------------------------------------
   @override

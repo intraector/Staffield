@@ -2,13 +2,11 @@ import 'dart:async';
 
 import 'package:Staffield/core/employees_repository_interface.dart';
 import 'package:Staffield/core/entities/employee.dart';
+import 'package:Staffield/services/sqlite/srvc_sqlite_employees.dart';
+import 'package:get/get.dart';
 
 class EmployeesRepository {
-  EmployeesRepository(this.sqlite) {
-    fetch();
-  }
-
-  EmployeesRepositoryInterface sqlite;
+  EmployeesRepositoryInterface sqlite = Get.find<EmployeesSqliteSrvc>();
 
   var _repo = <Employee>[];
 

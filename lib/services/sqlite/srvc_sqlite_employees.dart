@@ -1,22 +1,11 @@
 import 'package:Staffield/services/sqlite/sqlite_convert.dart';
-import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:Staffield/services/sqlite/sqlite_tables.dart';
 import 'package:Staffield/core/employees_repository_interface.dart';
 import 'package:Staffield/core/exceptions/e_insert_employee.dart';
 import 'package:Staffield/core/entities/employee.dart';
-import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
 
-class SrvcSqliteEmployees implements EmployeesRepositoryInterface {
-  SrvcSqliteEmployees() {
-    final init = Get.find<SrvcSqliteInit>();
-
-    initComplete = init.initComplete;
-    initComplete.whenComplete(() {
-      db = init.db;
-    });
-  }
-
+class EmployeesSqliteSrvc implements EmployeesRepositoryInterface {
   Database db;
   Future<void> initComplete;
 

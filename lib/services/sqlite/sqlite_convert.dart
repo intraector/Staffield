@@ -1,16 +1,18 @@
 import 'dart:ui';
 
+import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/core/entities/entry.dart';
 import 'package:Staffield/core/entities/penalty.dart';
 import 'package:Staffield/services/sqlite/sqlite_fields.dart';
+import 'package:get/get.dart';
 
 class SqliteConvert {
   //-----------------------------------------
   static Map<String, dynamic> entryToMap(Entry entry) => {
         SqliteFieldsEntries.uid: entry.uid,
         SqliteFieldsEntries.timestamp: entry.timestamp ?? DateTime.now().millisecondsSinceEpoch,
-        SqliteFieldsEntries.employeeUid: entry.employeeUid,
+        SqliteFieldsEntries.employeeUid: entry.employee.uid,
         SqliteFieldsEntries.total: entry.total,
         SqliteFieldsEntries.revenue: entry.revenue,
         SqliteFieldsEntries.wage: entry.wage,
@@ -19,10 +21,11 @@ class SqliteConvert {
 
   //-----------------------------------------
   static Entry mapToEntry(Map<String, dynamic> map) {
+    var employees = Get.find<EmployeesRepository>();
     var entry = Entry();
     entry.uid = map[SqliteFieldsEntries.uid];
     entry.timestamp = map[SqliteFieldsEntries.timestamp];
-    entry.employeeUid = map[SqliteFieldsEntries.employeeUid];
+    entry.employee = employees.getEmployeeByUid(map[SqliteFieldsEntries.employeeUid]);
     entry.total = map[SqliteFieldsEntries.total];
     entry.revenue = map[SqliteFieldsEntries.revenue];
     entry.wage = map[SqliteFieldsEntries.wage];

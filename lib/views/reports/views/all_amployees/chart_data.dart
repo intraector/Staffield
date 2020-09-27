@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/core/entities/period_report.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:jiffy/jiffy.dart';
@@ -38,10 +39,10 @@ class ChartData {
           var bv = data.bottomValues.firstWhere(
               (item) => (item.month == date.month && item.year == date.year),
               orElse: () => BottomValue());
-          bv.periodReports[periodReport.employeeUid] = FlSpot(bv.value, periodReport.total);
+          bv.periodReports[periodReport.employee] = FlSpot(bv.value, periodReport.total);
         }
 
-        Set<String> employees = periodReports.map<String>((item) => item.employeeUid).toSet();
+        Set<Employee> employees = periodReports.map<Employee>((item) => item.employee).toSet();
 
         employees.forEach((uid) {
           data.spots[uid] = [];
@@ -54,7 +55,7 @@ class ChartData {
         return data;
       });
 
-  Map<String, List<FlSpot>> spots = {};
+  Map<Employee, List<FlSpot>> spots = {};
   var bottomValues = <BottomValue>[];
 
   //----------------------------------------
@@ -76,7 +77,7 @@ class BottomValue {
   int month;
   int year;
   String title;
-  Map<String, FlSpot> periodReports = {};
+  Map<Employee, FlSpot> periodReports = {};
   @override
   String toString() {
     return '| value: $value, month: $month, title: $title, year: $year, periodReports: ${periodReports.keys.length} ';

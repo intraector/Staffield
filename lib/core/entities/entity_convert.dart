@@ -12,8 +12,7 @@ class EntityConvert {
   static Report entryToReport(Entry entry) {
     var report = Report();
     report.uid = entry.uid;
-    report.employeeName = entry.employeeName;
-    report.employeeUid = entry.employeeUid;
+    report.employee = entry.employee;
     report.revenue = entry.revenue;
     report.interest = entry.interest;
     report.bonus = entry.revenue * entry.interest / 100;
@@ -66,8 +65,7 @@ class EntityConvert {
   }) {
     var report = PeriodReport.empty();
     for (var item in list) {
-      report.employeeName = item.employeeName;
-      report.employeeUid = item.employeeUid;
+      report.employee = item.employee;
       report.revenue += item.revenue;
       report.interest += item.interest;
       report.wage += item.wage;

@@ -3,6 +3,7 @@ import 'package:Staffield/views/edit_penalty_type/screen_edit_penalty_type.dart'
 import 'package:Staffield/views/employees/view_employees.dart';
 import 'package:Staffield/views/penalty_types/screen_penalty_types.dart';
 import 'package:Staffield/views/reports/view_reports.dart';
+import 'package:Staffield/views/startup/view_startup.dart';
 import 'package:flutter/animation.dart';
 import 'package:sailor/sailor.dart';
 import 'package:Staffield/constants/router_paths.dart';
@@ -21,6 +22,7 @@ class Routes {
 
   static void createRoutes() {
     sailor.addRoutes([
+      SailorRoute(name: RouterPaths.startup, builder: (_, __, ___) => ViewStartup()),
       SailorRoute(name: RouterPaths.entries, builder: (_, __, ___) => ViewEntries()),
       SailorRoute(
         name: RouterPaths.editEntry,

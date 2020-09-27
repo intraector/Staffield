@@ -31,7 +31,7 @@ class ViewEntriesItem extends StatelessWidget {
                   child: Container(
                     margin: const EdgeInsets.only(left: 15.0, top: 12.0, bottom: 2.0, right: 8.0),
                     child: Text(
-                      item.name,
+                      item.employee.name,
                       softWrap: false,
                       overflow: TextOverflow.fade,
                       style: TextStyle(

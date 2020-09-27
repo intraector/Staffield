@@ -1,3 +1,4 @@
+import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/core/entities/entity_convert.dart';
 import 'package:Staffield/core/entities/report.dart';
 import 'package:Staffield/core/entities/penalty_report.dart';
@@ -37,8 +38,7 @@ class PeriodReport {
     periodTitle = labelOf(periodTimestamp, period);
   }
 
-  String employeeUid;
-  String employeeName;
+  Employee employee;
   String periodTitle;
   int periodTimestamp;
   int reportsCount = 0;
@@ -72,5 +72,5 @@ class PeriodReport {
   //-----------------------------------------
   @override
   String toString() =>
-      'periodTitle : $periodTitle, employeeName : $employeeName, total : $total, periodTimestamp : $periodTimestamp ';
+      'periodTitle : $periodTitle, total : $total, periodTimestamp : $periodTimestamp ';
 }

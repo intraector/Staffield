@@ -22,7 +22,7 @@ class ListEmployees extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(list[index].name,
+                          Text(list[index].employee.name,
                               softWrap: false,
                               overflow: TextOverflow.fade,
                               style: AppTextStyles.body.copyWith(fontWeight: FontWeight.bold)),

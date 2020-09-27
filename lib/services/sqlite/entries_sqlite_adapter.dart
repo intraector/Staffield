@@ -8,8 +8,8 @@ import 'package:Staffield/services/sqlite/srvc_sqlite_entries.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
-class SqliteEntriesAdapater implements EntriesRepositoryInterface {
-  var _srvcSqliteEntries = SrvcSqliteEntries();
+class EntriesSqliteAdapater implements EntriesRepositoryInterface {
+  var _srvcSqliteEntries = Get.find<EntriesSqliteSrvc>();
   var _employeesRepo = Get.find<EmployeesRepository>();
 
   //-----------------------------------------
@@ -73,8 +73,8 @@ List<Entry> linkEntriesAndPenalties(ComputeArgs args) {
   for (var entry in args.entries) {
     var foundPenalties = args.penalties.where((penalty) => penalty.parentUid == entry.uid).toList();
     entry.penalties = foundPenalties;
-    entry.employeeName =
-        args.employeesRepo.firstWhere((employee) => employee.uid == entry.employeeUid).name;
+    entry.employee.name =
+        args.employeesRepo.firstWhere((employee) => employee.uid == entry.employee.uid).name;
   }
   return args.entries;
 }

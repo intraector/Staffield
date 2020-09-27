@@ -1,11 +1,11 @@
+import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/core/entities/penalty_report.dart';
 import 'package:Staffield/core/entities/period_report.dart';
 import 'package:Staffield/utils/string_utils.dart';
 
 class PeriodReportUiAdapted {
   PeriodReportUiAdapted(PeriodReport report) {
-    employeeName = report.employeeName;
-    employeeUid = report.employeeUid;
+    employee = report.employee;
     periodTitle = report.periodTitle;
     total = report.total.toString().formatInt;
     wage = report.wage.toString().formatInt;
@@ -20,7 +20,7 @@ class PeriodReportUiAdapted {
     periodTitle = report.periodTitle;
     penalties = report.penalties;
   }
-  String employeeUid;
+  Employee employee;
   String employeeName;
   String periodTitle;
   String total;

@@ -3,12 +3,11 @@ import 'dart:math';
 
 import 'package:Staffield/core/entities/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository_interface.dart';
+import 'package:Staffield/services/sqlite/srvc_sqlite_penalty_types_adapter.dart';
+import 'package:get/get.dart';
 
 class PenaltyTypesRepository {
-  PenaltyTypesRepository(this.sqlite) {
-    _fetch();
-  }
-  final PenaltyTypeRepositoryInterface sqlite;
+  final PenaltyTypeRepositoryInterface sqliteAdapter = Get.find<PenaltyTypesAdapter>();
   var _repo = <PenaltyType>[];
 
   //-----------------------------------------
@@ -22,8 +21,8 @@ class PenaltyTypesRepository {
   //-----------------------------------------
   PenaltyType getType(String typeUid) => _repo.firstWhere((type) => type.uid == typeUid);
   //-----------------------------------------
-  Future<void> _fetch() async {
-    _repo = await sqlite.fetch();
+  Future<void> fetch() async {
+    _repo = await sqliteAdapter.fetch();
     _notifyRepoUpdates();
   }
 
@@ -44,14 +43,14 @@ class PenaltyTypesRepository {
       else
         _repo[index] = type;
     }
-    var result = await sqlite.addOrUpdate(type);
+    var result = await sqliteAdapter.addOrUpdate(type);
     _notifyRepoUpdates();
     return result;
   }
 
   //-----------------------------------------
   Future<int> hideUnHide(PenaltyType type) async {
-    var result = await sqlite.hideUnhide(uid: type.uid, hide: type.hide);
+    var result = await sqliteAdapter.hideUnhide(uid: type.uid, hide: type.hide);
     _notifyRepoUpdates();
     return result;
   }

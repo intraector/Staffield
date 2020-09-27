@@ -28,9 +28,8 @@ class GenerateRandomEntries {
     for (var date in _dates) {
       var entry = Entry();
       entry.timestamp = date.millisecondsSinceEpoch;
-      var _tmp = random.nextInt(_employees.length);
-      entry.employeeUid = _employees[_tmp].uid;
-      entry.employeeName = _employeesRepo.getEmployeeByUid(entry.employeeUid).name;
+      var rand = random.nextInt(_employees.length);
+      entry.employee = _employees[rand];
       entry.revenue = random.nextDouble() * 20000;
       entry.wage = (200 + random.nextInt(400)).toDouble();
       entry.interest = (1 + random.nextInt(4)).toDouble();

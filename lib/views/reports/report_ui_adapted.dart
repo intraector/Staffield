@@ -1,3 +1,4 @@
+import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/core/entities/report.dart';
 import 'package:Staffield/core/entities/penalty.dart';
 import 'package:Staffield/utils/string_utils.dart';
@@ -13,7 +14,7 @@ class ReportUiAdapted {
     uid = report.uid;
     date = Jiffy(DateTime.fromMillisecondsSinceEpoch(report.timestamp)).MMMMd;
     report.timestamp.toString();
-    name = report.employeeName;
+    employee = report.employee;
     total = report.total.toString().formatDouble.noDotZero;
     revenue = report.revenue.toString().formatDouble.noDotZero;
     interest = report.interest.toString().formatDouble.noDotZero;
@@ -25,7 +26,7 @@ class ReportUiAdapted {
     penaltiesCount = report.penaltiesCount.toString().formatInt;
   }
   String uid;
-  String name;
+  Employee employee;
   String total;
   String revenue;
   String interest;

@@ -59,7 +59,7 @@ class ReportsRepository {
           employeesList = employees;
         }
         for (var employee in employeesList) {
-          var entriesFound = entries.where((entry) => entry.employeeUid == employee.uid).toList();
+          var entriesFound = entries.where((entry) => entry.employee.uid == employee.uid).toList();
           if (entriesFound.isNotEmpty) {
             output.addAll(_aggregateByPeriod(entriesFound, period: period));
           }

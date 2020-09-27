@@ -1,5 +1,5 @@
 import 'package:Staffield/core/service_locator.dart';
-import 'package:Staffield/views/entries/view_entries.dart';
+import 'package:Staffield/views/startup/view_startup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:Staffield/services/routes.dart';
@@ -18,7 +18,7 @@ Future<void> main() async {
       title: 'Staffield',
       navigatorKey: Routes.sailor.navigatorKey,
       onGenerateRoute: Routes.sailor.generator(),
-      home: ViewEntries(),
+      home: ViewStartup(),
       theme: ThemeData(
         brightness: Brightness.light,
         textTheme: TextTheme(

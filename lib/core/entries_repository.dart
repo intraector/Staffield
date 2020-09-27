@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'package:Staffield/core/entries_repository_interface.dart';
 import 'package:Staffield/core/entities/entry.dart';
+import 'package:Staffield/services/sqlite/entries_sqlite_adapter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 
 class EntriesRepository extends GetxController {
-  EntriesRepository(this.sqlite) {
-    fetchNextChunkToCache();
-  }
-
-  final EntriesRepositoryInterface sqlite;
+  final EntriesRepositoryInterface sqlite = Get.find<EntriesSqliteAdapater>();
   static EntriesRepository get find => Get.find();
   var _cache = <Entry>[];
 
