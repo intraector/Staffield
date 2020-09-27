@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/core/entities/entry.dart';
 import 'package:Staffield/core/entities/penalty.dart';
@@ -59,7 +61,7 @@ class SqliteConvert {
         uid: map[SqliteFieldsEmployees.uid],
         name: map[SqliteFieldsEmployees.name],
         hide: map[SqliteFieldsEmployees.hide] == 1 ? true : false,
-        color: map[SqliteFieldsEmployees.color],
+        color: Color(map[SqliteFieldsEmployees.color]),
       );
 
   //-----------------------------------------
@@ -68,7 +70,7 @@ class SqliteConvert {
       SqliteFieldsEmployees.uid: employee.uid,
       SqliteFieldsEmployees.name: employee.name,
       SqliteFieldsEmployees.hide: employee.hide ? 1 : 0,
-      SqliteFieldsEmployees.color: employee.color,
+      SqliteFieldsEmployees.color: employee.color.value,
     };
   }
 }

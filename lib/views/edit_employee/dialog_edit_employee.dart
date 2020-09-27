@@ -63,13 +63,14 @@ class DialogEditEmployee extends StatelessWidget {
                     ],
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text('Выберите цвет: '),
-                    Material(
-                      child: InkWell(
-                        child: Container(
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text('Выберите цвет: '),
+                        Container(
                           width: 30.0,
                           height: 30.0,
                           decoration: BoxDecoration(
@@ -77,28 +78,28 @@ class DialogEditEmployee extends StatelessWidget {
                             color: vmodel.employee.color,
                           ),
                         ),
-                        onTap: () async {
-                          var color = await showDialog<Color>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: SingleChildScrollView(
-                                  child: BlockPicker(
-                                    availableColors: AppColors.colors,
-                                    pickerColor: Colors.lime,
-                                    onColorChanged: (color) {
-                                      Navigator.of(context).pop(color);
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                          vmodel.changeColor(color);
-                        },
-                      ),
+                      ],
                     ),
-                  ],
+                    onTap: () async {
+                      var color = await showDialog<Color>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: SingleChildScrollView(
+                              child: BlockPicker(
+                                availableColors: AppColors.colors,
+                                pickerColor: Colors.lime,
+                                onColorChanged: (color) {
+                                  Navigator.of(context).pop(color);
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                      vmodel.changeColor(color);
+                    },
+                  ),
                 ),
                 if (employee != null)
                   Row(

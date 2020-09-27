@@ -1,5 +1,5 @@
 import 'package:Staffield/views/reports/views/all_amployees/chart_data.dart';
-import 'package:Staffield/views/reports/views/all_amployees/dropdown_employees.dart';
+import 'package:Staffield/views/reports/views/all_amployees/components/choose_employees.dart';
 import 'package:Staffield/views/reports/vmodel_view_reports.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,7 @@ class AreaFlCharts extends StatelessWidget {
         GetBuilder<VModelViewReports>(
           builder: (vmodel) => Row(
             children: <Widget>[
-              Flexible(child: DropdownEmployees(vmodel)),
+              Flexible(child: ChooseEmployees()),
             ],
           ),
         ),
@@ -129,10 +129,7 @@ List<LineChartBarData> buildLines(ChartData data) {
       LineChartBarData(
         spots: data.spots[key],
         isCurved: true,
-        colors: [
-          ColorTween(begin: gradientColors[0], end: gradientColors[1]).lerp(0.2),
-          ColorTween(begin: gradientColors[0], end: gradientColors[1]).lerp(0.2),
-        ],
+        colors: [],
         barWidth: 5,
         isStrokeCapRound: true,
         dotData: FlDotData(

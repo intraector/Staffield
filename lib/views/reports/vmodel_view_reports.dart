@@ -14,7 +14,6 @@ import 'package:jiffy/jiffy.dart';
 class VModelViewReports extends GetxController {
   VModelViewReports() {
     _employee = employeesList.first;
-    _employees.addAll(employeesList);
     fetchReportData();
   }
   final _reportsRepo = ReportsRepository();
@@ -31,7 +30,7 @@ class VModelViewReports extends GetxController {
 
   //-----------------------------------------
   List<Employee> get employeesList =>
-      _employeesRepo.repo.isNotEmpty ? _employeesRepo.repo : [_dummy];
+      _employeesRepo.repo.isNotEmpty ? _employeesRepo.repoWhereHidden(false) : [_dummy];
 
   //-----------------------------------------
   Employee _employee;
@@ -40,15 +39,6 @@ class VModelViewReports extends GetxController {
     _employee = employee;
     fetchReportData();
   }
-
-  //-----------------------------------------
-  List<Employee> _employees = [];
-  List<Employee> get employees => employees;
-  // set employees() => employees;
-  List<int> selectedItems = [];
-  List<DropdownMenuItem> get items => employeesList
-      .map((employee) => DropdownMenuItem(value: employee, child: Text(employee.name)))
-      .toList();
 
   //-----------------------------------------
   ReportType get reportType => _reportType;
@@ -60,7 +50,6 @@ class VModelViewReports extends GetxController {
   //-----------------------------------------
   static DateTime get currentDay {
     var now = DateTime.now();
-    // return DateTime(now.year, now.month, now.day);
     return now;
   }
 
@@ -110,12 +99,6 @@ class VModelViewReports extends GetxController {
             periodsAmount: 6,
             period: period,
           );
-          // var reports = _reportsRepo.fetchSingleEmployeeOverPeriod(
-          //   greaterThan: _endDate,
-          //   lessThan: _startDate,
-          //   employeeUid: [_employee.uid],
-          //   period: period,
-          // );
           reports.then((reports) {
             ChartData.build(reports).then((data) {
               view = AreaFlCharts(data);

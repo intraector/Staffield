@@ -40,6 +40,7 @@ class ReportsRepository {
       int lessThan}) async {
     var futures = <Future>[];
     var output = <PeriodReport>[];
+    if (_entriesRepo.cache.isEmpty) return output;
     lessThan ??= _entriesRepo.newestTimestamp;
     for (int i = 0; i < periodsAmount; i++) {
       var greaterThan = getFirstDayOf(lessThan, period);
