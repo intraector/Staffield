@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:sailor/sailor.dart';
 import 'package:Staffield/constants/app_colors.dart';
-import 'package:Staffield/services/routes.dart';
-import 'package:Staffield/constants/router_paths.dart';
+import 'package:Staffield/constants/routes.dart';
+import 'package:Staffield/constants/routes_paths.dart';
 
 class BottomNavigation extends StatelessWidget {
   BottomNavigation(this._index);
@@ -22,10 +22,10 @@ class BottomNavigation extends StatelessWidget {
       iconSize: _iconSize,
       disabledColor: _disabledColor,
       color: _inactiveColor,
-      onPressed: _index == RouterPaths.entries
+      onPressed: _index == RoutesPaths.entries
           ? null
           : () => Routes.sailor
-              .navigate(RouterPaths.entries, navigationType: NavigationType.pushReplace),
+              .navigate(RoutesPaths.entries, navigationType: NavigationType.pushReplace),
     );
 
     //----------------------------------------employees
@@ -34,11 +34,11 @@ class BottomNavigation extends StatelessWidget {
       iconSize: _iconSize,
       disabledColor: _disabledColor,
       color: _inactiveColor,
-      onPressed: _index == RouterPaths.employees
+      onPressed: _index == RoutesPaths.employees
           ? null
           : () {
               return Routes.sailor
-                  .navigate(RouterPaths.employees, navigationType: NavigationType.pushReplace);
+                  .navigate(RoutesPaths.employees, navigationType: NavigationType.pushReplace);
             },
     );
 
@@ -48,11 +48,11 @@ class BottomNavigation extends StatelessWidget {
       iconSize: _iconSize,
       disabledColor: _disabledColor,
       color: _inactiveColor,
-      onPressed: _index == RouterPaths.reports
+      onPressed: _index == RoutesPaths.reports
           ? null
           : () {
               return Routes.sailor
-                  .navigate(RouterPaths.reports, navigationType: NavigationType.pushReplace);
+                  .navigate(RoutesPaths.reports, navigationType: NavigationType.pushReplace);
             },
     );
 

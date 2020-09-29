@@ -11,7 +11,7 @@ extension SeparateThousands on String {
         subChunk = '';
       }
     }
-    return subChunks.join(' ');
+    return subChunks.join(String.fromCharCode(0x00A0));
   }
 }
 

@@ -81,7 +81,7 @@ class EntityConvert {
       report.penaltiesCount += item.penaltiesCount;
       report.reportsCount++;
     }
-    report.revenueAverage = report.revenue / report.reportsCount;
+    report.revenueAvg = report.revenue / report.reportsCount;
     report.totalAverage = report.total / report.reportsCount;
     report.periodTimestamp = periodTimestamp;
     report.periodTitle = PeriodReport.labelOf(periodTimestamp, period);

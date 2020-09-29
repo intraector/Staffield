@@ -2,8 +2,8 @@ import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/app_font_family.dart';
 import 'package:Staffield/constants/app_fonts.dart';
 import 'package:Staffield/constants/app_text_styles.dart';
-import 'package:Staffield/constants/router_paths.dart';
-import 'package:Staffield/services/routes.dart';
+import 'package:Staffield/constants/routes_paths.dart';
+import 'package:Staffield/constants/routes.dart';
 import 'package:Staffield/views/common/data_chip.dart';
 import 'package:Staffield/views/reports/report_ui_adapted.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class ViewEntriesItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Routes.sailor.navigate(RouterPaths.editEntry, params: {'entry_uid': item.uid}),
+      onTap: () => Routes.sailor.navigate(RoutesPaths.editEntry, params: {'entry_uid': item.uid}),
       child: Container(
         margin: EdgeInsets.only(left: 6.0, right: 6.0, bottom: 3.0, top: 3.0),
         decoration: BoxDecoration(

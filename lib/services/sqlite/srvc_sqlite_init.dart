@@ -18,7 +18,7 @@ class SrvcSqliteInit {
     path = join(path, 'drrb.db');
     // await deleteDb();
     db = await openDb(path);
-    Print.magenta('||| db $db');
+    // Print.magenta('||| db $db');
     _completer.complete();
   }
 

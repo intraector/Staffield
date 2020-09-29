@@ -19,12 +19,12 @@ class ReportsRepository {
   Future<List<Report>> fetchEntriesList({
     @required DateTime greaterThan,
     @required DateTime lessThan,
-    @required List<String> employeeUid,
+    @required List<Employee> employees,
   }) async {
     var reports = await _entriesRepo.fetch(
       greaterThan: greaterThan.millisecondsSinceEpoch,
       lessThan: lessThan.millisecondsSinceEpoch,
-      employeeUids: employeeUid,
+      employees: employees,
     );
     return reports.map((entry) => EntityConvert.entryToReport(entry)).toList();
   }
@@ -47,7 +47,7 @@ class ReportsRepository {
       var entriesFuture = _entriesRepo.fetch(
         greaterThan: greaterThan,
         lessThan: lessThan,
-        employeeUids: employees?.map((employee) => employee.uid),
+        employees: employees,
       );
       futures.add(entriesFuture);
       var entries = await entriesFuture;

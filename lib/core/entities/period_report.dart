@@ -42,7 +42,7 @@ class PeriodReport {
   String periodTitle;
   int periodTimestamp;
   int reportsCount = 0;
-  double revenueAverage = 0.0;
+  double revenueAvg = 0.0;
   double totalAverage = 0.0;
   double interest = 0.0;
   double wage = 0.0;

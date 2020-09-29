@@ -41,7 +41,7 @@ class EntriesSliverAppBar extends StatelessWidget {
         ),
         IconButton(
           icon: Icon(Icons.create_rounded),
-          onPressed: () => vModel.generateRandomEntries(days: 180, recordsPerDay: 3),
+          onPressed: () => vModel.generateRandomEntries(days: 720, recordsPerDay: 3),
         ),
       ],
     );

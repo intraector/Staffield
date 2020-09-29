@@ -6,9 +6,9 @@ import 'package:Staffield/views/reports/view_reports.dart';
 import 'package:Staffield/views/startup/view_startup.dart';
 import 'package:flutter/animation.dart';
 import 'package:sailor/sailor.dart';
-import 'package:Staffield/constants/router_paths.dart';
+import 'package:Staffield/constants/routes_paths.dart';
 import 'package:Staffield/views/entries/view_entries.dart';
-import 'package:Staffield/views/edit_entry/screen_edit_entry.dart';
+import 'package:Staffield/views/edit_entry/view_edit_entry.dart';
 
 class Routes {
   static final sailor = Sailor(
@@ -22,21 +22,21 @@ class Routes {
 
   static void createRoutes() {
     sailor.addRoutes([
-      SailorRoute(name: RouterPaths.startup, builder: (_, __, ___) => ViewStartup()),
-      SailorRoute(name: RouterPaths.entries, builder: (_, __, ___) => ViewEntries()),
+      SailorRoute(name: RoutesPaths.startup, builder: (_, __, ___) => ViewStartup()),
+      SailorRoute(name: RoutesPaths.entries, builder: (_, __, ___) => ViewEntries()),
       SailorRoute(
-        name: RouterPaths.editEntry,
+        name: RoutesPaths.editEntry,
         builder: (_, __, params) => ScreenEditEntry(params.param<String>('entry_uid')),
         params: [SailorParam<String>(name: 'entry_uid')],
       ),
       SailorRoute(
-        name: RouterPaths.editPenaltyType,
+        name: RoutesPaths.editPenaltyType,
         builder: (_, __, params) => ScreenEditPenaltyType(params.param<PenaltyType>('penaltyType')),
         params: [SailorParam<PenaltyType>(name: 'penaltyType')],
       ),
-      SailorRoute(name: RouterPaths.employees, builder: (_, __, ___) => ViewEmployees()),
-      SailorRoute(name: RouterPaths.reports, builder: (_, __, ___) => ViewReports()),
-      SailorRoute(name: RouterPaths.penaltyTypes, builder: (_, __, ___) => ScreenPenaltyTypes()),
+      SailorRoute(name: RoutesPaths.employees, builder: (_, __, ___) => ViewEmployees()),
+      SailorRoute(name: RoutesPaths.reports, builder: (_, __, ___) => ViewReports()),
+      SailorRoute(name: RoutesPaths.penaltyTypes, builder: (_, __, ___) => ScreenPenaltyTypes()),
     ]);
   }
 }

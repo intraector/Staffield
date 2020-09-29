@@ -13,7 +13,7 @@ class PeriodReportUiAdapted {
     totalAverage = report.totalAverage.toString().formatInt;
     reportsCount = report.reportsCount.toString();
     revenue = report.revenue.toString().formatInt;
-    revenueAverage = report.revenueAverage.toString().formatInt;
+    revenueAverage = report.revenueAvg.toString().formatInt;
     penaltiesTotal = report.penaltiesTotal.toString().formatInt;
     penaltyUnit = report.penaltyUnit.toString().formatInt;
     penaltiesCount = report.penaltiesCount.toString().formatInt;

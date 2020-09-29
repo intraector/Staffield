@@ -2,7 +2,7 @@ import 'package:Staffield/core/service_locator.dart';
 import 'package:Staffield/views/startup/view_startup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:Staffield/services/routes.dart';
+import 'package:Staffield/constants/routes.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
 

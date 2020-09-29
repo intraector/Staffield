@@ -5,8 +5,8 @@ import 'package:Staffield/views/entries/views/view_screen_entries_body.dart';
 import 'package:flutter/material.dart';
 import 'package:Staffield/views/bottom_navigation.dart';
 import 'package:Staffield/constants/app_colors.dart';
-import 'package:Staffield/constants/router_paths.dart';
-import 'package:Staffield/services/routes.dart';
+import 'package:Staffield/constants/routes_paths.dart';
+import 'package:Staffield/constants/routes.dart';
 import 'package:Staffield/views/entries/view_entries_vmodel.dart';
 import 'package:Staffield/views/view_drawer.dart';
 import 'package:get/get.dart';
@@ -20,11 +20,11 @@ class ViewEntries extends StatelessWidget {
           return SafeArea(
             child: Scaffold(
               drawer: ViewDrawer(),
-              bottomNavigationBar: BottomNavigation(RouterPaths.entries),
+              bottomNavigationBar: BottomNavigation(RoutesPaths.entries),
               floatingActionButton: FloatingActionButton(
                 child: Icon(Icons.add),
                 onPressed: () =>
-                    Routes.sailor.navigate(RouterPaths.editEntry, params: {'entry_uid': null}),
+                    Routes.sailor.navigate(RoutesPaths.editEntry, params: {'entry_uid': null}),
               ),
               backgroundColor: AppColors.primaryAccent,
               body: NestedScrollView(

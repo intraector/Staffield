@@ -1,5 +1,5 @@
 import 'package:Staffield/constants/app_text_styles.dart';
-import 'package:Staffield/constants/router_paths.dart';
+import 'package:Staffield/constants/routes_paths.dart';
 import 'package:Staffield/views/bottom_navigation.dart';
 import 'package:Staffield/views/common/chip_total.dart';
 import 'package:Staffield/views/common/data_chip.dart';
@@ -7,7 +7,7 @@ import 'package:Staffield/views/common/text_fields/text_field_double.dart';
 import 'package:Staffield/views/view_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:Staffield/constants/app_colors.dart';
-import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
+import 'package:Staffield/views/edit_entry/vmodel_edit_entry.dart';
 import 'package:Staffield/views/edit_entry/view_penalties.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +31,7 @@ class ScreenEditEntry extends StatelessWidget {
         return SafeArea(
           child: Scaffold(
             drawer: ViewDrawer(),
-            bottomNavigationBar: BottomNavigation(RouterPaths.editEntry),
+            bottomNavigationBar: BottomNavigation(RoutesPaths.editEntry),
             appBar: AppBar(
               title: Text('Запись'),
               actions: <Widget>[

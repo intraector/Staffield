@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:Staffield/constants/router_paths.dart';
+import 'package:Staffield/constants/routes_paths.dart';
 import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entries_repository.dart';
 import 'package:Staffield/core/entities/employee.dart';
@@ -10,7 +10,7 @@ import 'package:Staffield/core/entities/penalty_mode.dart';
 import 'package:Staffield/core/entities/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository.dart';
 import 'package:Staffield/core/utils/calc_total_mixin.dart';
-import 'package:Staffield/services/routes.dart';
+import 'package:Staffield/constants/routes.dart';
 import 'package:Staffield/utils/string_utils.dart';
 import 'package:Staffield/views/common/dialog_confirm.dart';
 import 'package:Staffield/views/common/text_feild_handler/text_field_handler_double.dart';
@@ -221,7 +221,7 @@ class ScreenEditEntryVModel with ChangeNotifier {
 
   //-----------------------------------------
   void _addPenaltyType(BuildContext context) {
-    Routes.sailor.navigate(RouterPaths.editPenaltyType,
+    Routes.sailor.navigate(RoutesPaths.editPenaltyType,
         params: {'penaltyType': PenaltyType(mode: PenaltyMode.plain)});
   }
 }

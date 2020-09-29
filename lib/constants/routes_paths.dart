@@ -1,4 +1,4 @@
-class RouterPaths {
+class RoutesPaths {
   static String startup = 'startup';
   static String entries = 'entriesList';
   static String editEntry = 'editEntry';

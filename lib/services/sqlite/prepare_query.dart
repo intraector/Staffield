@@ -55,7 +55,6 @@ class PrepareQuery {
   void _addEntriesEmployeeUids(List<String> employeeUids) {
     if (employeeUids == null || employeeUids.isEmpty) return;
     String employees = employeeUids.join("', '");
-    print('||| employeesList : $employees');
     _whereClause += _whereClause.isEmpty ? ' WHERE' : ' AND';
     _whereClause += ' ${SqliteFieldsEntries.employeeUid} IN  (\'$employees\')';
   }

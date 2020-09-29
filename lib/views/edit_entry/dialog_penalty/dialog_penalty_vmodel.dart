@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:Staffield/core/entities/penalty_mode.dart';
 import 'package:Staffield/core/entities/penalty.dart';
 import 'package:Staffield/utils/string_utils.dart';
-import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
+import 'package:Staffield/views/edit_entry/vmodel_edit_entry.dart';
 import 'package:get/get.dart';
 
 class DialogPenaltyVModel extends ChangeNotifier {

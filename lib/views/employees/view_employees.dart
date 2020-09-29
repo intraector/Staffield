@@ -1,4 +1,4 @@
-import 'package:Staffield/constants/router_paths.dart';
+import 'package:Staffield/constants/routes_paths.dart';
 import 'package:Staffield/views/common/sliver_delegate.dart';
 import 'package:Staffield/views/edit_employee/dialog_edit_employee.dart';
 import 'package:Staffield/views/employees/vmodel_employees.dart';
@@ -16,7 +16,7 @@ class ViewEmployees extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         drawer: ViewDrawer(),
-        bottomNavigationBar: BottomNavigation(RouterPaths.employees),
+        bottomNavigationBar: BottomNavigation(RoutesPaths.employees),
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppColors.secondary,
           child: Icon(Icons.add),
@@ -109,7 +109,18 @@ class ViewEmployees extends StatelessWidget {
                           child: Padding(
                             padding: EdgeInsets.all(8),
                             child: Row(
-                              children: <Widget>[Text(vmodel.list[index].name)],
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(vmodel.list[index].name),
+                                Container(
+                                  width: 30.0,
+                                  height: 30.0,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: vmodel.list[index].color,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),

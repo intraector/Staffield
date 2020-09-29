@@ -15,11 +15,11 @@ class EntriesSqliteAdapater implements EntriesRepositoryInterface {
   //-----------------------------------------
   @override
   Future<List<Entry>> fetch(
-      {int greaterThan, int lessThan, List<String> employeeUid, int limit}) async {
+      {int greaterThan, int lessThan, List<Employee> employees, int limit}) async {
     var futureEntriesMaps = _srvcSqliteEntries.fetchEntries(
       greaterThan: greaterThan,
       lessThan: lessThan,
-      employeeUids: employeeUid,
+      employeeUids: employees?.map((employee) => employee.uid)?.toList(),
       limit: limit,
     );
 

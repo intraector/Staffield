@@ -4,36 +4,41 @@ import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/core/reports_repository.dart';
 import 'package:Staffield/views/reports/report_type.dart';
-import 'package:Staffield/views/reports/views/all_amployees/area_fl_charts.dart';
-import 'package:Staffield/views/reports/views/all_amployees/chart_data.dart';
+import 'package:Staffield/views/reports/views/fl_charts/area_fl_charts.dart';
+import 'package:Staffield/views/reports/views/fl_charts/chart_data.dart';
+import 'package:Staffield/views/reports/views/fl_charts/components/report_criteria.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 
-class VModelViewReports extends GetxController {
-  VModelViewReports() {
-    _employee = employeesList.first;
+class VModelReports extends GetxController {
+  @override
+  void onInit() {
+    if (employees.isNotEmpty) _employee = employees.first;
+    selectedEmployees = employees;
     fetchReportData();
+    super.onInit();
   }
+
   final _reportsRepo = ReportsRepository();
   final _employeesRepo = Get.find<EmployeesRepository>();
-  DateTime _endDate = DateTime(2020, 2, 1);
-  int chartLessThan;
 
-  DateTime _startDate = currentDay;
+  DateTime _endDate = DateTime(2020, 2, 1);
+  DateTime _startDate = DateTime.now();
 
   ReportType _reportType = ReportType.fl_charts;
   Units period = Units.MONTH;
+  var selectedEmployees = <Employee>[];
   Widget view = Center(child: CircularProgressIndicator());
-  var _dummy = Employee(name: 'Нет сотрудников', uid: '111');
+  // var _dummy = Employee(name: 'Нет сотрудников', uid: '111');
 
   //-----------------------------------------
-  List<Employee> get employeesList =>
-      _employeesRepo.repo.isNotEmpty ? _employeesRepo.repoWhereHidden(false) : [_dummy];
+  List<Employee> get employees => _employeesRepo.repoWhereHidden(false);
 
   //-----------------------------------------
   Employee _employee;
+
   Employee get employee => _employee;
   set employee(Employee employee) {
     _employee = employee;
@@ -41,16 +46,29 @@ class VModelViewReports extends GetxController {
   }
 
   //-----------------------------------------
-  ReportType get reportType => _reportType;
-  set reportType(ReportType type) {
-    _reportType = type;
+  var _criterion = ReportCriterion.total;
+
+  ReportCriterion get criterion => _criterion;
+  set criterion(ReportCriterion value) {
+    _criterion = value;
     fetchReportData();
   }
 
   //-----------------------------------------
-  static DateTime get currentDay {
-    var now = DateTime.now();
-    return now;
+  int _periodsAmount = 6;
+
+  int get periodsAmount => _periodsAmount;
+  set periodsAmount(int amount) {
+    _periodsAmount = amount;
+    fetchReportData();
+  }
+
+  //-----------------------------------------
+  ReportType get reportType => _reportType;
+
+  set reportType(ReportType type) {
+    _reportType = type;
+    fetchReportData();
   }
 
   //-----------------------------------------
@@ -88,7 +106,7 @@ class VModelViewReports extends GetxController {
   }
 
   //-----------------------------------------
-  Future<void> fetchReportData() async {
+  Future<void> fetchReportData([List<Employee> employees]) async {
     view = Center(child: CircularProgressIndicator());
     update();
 
@@ -96,14 +114,13 @@ class VModelViewReports extends GetxController {
       case ReportType.fl_charts:
         {
           var reports = _reportsRepo.fetch(
-            periodsAmount: 6,
+            periodsAmount: _periodsAmount,
             period: period,
+            employees: employees,
           );
           reports.then((reports) {
-            ChartData.build(reports).then((data) {
-              view = AreaFlCharts(data);
-              update();
-            });
+            view = AreaFlCharts(ChartData(reports, criterion));
+            update();
           });
         }
       // case ReportType.listEmployees:

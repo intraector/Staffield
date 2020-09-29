@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/core/entries_repository_interface.dart';
 import 'package:Staffield/core/entities/entry.dart';
 import 'package:Staffield/services/sqlite/entries_sqlite_adapter.dart';
@@ -49,7 +50,7 @@ class EntriesRepository extends GetxController {
     var result = await fetch(
       greaterThan: null,
       lessThan: restart ? _startTimestamp : _oldestTimestamp,
-      employeeUids: null,
+      employees: null,
       limit: limit,
     );
     if (result.length == 0) endOfData = true;
@@ -64,13 +65,13 @@ class EntriesRepository extends GetxController {
   Future<List<Entry>> fetch({
     @required int greaterThan,
     @required int lessThan,
-    @required List<String> employeeUids,
+    @required List<Employee> employees,
     int limit,
   }) async =>
       sqlite.fetch(
         greaterThan: greaterThan,
         lessThan: lessThan,
-        employeeUid: employeeUids,
+        employees: employees,
         limit: limit,
       );
 

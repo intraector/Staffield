@@ -1,7 +1,7 @@
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/views/reports/report_ui_adapted.dart';
-import 'package:Staffield/views/reports/vmodel_view_reports.dart';
+import 'package:Staffield/views/reports/vmodel_reports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +12,7 @@ class TableEntries extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var vModel = Provider.of<VModelViewReports>(context, listen: false);
+    var vModel = Provider.of<VModelReports>(context, listen: false);
     final columnWidth = MediaQuery.of(context).size.shortestSide / 4.5;
     final rowHeight = MediaQuery.of(context).size.shortestSide / 11;
     final tableHeaderHeight = MediaQuery.of(context).size.shortestSide / 7.0;
@@ -30,7 +30,7 @@ class TableEntries extends StatelessWidget {
                       child: Card(
                     child: Container(
                       child: DropdownButton<Employee>(
-                          items: vModel.employeesList
+                          items: vModel.employees
                               .map((employee) =>
                                   DropdownMenuItem(value: employee, child: Text(employee.name)))
                               .toList(),

@@ -7,8 +7,8 @@ import 'package:Staffield/services/sqlite/srvc_sqlite_init.dart';
 import 'package:Staffield/services/sqlite/penalty_types_sqlite_srvc.dart';
 import 'package:get/get.dart';
 
-class ServiceOrchestrator {
-  ServiceOrchestrator() {
+class OrchestratorSrvc {
+  OrchestratorSrvc() {
     initComplete = init();
   }
   Future initComplete;

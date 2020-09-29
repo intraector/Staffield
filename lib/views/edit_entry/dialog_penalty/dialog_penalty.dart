@@ -1,7 +1,7 @@
 import 'package:Staffield/views/edit_entry/dialog_penalty/dialog_penalty_vmodel.dart';
 import 'package:Staffield/views/edit_entry/dialog_penalty/views/view_calc.dart';
 import 'package:Staffield/views/edit_entry/dialog_penalty/views/view_plain.dart';
-import 'package:Staffield/views/edit_entry/screen_edit_entry_vmodel.dart';
+import 'package:Staffield/views/edit_entry/vmodel_edit_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/core/entities/penalty_mode.dart';

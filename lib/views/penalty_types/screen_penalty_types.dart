@@ -1,8 +1,8 @@
 import 'package:Staffield/constants/app_colors.dart';
-import 'package:Staffield/constants/router_paths.dart';
+import 'package:Staffield/constants/routes_paths.dart';
 import 'package:Staffield/core/entities/penalty_mode.dart';
 import 'package:Staffield/core/entities/penalty_type.dart';
-import 'package:Staffield/services/routes.dart';
+import 'package:Staffield/constants/routes.dart';
 import 'package:Staffield/views/bottom_navigation.dart';
 import 'package:Staffield/views/penalty_types/screen_penalty_types_vmodel.dart';
 import 'package:Staffield/views/view_drawer.dart';
@@ -15,12 +15,12 @@ class ScreenPenaltyTypes extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         drawer: ViewDrawer(),
-        bottomNavigationBar: BottomNavigation(RouterPaths.penaltyTypes),
+        bottomNavigationBar: BottomNavigation(RoutesPaths.penaltyTypes),
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppColors.secondary,
           child: Icon(Icons.add),
           onPressed: () => Routes.sailor.navigate(
-            RouterPaths.editPenaltyType,
+            RoutesPaths.editPenaltyType,
             params: {'penaltyType': PenaltyType(mode: PenaltyMode.plain)},
           ),
         ),
@@ -68,7 +68,7 @@ class ScreenPenaltyTypes extends StatelessWidget {
                       itemCount: vModel.cache.length,
                       itemBuilder: (context, index) => InkWell(
                         onTap: () => Routes.sailor.navigate(
-                          RouterPaths.editPenaltyType,
+                          RoutesPaths.editPenaltyType,
                           params: {'penaltyType': vModel.cache[index]},
                         ),
                         child: Card(

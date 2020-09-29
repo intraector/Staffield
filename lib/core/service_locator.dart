@@ -20,5 +20,5 @@ void serviceLocatorInit() {
   Get.put(EntriesSqliteSrvc());
   Get.put(EntriesSqliteAdapater());
   Get.put(EntriesRepository());
-  Get.put(ServiceOrchestrator());
+  Get.put(OrchestratorSrvc());
 }
