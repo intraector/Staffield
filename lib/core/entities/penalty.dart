@@ -5,14 +5,14 @@ import 'package:Staffield/utils/string_utils.dart';
 class Penalty {
   Penalty({@required this.parentUid, @required this.typeUid, this.mode});
 
-  double cost;
   String mode;
   String parentUid = '';
   int timestamp;
+  double units;
+  double cost;
   double total;
   String typeUid;
   String uid = TimeBasedUuidGenerator().generate().toString();
-  double units;
 
   //-----------------------------------------
   Penalty.copy(Penalty penalty) {

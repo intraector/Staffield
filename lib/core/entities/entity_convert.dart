@@ -18,7 +18,7 @@ class EntityConvert {
     report.bonus = entry.revenue * entry.interest / 100;
     report.wage = entry.wage;
     report.penalties = entry.penalties;
-    report.penaltyUnit = 0;
+    report.penaltyUnits = 0;
     report.timestamp = entry.timestamp;
 
     var calcTotal = CalcTotal(
@@ -46,7 +46,7 @@ class EntityConvert {
             report.penaltiesTotalByType[penalty.typeUid] =
                 (report.penaltiesTotalByType[penalty.typeUid] ?? 0.0) +
                     (penalty.units * penalty.cost);
-            report.penaltyUnit += penalty.units;
+            report.penaltyUnits += penalty.units;
           }
           break;
       }
@@ -70,7 +70,7 @@ class EntityConvert {
       report.interest += item.interest;
       report.wage += item.wage;
       report.bonus += item.bonus;
-      report.penaltyUnit += item.penaltyUnit ?? 0.0;
+      report.penaltyUnits += item.penaltyUnits ?? 0.0;
       report.penaltiesTotal += item.penaltiesTotal ?? 0.0;
       report.total += item.total;
       _addPenaltyToPeriodReport(item.penaltiesReports, report);
@@ -102,12 +102,12 @@ class EntityConvert {
 
   //-----------------------------------------
   static void _addPenaltyToPeriodReport(List<PenaltyReport> list, PeriodReport report) {
-    for (var otherItem in list) {
-      var index = report.penalties.indexWhere((ownItem) => ownItem.typeUid == otherItem.typeUid);
+    for (var nextItem in list) {
+      var index = report.penalties.indexWhere((ownItem) => ownItem.typeUid == nextItem.typeUid);
       if (index >= 0) {
-        report.penalties[index] += otherItem;
+        report.penalties[index] += nextItem;
       } else {
-        report.penalties.add(otherItem);
+        report.penalties.add(nextItem);
       }
     }
   }

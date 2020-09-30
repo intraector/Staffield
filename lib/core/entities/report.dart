@@ -15,7 +15,7 @@ class Report extends Entry {
   var penaltiesReports = <PenaltyReport>[];
   int penaltiesCount = 0;
   double bonus;
-  double penaltyUnit = 0;
+  double penaltyUnits = 0;
   Map<String, double> penaltiesTotalByType = {};
   double penaltiesTotal = 0.0;
 

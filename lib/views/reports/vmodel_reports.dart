@@ -4,6 +4,7 @@ import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/core/reports_repository.dart';
 import 'package:Staffield/views/reports/report_type.dart';
+import 'package:Staffield/views/reports/views/fl_charts/area_table.dart';
 import 'package:Staffield/views/reports/views/fl_charts/area_fl_charts.dart';
 import 'package:Staffield/views/reports/views/fl_charts/chart_data.dart';
 import 'package:Staffield/views/reports/views/fl_charts/components/report_criteria.dart';
@@ -123,15 +124,20 @@ class VModelReports extends GetxController {
             update();
           });
         }
-      // case ReportType.listEmployees:
-      //   {
-      //     var entryReports = await _reportsRepo.fetchEntriesList(
-      //         greaterThan: _endDate, lessThan: _startDate, employeeUid: null);
-      //     var result =
-      //         entryReports.map((entryReport) => ReportUiAdapted.from(entryReport)).toList();
-      //     view = ListEmployees(result);
-      //   }
-      //   break;
+        break;
+      case ReportType.listEmployees:
+        {
+          var reports = _reportsRepo.fetch(
+            periodsAmount: _periodsAmount,
+            period: period,
+            employees: employees,
+          );
+          reports.then((reports) {
+            view = AreaTable(ChartData(reports, criterion));
+            update();
+          });
+        }
+        break;
       // case ReportType.allEmployees:
       //   {
       //     var reports = await _reportsRepo.fetchAllEmployees(

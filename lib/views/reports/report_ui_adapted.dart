@@ -22,7 +22,7 @@ class ReportUiAdapted {
     wage = report.wage.toString().formatDouble.noDotZero;
     penaltiesTotal = report.penaltiesTotal.toString().formatDouble.noDotZero;
     penalties = report.penalties.map((penalty) => penalty.strings).toList();
-    penaltyUnit = report.penaltyUnit.toString().formatDouble.noDotZero;
+    penaltyUnit = report.penaltyUnits.toString().formatDouble.noDotZero;
     penaltiesCount = report.penaltiesCount.toString().formatInt;
   }
   String uid;

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:Staffield/core/entities/employee.dart';
+import 'package:Staffield/core/entities/penalty_report.dart';
 import 'package:Staffield/core/entities/period_report.dart';
 import 'package:Staffield/views/reports/views/fl_charts/components/report_criteria.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -9,7 +10,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:Staffield/utils/string_utils.dart';
 
 class ChartData {
-  ChartData(List<PeriodReport> periodReports, ReportCriterion criterion) {
+  ChartData(List<PeriodReport> periodReports, this.criterion) {
     voidBuildData(periodReports, criterion);
   }
 
@@ -18,6 +19,11 @@ class ChartData {
   bool textMode = true;
   double maxCriterionValue = 0.0;
   double interval = 0.0;
+  ReportCriterion criterion;
+  Set<Employee> employees = {};
+  double _maxPenaltiesCount = 1;
+  double get maxPenaltiesCount =>
+      criterion == ReportCriterion.penaltiesTotal ? _maxPenaltiesCount : 1.0;
 
   //----------------------------------------
   voidBuildData(List<PeriodReport> periodReports, ReportCriterion criterion) {
@@ -50,9 +56,13 @@ class ChartData {
           orElse: () => BottomValue());
       bv.periodReports[periodReport.employee] =
           FlSpot(bv.value, ReportCriterionMapper.value(criterion, periodReport));
+      bv.periodPenalties[periodReport.employee] = periodReport.penalties;
+      if (periodReport.penalties.length > _maxPenaltiesCount) {
+        _maxPenaltiesCount = periodReport.penalties.length.toDouble();
+      }
     }
     calcInterval();
-    Set<Employee> employees = periodReports.map<Employee>((item) => item.employee).toSet();
+    employees = periodReports.map<Employee>((item) => item.employee).toSet();
 
     employees.forEach((uid) {
       spots[uid] = [];
@@ -110,16 +120,78 @@ class ChartData {
     }
     return list;
   }
+
+  //----------------------------------------
+  List<DataColumn> get tableTitles => employees
+      .map<DataColumn>((item) =>
+          DataColumn(label: Text(item.name), numeric: criterion != ReportCriterion.penaltiesTotal))
+      .toList()
+        ..insert(0, DataColumn(label: Text('')));
+
+  //----------------------------------------
+  List<DataRow> get tableRows {
+    var output = <DataRow>[];
+    for (int i = 0; i < bottomValues.length; i++) {
+      var cells = <DataCell>[DataCell(Container(width: 10.0, child: Text('')))];
+      for (var employee in employees) {
+        Widget cellContent;
+        if (criterion == ReportCriterion.penaltiesTotal) {
+          var rows = bottomValues[i]
+              .periodPenalties[employee]
+              .map<Row>((penalty) => Row(
+                    children: [
+                      Text(penalty.typeTitle +
+                          ' ' +
+                          penalty.unitString +
+                          ' ' +
+                          penalty.unitTitle +
+                          ' : ' +
+                          penalty.totalString),
+                    ],
+                  ))
+              .toList();
+          cellContent = Column(children: rows);
+        } else {
+          cellContent =
+              Text(bottomValues[i].periodReports[employee]?.y?.toString()?.formatInt ?? '0');
+        }
+        cells.add(DataCell(cellContent));
+      }
+      output.add(DataRow(cells: cells));
+    }
+    return output;
+  }
+
+  //----------------------------------------
+  List<DataRow> getEmptyTableRows(Color color) {
+    var output = <DataRow>[];
+    for (var bv in bottomValues) {
+      var cells = <DataCell>[
+        DataCell(
+          Container(
+            alignment: Alignment.centerRight,
+            padding: EdgeInsets.only(right: 15.0),
+            width: 70.0,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+              colors: [color, color.withOpacity(0.5)],
+              stops: [0.9, 1.0],
+            )),
+            child: Text(bv.title),
+          ),
+        ),
+      ];
+
+      output.add(DataRow(cells: cells));
+    }
+    return output;
+  }
 }
 
 class BottomValue {
   BottomValue({this.value, this.month, this.year, bool textMode = true}) {
     if (month != null && year != null) {
-      if (textMode) {
-        this.title = Jiffy(DateTime(year, month)).MMM;
-      } else {
-        this.title = month.toString();
-      }
+      this.title = Jiffy(DateTime(year, month)).MMM;
     }
   }
   double value;
@@ -127,6 +199,7 @@ class BottomValue {
   int year;
   String title;
   Map<Employee, FlSpot> periodReports = {};
+  Map<Employee, List<PenaltyReport>> periodPenalties = {};
   @override
   String toString() {
     return '| value: $value, month: $month, title: $title, year: $year, periodReports: ${periodReports.keys.length} ';

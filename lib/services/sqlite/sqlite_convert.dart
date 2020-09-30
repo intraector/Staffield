@@ -4,6 +4,7 @@ import 'package:Staffield/core/employees_repository.dart';
 import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/core/entities/entry.dart';
 import 'package:Staffield/core/entities/penalty.dart';
+import 'package:Staffield/core/entities/penalty_type.dart';
 import 'package:Staffield/services/sqlite/sqlite_fields.dart';
 import 'package:get/get.dart';
 
@@ -75,5 +76,29 @@ class SqliteConvert {
       SqliteFieldsEmployees.hide: employee.hide ? 1 : 0,
       SqliteFieldsEmployees.color: employee.color.value,
     };
+  }
+
+  //-----------------------------------------
+  static Map<String, dynamic> penaltyTypeToMap(PenaltyType penaltyType) => {
+        SqliteFieldsPenaltyTypes.uid: penaltyType.uid,
+        SqliteFieldsPenaltyTypes.mode: penaltyType.mode,
+        SqliteFieldsPenaltyTypes.title: penaltyType.title,
+        SqliteFieldsPenaltyTypes.unitTitle: penaltyType.unitTitle,
+        SqliteFieldsPenaltyTypes.unitDefaultValue: penaltyType.unitDefaultValue,
+        SqliteFieldsPenaltyTypes.costDefaultValue: penaltyType.costDefaultValue,
+        SqliteFieldsPenaltyTypes.hide: penaltyType.hide ? 1 : 0,
+      };
+
+  //-----------------------------------------
+  static PenaltyType mapToPenaltyType(Map<String, dynamic> map) {
+    var output = PenaltyType();
+    output.uid = map[SqliteFieldsPenaltyTypes.uid];
+    output.mode = map[SqliteFieldsPenaltyTypes.mode];
+    output.title = map[SqliteFieldsPenaltyTypes.title];
+    output.unitTitle = map[SqliteFieldsPenaltyTypes.unitTitle];
+    output.unitDefaultValue = map[SqliteFieldsPenaltyTypes.unitDefaultValue];
+    output.costDefaultValue = map[SqliteFieldsPenaltyTypes.costDefaultValue];
+    output.hide = map[SqliteFieldsPenaltyTypes.hide] == 0 ? false : true;
+    return output;
   }
 }

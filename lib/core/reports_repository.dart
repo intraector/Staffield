@@ -97,7 +97,7 @@ class ReportsRepository {
 
   //-----------------------------------------
   List<PeriodReport> _aggregateByPeriod(List<Entry> entries, {@required Units period}) {
-    var periodReports = <PeriodReport>[];
+    var output = <PeriodReport>[];
     if (entries.isEmpty) return [];
     int newest = entries
         .reduce((current, next) => current.timestamp > next.timestamp ? current : next)
@@ -120,11 +120,11 @@ class ReportsRepository {
           period: period,
           periodTimestamp: firstDayOfPeriod,
         );
-        periodReports.add(periodReport);
+        output.add(periodReport);
       }
       lastDayOfPeriod = firstDayOfPeriod - 1;
     }
-    return periodReports;
+    return output;
   }
 
   //-----------------------------------------

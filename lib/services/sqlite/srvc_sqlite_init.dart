@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:Staffield/core/entities/penalty_mode.dart';
 import 'package:Staffield/core/entities/penalty_type.dart';
+import 'package:Staffield/services/sqlite/sqlite_convert.dart';
 import 'package:Staffield/services/sqlite/sqlite_fields.dart';
 import 'package:path/path.dart';
 import 'package:print_color/print_color.dart';
@@ -97,13 +98,13 @@ class SrvcSqliteInit {
     var type = PenaltyType()
       ..mode = PenaltyMode.plain
       ..title = 'Штраф';
-    await db.insert(SqliteTable.penaltyTypes, type.toSqlite);
+    await db.insert(SqliteTable.penaltyTypes, SqliteConvert.penaltyTypeToMap(type));
 
     type = PenaltyType()
       ..mode = PenaltyMode.calc
       ..title = 'Опоздание'
       ..unitTitle = 'Минуты';
-    await db.insert(SqliteTable.penaltyTypes, type.toSqlite);
+    await db.insert(SqliteTable.penaltyTypes, SqliteConvert.penaltyTypeToMap(type));
   }
 
 //-----------------------------------------

@@ -49,7 +49,7 @@ class PeriodReport {
   double revenue = 0.0;
   double bonus = 0.0;
   double total = 0.0;
-  double penaltyUnit = 0.0;
+  double penaltyUnits = 0.0;
   double penaltiesTotal = 0.0;
   int penaltiesCount = 0;
   var penalties = <PenaltyReport>[];

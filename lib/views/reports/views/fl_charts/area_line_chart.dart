@@ -9,13 +9,6 @@ class AreaLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LineChart(LineChartData(
-      // extraLinesData: ExtraLinesData(horizontalLines: [
-      //   HorizontalLine(
-      //     y: data.maxCriterionValue,
-      //     color: Colors.white,
-      //     label: HorizontalLineLabel(show: true, style: TextStyle(color: Colors.white)),
-      //   )
-      // ]),
       lineTouchData: LineTouchData(
         enabled: true,
         touchTooltipData: LineTouchTooltipData(
@@ -33,13 +26,7 @@ class AreaLineChart extends StatelessWidget {
                 strokeWidth: 1,
               ),
           getDrawingHorizontalLine: (_) => FlLine(color: Colors.blueGrey.shade800, strokeWidth: 1),
-          checkToShowHorizontalLine: (val) {
-            print(val.toString() + ' ' + data.interval.toString());
-            // return true;
-            if (data.maxCriterionValue < val) return true;
-            // return false;
-            return (val % data.interval == 0.0) ? true : false;
-          }),
+          checkToShowHorizontalLine: (val) => (val % data.interval == 0.0) ? true : false),
       titlesData: FlTitlesData(
         show: true,
         bottomTitles: SideTitles(
@@ -66,8 +53,6 @@ class AreaLineChart extends StatelessWidget {
       ),
       borderData:
           FlBorderData(show: true, border: Border.all(color: const Color(0xff37434d), width: 1)),
-      // minX: 0,
-      // maxX: 11,
       minY: 0,
       maxY: data.maxCriterionValue + data.interval / 1.8,
       lineBarsData: data.lines,

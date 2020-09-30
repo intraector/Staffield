@@ -1,8 +1,6 @@
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/routes_paths.dart';
 import 'package:Staffield/views/bottom_navigation.dart';
-import 'package:Staffield/views/reports/report_type.dart';
-import 'package:Staffield/views/reports/views/fl_charts/components/choose_employees.dart';
 import 'package:Staffield/views/reports/views/fl_charts/components/report_criteria.dart';
 import 'package:Staffield/views/reports/vmodel_reports.dart';
 import 'package:Staffield/views/view_drawer.dart';
@@ -131,7 +129,7 @@ class ViewReports extends StatelessWidget {
                                         style: Theme.of(context).primaryTextTheme.bodyText2,
                                         iconEnabledColor: Colors.white,
                                         dropdownColor: AppColors.primary,
-                                        items: ReportCriterionMapper.criteria,
+                                        items: ReportCriterionMapper.dropdownItems,
                                         onChanged: (value) => vmodel.criterion = value,
                                         value: vmodel.criterion,
                                       ),
@@ -147,11 +145,8 @@ class ViewReports extends StatelessWidget {
                   ),
                   Expanded(
                     child: ListView(
-                      children: [
-                        vmodel.view,
-                        Row(children: <Widget>[Flexible(child: ChooseEmployees())]),
-                      ],
                       shrinkWrap: true,
+                      children: [vmodel.view],
                     ),
                   ),
                 ],
