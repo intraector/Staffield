@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/core/entities/penalty_report.dart';
 import 'package:Staffield/core/entities/period_report.dart';
+import 'package:Staffield/views/reports/views/fl_charts/components/menu_penalty_type/vmodel_penalty_type.dart';
 import 'package:Staffield/views/reports/views/fl_charts/components/period_value.dart';
 import 'package:Staffield/views/reports/views/fl_charts/components/report_criteria.dart';
 import 'package:Staffield/views/reports/vmodel_reports.dart';
@@ -13,8 +14,18 @@ import 'package:jiffy/jiffy.dart';
 import 'package:Staffield/utils/string_utils.dart';
 
 class ChartData {
-  ChartData(List<PeriodReport> periodReports, this.criterion, String penaltyTypeUid) {
-    voidBuildData(periodReports, criterion, penaltyTypeUid: penaltyTypeUid);
+  ChartData(
+    List<PeriodReport> periodReports,
+    this.criterion, {
+    String penaltyTypeUid,
+    MenuWageItem auxMenuValue,
+  }) {
+    voidBuildData(
+      periodReports,
+      criterion,
+      penaltyTypeUid: penaltyTypeUid,
+      auxMenuValue: auxMenuValue,
+    );
   }
 
   Map<Employee, List<FlSpot>> spots = {};
@@ -33,7 +44,7 @@ class ChartData {
 
   //----------------------------------------
   voidBuildData(List<PeriodReport> periodReports, ReportCriterion criterion,
-      {String penaltyTypeUid}) {
+      {String penaltyTypeUid, MenuWageItem auxMenuValue}) {
     if (periodReports.isEmpty) return;
     periodReports.sort((a, b) => a.periodTimestamp.compareTo(b.periodTimestamp));
 
@@ -59,8 +70,12 @@ class ChartData {
       var periodValue = periodValues.firstWhere(
           (item) => (item.month == date.month && item.year == date.year),
           orElse: () => PeriodValue());
-      var nextCriterionValue =
-          ReportCriterionMapper.value(criterion, periodReport, penaltyTypeUid: penaltyTypeUid);
+      var nextCriterionValue = ReportCriterionMapper.value(
+        criterion,
+        periodReport,
+        penaltyTypeUid: penaltyTypeUid,
+        auxMenuValue: auxMenuValue,
+      );
       periodValue.periodReports[periodReport.employee] =
           FlSpot(periodValue.value, nextCriterionValue);
       periodValue.periodPenalties[periodReport.employee] = periodReport.penalties;
@@ -90,7 +105,7 @@ class ChartData {
 
   //----------------------------------------
   void generatePenaltiesMenuItems() =>
-      Get.find<VModelReports>().generatePenaltiesMenuItems(_penaltiesMenuItems);
+      Get.find<VModelPenaltyType>().generatePenaltiesMenuItems(_penaltiesMenuItems);
 
   //----------------------------------------
   void calcInterval() {

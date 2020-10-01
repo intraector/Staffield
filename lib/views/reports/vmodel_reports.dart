@@ -30,6 +30,9 @@ class VModelReports extends GetxController {
   ReportType _reportType = ReportType.fl_charts;
   Units period = Units.MONTH;
   var selectedEmployees = <Employee>[];
+  String penaltyTypeCurrentUid = '111';
+  static var _auxMenuTextStyle = TextStyle(color: Colors.lightBlueAccent, fontSize: 20.0);
+
   Widget view = Center(child: CircularProgressIndicator());
 
   //-----------------------------------------
@@ -62,59 +65,25 @@ class VModelReports extends GetxController {
     fetchReportData();
   }
 
-  // //-----------------------------------------
-  // ReportType get reportType => _reportType;
-
-  // set reportType(ReportType type) {
-  //   _reportType = type;
-  //   fetchReportData();
-  // }
-
   //-----------------------------------------
   DateTime _startDate = DateTime.now();
   String get startDate => Jiffy(_startDate).yMMMd;
 
   //-----------------------------------------
-  String penaltyTypeCurrentUid = '111';
 
-  Map<String, String> _auxMenuItems = {
-    '111': 'сумма',
-    '222': 'количество',
-  };
-
-  Map<String, String> get penaltiesMenuItems => _auxMenuItems;
-
-  //-----------------------------------------
-  void generatePenaltiesMenuItems(Set<String> list) {
-    _auxMenuItems.clear();
-    _auxMenuItems = {
-      '111': 'сумма',
-      '222': 'количество',
-    };
-    PenaltyTypesRepository penaltyTypesRepo = Get.find();
-    for (var uid in list) {
-      _auxMenuItems[uid] = penaltyTypesRepo.getType(uid).title;
-    }
-  }
-
-  //-----------------------------------------
-  void generateWageMenuItems(Set<String> list) {
-    _auxMenuItems.clear();
-    _auxMenuItems = {
-      '111': 'сумма',
-      '222': 'количество',
-    };
-    PenaltyTypesRepository penaltyTypesRepo = Get.find();
-    for (var uid in list) {
-      _auxMenuItems[uid] = penaltyTypesRepo.getType(uid).title;
-    }
-  }
-
-  //-----------------------------------------
-  set penaltyTypeUid(String value) {
-    penaltyTypeCurrentUid = value;
+//-----------------------------------------
+  MenuWageItem _auxMenuCurrentValue = MenuWageItem.sum;
+  MenuWageItem get auxMenuCurrentValue => _auxMenuCurrentValue;
+  set auxMenuCurrentValue(MenuWageItem value) {
+    _auxMenuCurrentValue = value;
     fetchReportData();
   }
+
+  var auxMenuWageItems = [
+    DropdownMenuItem(value: MenuWageItem.sum, child: Text('сумма', style: _auxMenuTextStyle)),
+    DropdownMenuItem(value: MenuWageItem.bonus, child: Text('бонусы', style: _auxMenuTextStyle)),
+    DropdownMenuItem(value: MenuWageItem.avg, child: Text('средняя', style: _auxMenuTextStyle)),
+  ];
 
   //-----------------------------------------
   Future<void> pickStartDate(BuildContext context) async {
@@ -188,46 +157,18 @@ class VModelReports extends GetxController {
             startDate: _startDate,
           );
           reports.then((reports) {
-            view = AreaFlCharts(ChartData(reports, criterion, penaltyTypeCurrentUid));
+            view = AreaFlCharts(ChartData(
+              reports,
+              criterion,
+              penaltyTypeUid: penaltyTypeCurrentUid,
+              auxMenuValue: auxMenuCurrentValue,
+            ));
             update();
           });
         }
         break;
-
-      // case ReportType.allEmployees:
-      //   {
-      //     var reports = await _reportsRepo.fetchAllEmployees(
-      //       period: period,
-      //       periodsAmount: 1,
-      //       lessThan: chartLessThan,
-      //     );
-      //     var tableData = await Future<TableData>.value(TableData(reports));
-      //     view = TableEmployees(tableData);
-      //     chartLessThan = reports.last.periodTimestamp - 1;
-      //   }
-      //   break;
-      // case ReportType.singleEmployeeOverPeriod:
-      //   {
-      //     var reports = await _reportsRepo.fetchSingleEmployeeOverPeriod(
-      //       greaterThan: _endDate,
-      //       lessThan: _startDate,
-      //       employeeUid: _employee.uid,
-      //       period: period,
-      //     );
-      //     var result = reports.map((report) => PeriodReportUiAdapted(report)).toList();
-
-      //     view = TableSingleEmployee(result);
-      //   }
-      //   break;
-      // case ReportType.tableEntries:
-      //   {
-      //     var entryReports = await _reportsRepo.fetchEntriesList(
-      //         greaterThan: _endDate, lessThan: _startDate, employeeUid: null);
-      //     var result =
-      //         entryReports.map((entryReport) => ReportUiAdapted.from(entryReport)).toList();
-      //     view = TableEntries(result);
-      //   }
-      //   break;
     }
   }
 }
+
+enum MenuWageItem { sum, bonus, avg }

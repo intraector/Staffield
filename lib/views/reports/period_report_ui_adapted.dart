@@ -10,7 +10,7 @@ class PeriodReportUiAdapted {
     total = report.total.toString().formatInt;
     wage = report.wage.toString().formatInt;
     bonus = report.bonus.toString().formatInt;
-    totalAverage = report.totalAverage.toString().formatInt;
+    totalAverage = report.totalAvg.toString().formatInt;
     reportsCount = report.reportsCount.toString();
     revenue = report.revenue.toString().formatInt;
     revenueAverage = report.revenueAvg.toString().formatInt;

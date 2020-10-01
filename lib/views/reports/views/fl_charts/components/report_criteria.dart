@@ -1,5 +1,6 @@
 import 'package:Staffield/core/entities/penalty_report.dart';
 import 'package:Staffield/core/entities/period_report.dart';
+import 'package:Staffield/views/reports/vmodel_reports.dart';
 import 'package:flutter/material.dart';
 
 enum ReportCriterion { total, bonus, penaltiesTotal, revenue, revenueAvg }
@@ -21,11 +22,21 @@ class ReportCriterionMapper {
       .toList();
 
   static double value(ReportCriterion criterion, PeriodReport periodReport,
-      {String penaltyTypeUid}) {
+      {String penaltyTypeUid, MenuWageItem auxMenuValue}) {
     double result;
     switch (criterion) {
       case ReportCriterion.total:
-        result = periodReport.total;
+        switch (auxMenuValue) {
+          case MenuWageItem.bonus:
+            result = periodReport.bonus;
+            break;
+          case MenuWageItem.avg:
+            result = periodReport.totalAvg;
+            break;
+          default:
+            result = periodReport.total;
+        }
+
         break;
       case ReportCriterion.bonus:
         result = periodReport.bonus;

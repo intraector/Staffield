@@ -2,6 +2,7 @@ import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/routes_paths.dart';
 import 'package:Staffield/views/bottom_navigation.dart';
 import 'package:Staffield/views/reports/views/fl_charts/components/choose_employees.dart';
+import 'package:Staffield/views/reports/views/fl_charts/components/menu_penalty_type/menu_penalty_type.dart';
 import 'package:Staffield/views/reports/views/fl_charts/components/report_criteria.dart';
 import 'package:Staffield/views/reports/vmodel_reports.dart';
 import 'package:Staffield/views/view_drawer.dart';
@@ -55,30 +56,17 @@ class ViewReports extends StatelessWidget {
                               ),
                             ),
                             if (vmodel.criterion == ReportCriterion.penaltiesTotal)
-                              Row(
-                                children: <Widget>[
-                                  Wrap(
-                                    children: [
-                                      DropdownButtonHideUnderline(
-                                        child: DropdownButton<String>(
-                                          isExpanded: false,
-                                          style: TextStyle(
-                                              color: Colors.lightBlueAccent, fontSize: 20.0),
-                                          iconEnabledColor: Colors.white,
-                                          dropdownColor: AppColors.primary,
-                                          items: vmodel.penaltiesMenuItems.keys
-                                              .map<DropdownMenuItem<String>>((uid) =>
-                                                  DropdownMenuItem(
-                                                      value: uid,
-                                                      child: Text(vmodel.penaltiesMenuItems[uid])))
-                                              .toList(),
-                                          onChanged: (value) => vmodel.penaltyTypeUid = value,
-                                          value: vmodel.penaltyTypeCurrentUid,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                              MenuPenaltytype(),
+                            if (vmodel.criterion == ReportCriterion.total)
+                              DropdownButtonHideUnderline(
+                                child: DropdownButton<MenuWageItem>(
+                                  style: TextStyle(color: Colors.lightBlueAccent, fontSize: 20.0),
+                                  iconEnabledColor: Colors.white,
+                                  dropdownColor: AppColors.primary,
+                                  items: vmodel.auxMenuWageItems,
+                                  onChanged: (value) => vmodel.auxMenuCurrentValue = value,
+                                  value: vmodel.auxMenuCurrentValue,
+                                ),
                               ),
                           ],
                         ),
