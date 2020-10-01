@@ -1,14 +1,14 @@
+import 'package:Staffield/core/entities/penalty_report.dart';
 import 'package:Staffield/core/entities/period_report.dart';
 import 'package:flutter/material.dart';
 
-enum ReportCriterion { total, bonus, penaltiesTotal, penaltiesCount, revenue, revenueAvg }
+enum ReportCriterion { total, bonus, penaltiesTotal, revenue, revenueAvg }
 
 class ReportCriterionMapper {
   static final Map<ReportCriterion, String> _criteria = {
     ReportCriterion.total: 'зарплата',
     ReportCriterion.bonus: 'бонус',
     ReportCriterion.penaltiesTotal: 'штрафы',
-    ReportCriterion.penaltiesCount: 'кол-во штрафов',
     ReportCriterion.revenue: 'выручка',
     ReportCriterion.revenueAvg: 'средняя выручка',
   };
@@ -20,7 +20,8 @@ class ReportCriterionMapper {
           ))
       .toList();
 
-  static double value(ReportCriterion criterion, PeriodReport periodReport) {
+  static double value(ReportCriterion criterion, PeriodReport periodReport,
+      {String penaltyTypeUid}) {
     double result;
     switch (criterion) {
       case ReportCriterion.total:
@@ -30,10 +31,22 @@ class ReportCriterionMapper {
         result = periodReport.bonus;
         break;
       case ReportCriterion.penaltiesTotal:
-        result = periodReport.penaltiesTotal;
-        break;
-      case ReportCriterion.penaltiesCount:
-        result = periodReport.penaltiesCount.toDouble();
+        {
+          if (penaltyTypeUid == null || penaltyTypeUid == '111') {
+            result = periodReport.penaltiesTotal;
+          } else {
+            if (penaltyTypeUid == '222') {
+              result = periodReport.penaltiesCount.toDouble();
+            } else {
+              result = periodReport.penalties
+                  .firstWhere(
+                    (penalty) => penalty.typeUid == penaltyTypeUid,
+                    orElse: () => PenaltyReport.empty(),
+                  )
+                  .total;
+            }
+          }
+        }
         break;
 
       case ReportCriterion.revenue:
@@ -42,6 +55,10 @@ class ReportCriterionMapper {
       case ReportCriterion.revenueAvg:
         result = periodReport.revenueAvg;
         break;
+      default:
+        {
+          result = periodReport.penaltiesTotal;
+        }
     }
     return result;
   }

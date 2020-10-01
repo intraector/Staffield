@@ -16,7 +16,7 @@ class ViewCalcVModel extends ChangeNotifier {
     );
     this.unitLabel = TextFieldHandlerString(
       label: 'НАЗВАНИЕ',
-      hint: 'Например, "Штуки"',
+      hint: 'Например, шт. или мин.',
       defaultValue: parentVModel.type.unitTitle,
       onChange: notifyListeners,
       onSave: save,

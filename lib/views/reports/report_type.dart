@@ -1,7 +1,7 @@
 enum ReportType {
   // allEmployees,
   // singleEmployeeOverPeriod,
-  listEmployees,
+  // listEmployees,
   // tableEntries,
   fl_charts
 }
@@ -19,9 +19,9 @@ extension Title on ReportType {
       // case ReportType.singleEmployeeOverPeriod:
       //   result = 'по одному сотруднику';
       //   break;
-      case ReportType.listEmployees:
-        result = 'таблица';
-        break;
+      // case ReportType.listEmployees:
+      //   result = 'таблица';
+      //   break;
       // case ReportType.tableEntries:
       //   result = 'список записей';
       //   break;

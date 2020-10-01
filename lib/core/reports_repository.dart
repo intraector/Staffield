@@ -33,15 +33,16 @@ class ReportsRepository {
   /// default periodsAmount = 1
   ///
   /// lessThan ??= _entriesRepo.newestTimestamp
-  Future<List<PeriodReport>> fetch(
-      {@required Units period,
-      List<Employee> employees,
-      int periodsAmount = 1,
-      int lessThan}) async {
+  Future<List<PeriodReport>> fetch({
+    @required Units period,
+    List<Employee> employees,
+    int periodsAmount = 1,
+    DateTime startDate,
+  }) async {
     var futures = <Future>[];
     var output = <PeriodReport>[];
     if (_entriesRepo.cache.isEmpty) return output;
-    lessThan ??= _entriesRepo.newestTimestamp;
+    int lessThan = startDate?.millisecondsSinceEpoch ?? _entriesRepo.newestTimestamp;
     for (int i = 0; i < periodsAmount; i++) {
       var greaterThan = getFirstDayOf(lessThan, period);
       var entriesFuture = _entriesRepo.fetch(

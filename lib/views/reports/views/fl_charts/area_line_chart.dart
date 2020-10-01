@@ -1,4 +1,4 @@
-import 'package:Staffield/views/reports/views/fl_charts/chart_data.dart';
+import 'package:Staffield/views/reports/views/fl_charts/components/chart_data.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:Staffield/utils/string_utils.dart';

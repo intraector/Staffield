@@ -25,6 +25,6 @@ class VModelChooseEmployees extends GetxController {
   List<Employee> get selectedEmployees => _vmodelReports.selectedEmployees;
   set selectedEmployees(List<Employee> list) {
     _vmodelReports.selectedEmployees = list;
-    _vmodelReports.fetchReportData(list);
+    _vmodelReports.fetchReportData();
   }
 }

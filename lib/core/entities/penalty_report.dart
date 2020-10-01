@@ -3,6 +3,10 @@ import 'package:Staffield/core/entities/penalty_mode.dart';
 import 'package:Staffield/utils/string_utils.dart';
 
 class PenaltyReport {
+  PenaltyReport.empty() {
+    this.total = 0.0;
+    this.units = 0.0;
+  }
   PenaltyReport.from(Penalty penalty) {
     typeUid = penalty.typeUid;
     units = penalty.units;
