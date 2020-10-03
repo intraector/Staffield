@@ -105,6 +105,23 @@ class SrvcSqliteInit {
       ..title = 'Опоздание'
       ..unitTitle = 'Минуты';
     await db.insert(SqliteTable.penaltyTypes, SqliteConvert.penaltyTypeToMap(type));
+
+    type = PenaltyType()
+      ..mode = PenaltyMode.plain
+      ..title = 'Тунеядство';
+    await db.insert(SqliteTable.penaltyTypes, SqliteConvert.penaltyTypeToMap(type));
+
+    type = PenaltyType()
+      ..mode = PenaltyMode.calc
+      ..title = 'Бой тарелок'
+      ..unitTitle = 'шт.';
+    await db.insert(SqliteTable.penaltyTypes, SqliteConvert.penaltyTypeToMap(type));
+
+    type = PenaltyType()
+      ..mode = PenaltyMode.calc
+      ..title = 'Распитие алкоголя'
+      ..unitTitle = 'л';
+    await db.insert(SqliteTable.penaltyTypes, SqliteConvert.penaltyTypeToMap(type));
   }
 
 //-----------------------------------------

@@ -8,14 +8,14 @@ import 'package:Staffield/views/view_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/views/edit_entry/vmodel_edit_entry.dart';
-import 'package:Staffield/views/edit_entry/view_penalties.dart';
+import 'package:Staffield/views/edit_entry/area_penalties.dart';
+import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
 
 final _formKey = GlobalKey<FormState>();
 
-class ScreenEditEntry extends StatelessWidget {
-  ScreenEditEntry([this.entryUid]);
+class ViewEditEntry extends StatelessWidget {
+  ViewEditEntry([this.entryUid]);
 
   final String entryUid;
   final focusInterest = FocusNode();
@@ -24,10 +24,9 @@ class ScreenEditEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ScreenEditEntryVModel(entryUid),
-      builder: (context, _) {
-        var vModel = Provider.of<ScreenEditEntryVModel>(context, listen: false);
+    return GetBuilder<VModelEditEntry>(
+      init: VModelEditEntry(entryUid),
+      builder: (vmodel) {
         return SafeArea(
           child: Scaffold(
             drawer: ViewDrawer(),
@@ -38,7 +37,7 @@ class ScreenEditEntry extends StatelessWidget {
                 IconButton(
                     color: AppColors.error,
                     icon: Icon(Icons.delete),
-                    onPressed: () => vModel.removeEntry(context)),
+                    onPressed: () => vmodel.removeEntry(context)),
               ],
             ),
             body: Container(
@@ -80,21 +79,19 @@ class ScreenEditEntry extends StatelessWidget {
                                   children: <Widget>[
                                     Expanded(
                                       child: DropdownButtonFormField(
-                                        key: vModel.dropdownState,
+                                        key: vmodel.dropdownKey,
                                         decoration: InputDecoration(
                                           isDense: true,
-                                          labelText: vModel.labelName,
+                                          labelText: vmodel.labelName,
                                           labelStyle: AppTextStyles.dataChipLabel,
                                           hintStyle: AppTextStyles.dataChipLabel,
                                         ),
-                                        value: vModel.employeeUid,
+                                        value: vmodel.employeeUid,
                                         isExpanded: true,
-                                        validator: vModel.validateEmployeeUid,
-                                        items: context.select<ScreenEditEntryVModel,
-                                                List<DropdownMenuItem<String>>>(
-                                            (vModel) => vModel.employeesItems),
+                                        validator: vmodel.validateEmployeeUid,
+                                        items: vmodel.employeesItems,
                                         onChanged: (employeeUid) {
-                                          vModel.setEmployeeUid(employeeUid, context);
+                                          vmodel.setEmployeeUid(employeeUid, context);
                                           FocusScope.of(context).requestFocus(focusWage);
                                         },
                                       ),
@@ -110,7 +107,7 @@ class ScreenEditEntry extends StatelessWidget {
                                       child: Padding(
                                         padding: const EdgeInsets.only(right: 10.0),
                                         child: TextFieldDouble(
-                                          vModel.wage,
+                                          vmodel.wage,
                                           focusNode: focusWage,
                                           nextFocusNode: focusRevenue,
                                         ),
@@ -127,7 +124,7 @@ class ScreenEditEntry extends StatelessWidget {
                                       child: Padding(
                                         padding: const EdgeInsets.only(right: 10.0),
                                         child: TextFieldDouble(
-                                          vModel.revenue,
+                                          vmodel.revenue,
                                           focusNode: focusRevenue,
                                           nextFocusNode: focusInterest,
                                         ),
@@ -136,7 +133,7 @@ class ScreenEditEntry extends StatelessWidget {
                                     Flexible(
                                       flex: 1,
                                       child: TextFieldDouble(
-                                        vModel.interest,
+                                        vmodel.interest,
                                         focusNode: focusInterest,
                                       ),
                                     ),
@@ -151,13 +148,10 @@ class ScreenEditEntry extends StatelessWidget {
                                         alignment: WrapAlignment.spaceEvenly,
                                         children: <Widget>[
                                           DataChip(
-                                              value: context.select<ScreenEditEntryVModel, String>(
-                                                  (vModel) => vModel.penaltiesTotal),
-                                              label: vModel.labelPenalties),
-                                          DataChip(
-                                              value: context.select<ScreenEditEntryVModel, String>(
-                                                  (vModel) => vModel.bonus),
-                                              label: vModel.labelBonus),
+                                            value: vmodel.penaltiesTotal,
+                                            label: vmodel.labelPenalties,
+                                          ),
+                                          DataChip(value: vmodel.bonus, label: vmodel.labelBonus),
                                         ],
                                       ),
                                     ),
@@ -169,13 +163,13 @@ class ScreenEditEntry extends StatelessWidget {
                                   children: <Widget>[
                                     DropdownButton<String>(
                                         hint: Text('Добавить штраф'),
-                                        items: vModel.penaltyTypesList,
+                                        items: vmodel.penaltyTypesList,
                                         onChanged: (typeUid) {
-                                          return vModel.handlePenalty(context, typeUid);
+                                          return vmodel.handlePenalty(context, typeUid);
                                         }),
                                   ],
                                 ),
-                                ViewPenalties(Provider.of<ScreenEditEntryVModel>(context)),
+                                AreaPenalties(vmodel),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                                   child: Row(
@@ -183,8 +177,7 @@ class ScreenEditEntry extends StatelessWidget {
                                     children: <Widget>[
                                       ChipTotal(
                                         title: 'ИТОГО: ',
-                                        value: context.select<ScreenEditEntryVModel, String>(
-                                            (vModel) => vModel.total),
+                                        value: vmodel.total,
                                       ),
                                     ],
                                   ),
@@ -198,7 +191,7 @@ class ScreenEditEntry extends StatelessWidget {
                                           child: OutlineButton(
                                               child: Text('НАЗАД',
                                                   style: AppTextStyles.buttonLabelOutline),
-                                              onPressed: () => vModel.goBack(context)),
+                                              onPressed: () => vmodel.goBack(context)),
                                         ),
                                       ),
                                       Expanded(
@@ -208,7 +201,7 @@ class ScreenEditEntry extends StatelessWidget {
                                               child: Text('ОК'),
                                               onPressed: () {
                                                 if (_formKey.currentState.validate()) {
-                                                  vModel.save();
+                                                  vmodel.save();
                                                   Navigator.of(context).pop();
                                                 }
                                               }),

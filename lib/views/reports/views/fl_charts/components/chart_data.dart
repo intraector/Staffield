@@ -172,9 +172,12 @@ class ChartData {
           var rows = (periodValues[i].periodPenalties[employee] ?? <PenaltyReport>[])
               .map<Row>((penalty) => Row(
                     children: [
-                      Text('${penalty.typeTitle}: ' +
-                          '${(penalty.unitString.isEmpty ? '' : penalty.unitString + " " + penalty.unitTitle + " = ")}' +
-                          '${penalty.totalString} р.'),
+                      Text(
+                        '${penalty.typeTitle}: ' +
+                            '${(penalty.unitString.isEmpty ? '' : penalty.unitString + " " + penalty.unitTitle + " = ")}' +
+                            '${penalty.totalString} р.',
+                        style: TextStyle(fontSize: 14.0),
+                      ),
                     ],
                   ))
               .toList();

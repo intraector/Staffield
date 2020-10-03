@@ -5,25 +5,25 @@ import 'package:Staffield/core/entities/penalty.dart';
 import 'package:Staffield/views/edit_entry/vmodel_edit_entry.dart';
 import 'package:Staffield/utils/string_utils.dart';
 
-class ViewPenalties extends StatelessWidget {
-  ViewPenalties(this.screenEditEntryVModel);
-  final ScreenEditEntryVModel screenEditEntryVModel;
+class AreaPenalties extends StatelessWidget {
+  AreaPenalties(this.vmodelEditEntry);
+  final VModelEditEntry vmodelEditEntry;
   @override
   Widget build(BuildContext context) {
-    var penalties = screenEditEntryVModel.penalties;
+    var penalties = vmodelEditEntry.penalties;
     return Column(
       children: <Widget>[
         if (penalties != null)
-          ...penalties.map((penalty) => ViewPenaltiesItem(penalty, screenEditEntryVModel)).toList()
+          ...penalties.map((penalty) => ViewPenaltiesItem(penalty, vmodelEditEntry)).toList()
       ],
     );
   }
 }
 
 class ViewPenaltiesItem extends StatelessWidget {
-  ViewPenaltiesItem(this.penalty, this.vModel);
+  ViewPenaltiesItem(this.penalty, this.vmodel);
   final Penalty penalty;
-  final ScreenEditEntryVModel vModel;
+  final VModelEditEntry vmodel;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -34,10 +34,10 @@ class ViewPenaltiesItem extends StatelessWidget {
           var res = await showDialog<Penalty>(
             context: context,
             builder: (BuildContext context) =>
-                DialogPenalty(penalty: penalty, screenEntryVModel: vModel),
+                DialogPenalty(penalty: penalty, screenEntryVModel: vmodel),
           );
 
-          if (res != null) vModel.updatePenalty(res);
+          if (res != null) vmodel.updatePenalty(res);
         },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
@@ -47,7 +47,7 @@ class ViewPenaltiesItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Text(
-                    vModel.getPenaltyType(penalty.typeUid).title.toUpperCase(),
+                    vmodel.getPenaltyType(penalty.typeUid).title.toUpperCase(),
                     overflow: TextOverflow.fade,
                     softWrap: false,
                     style: Theme.of(context).textTheme.bodyText1,

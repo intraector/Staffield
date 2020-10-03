@@ -26,7 +26,7 @@ class Routes {
       SailorRoute(name: RoutesPaths.entries, builder: (_, __, ___) => ViewEntries()),
       SailorRoute(
         name: RoutesPaths.editEntry,
-        builder: (_, __, params) => ScreenEditEntry(params.param<String>('entry_uid')),
+        builder: (_, __, params) => ViewEditEntry(params.param<String>('entry_uid')),
         params: [SailorParam<String>(name: 'entry_uid')],
       ),
       SailorRoute(

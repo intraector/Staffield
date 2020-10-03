@@ -53,7 +53,12 @@ class EntriesRepository extends GetxController {
       employees: null,
       limit: limit,
     );
-    if (result.length == 0) endOfData = true;
+    if (result.isEmpty)
+      endOfData = true;
+    else {
+      var entriesRepository = DateTime.fromMillisecondsSinceEpoch(result.first.timestamp);
+      print('---------- entriesRepository : $entriesRepository');
+    }
     setOldestTimestampFrom(result);
     restart == false ? _cache.addAll(result) : _cache = result;
     notify();

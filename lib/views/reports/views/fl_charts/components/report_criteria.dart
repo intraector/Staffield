@@ -3,15 +3,13 @@ import 'package:Staffield/core/entities/period_report.dart';
 import 'package:Staffield/views/reports/vmodel_reports.dart';
 import 'package:flutter/material.dart';
 
-enum ReportCriterion { total, bonus, penaltiesTotal, revenue, revenueAvg }
+enum ReportCriterion { total, penaltiesTotal, revenue }
 
 class ReportCriterionMapper {
   static final Map<ReportCriterion, String> _criteria = {
-    ReportCriterion.total: 'зарплата',
-    ReportCriterion.bonus: 'бонус',
-    ReportCriterion.penaltiesTotal: 'штрафы',
-    ReportCriterion.revenue: 'выручка',
-    ReportCriterion.revenueAvg: 'средняя выручка',
+    ReportCriterion.total: 'Зарплата',
+    ReportCriterion.penaltiesTotal: 'Штрафы',
+    ReportCriterion.revenue: 'Выручка',
   };
 
   static List<DropdownMenuItem<ReportCriterion>> get dropdownItems => _criteria.keys
@@ -38,9 +36,7 @@ class ReportCriterionMapper {
         }
 
         break;
-      case ReportCriterion.bonus:
-        result = periodReport.bonus;
-        break;
+
       case ReportCriterion.penaltiesTotal:
         {
           if (penaltyTypeUid == null || penaltyTypeUid == '111') {
@@ -61,11 +57,14 @@ class ReportCriterionMapper {
         break;
 
       case ReportCriterion.revenue:
-        result = periodReport.revenue;
+        {
+          if (auxMenuValue == MenuWageItem.avg)
+            result = periodReport.revenueAvg;
+          else
+            result = periodReport.revenue;
+        }
         break;
-      case ReportCriterion.revenueAvg:
-        result = periodReport.revenueAvg;
-        break;
+
       default:
         {
           result = periodReport.penaltiesTotal;

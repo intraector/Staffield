@@ -11,7 +11,7 @@ import 'package:Staffield/core/entries_repository.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 
-class VModelViewEntries extends GetxController {
+class VModelEntries extends GetxController {
   @override
   void onInit() {
     _updateList();
@@ -65,6 +65,8 @@ class VModelViewEntries extends GetxController {
     var result = <Report>[];
     if (_repo.cache.isNotEmpty) {
       _currentDate = DateTime.fromMillisecondsSinceEpoch(_repo.cache.first.timestamp);
+      var tt = DateTime.fromMillisecondsSinceEpoch(_repo.cache.first.timestamp);
+      print('---------- viewEntries : $tt');
       result.add(Report.dateLabel(_repo.cache.first.timestamp));
     }
     for (var entry in _repo.cache) {

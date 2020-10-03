@@ -8,8 +8,8 @@ import 'package:Staffield/views/common/data_chip.dart';
 import 'package:Staffield/views/reports/report_ui_adapted.dart';
 import 'package:flutter/material.dart';
 
-class ViewEntriesItem extends StatelessWidget {
-  ViewEntriesItem(this.item);
+class EntriesItem extends StatelessWidget {
+  EntriesItem(this.item);
   final ReportUiAdapted item;
   @override
   Widget build(BuildContext context) {

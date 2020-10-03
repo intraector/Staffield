@@ -19,7 +19,10 @@ import 'package:Staffield/views/edit_entry/dialog_penalty/dialog_penalty.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ScreenEditEntryVModel with ChangeNotifier {
+class VModelEditEntry extends GetxController {
+  VModelEditEntry(String uid) {
+    init(uid);
+  }
   Entry entry;
   TextFieldHandlerDouble interest;
   String labelBonus = 'БОНУС';
@@ -32,14 +35,17 @@ class ScreenEditEntryVModel with ChangeNotifier {
   List<Penalty> penalties;
   TextFieldHandlerDouble revenue;
   TextFieldHandlerDouble wage;
-  final dropdownState = GlobalKey<FormFieldState>();
+  final dropdownKey = GlobalKey<FormFieldState>();
   final _employeesRepo = Get.find<EmployeesRepository>();
 
   final _entriesRepo = Get.find<EntriesRepository>();
   final _penaltyTypesRepo = Get.find<PenaltyTypesRepository>();
 
-  ScreenEditEntryVModel(String uid) {
+  init(String uid) {
     this.entry = uid == null ? Entry() : _entriesRepo.getEntry(uid);
+    if (uid != null) {
+      print('---------- view_edit_entry : ${DateTime.fromMillisecondsSinceEpoch(entry.timestamp)}');
+    }
     wage = TextFieldHandlerDouble(
       label: 'ОКЛАД',
       defaultValue: uid == null ? '' : entry.wage?.toString()?.formatDouble?.noDotZero,
@@ -75,7 +81,12 @@ class ScreenEditEntryVModel with ChangeNotifier {
   }
 
   //-----------------------------------------
-  String get employeeUid => entry.employee.uid.isEmpty ? null : entry.employee.uid;
+  String get employeeUid {
+    if (_employeesRepo.repo.any((element) => element.uid == entry.employee.uid)) {
+      return entry.employee.uid;
+    } else
+      return null;
+  }
 
   //-----------------------------------------
   String get penaltiesTotal => _penaltiesTotal.toString().formatDouble;
@@ -109,7 +120,7 @@ class ScreenEditEntryVModel with ChangeNotifier {
   //-----------------------------------------
   void calcTotalAndNotify() {
     calcTotal();
-    notifyListeners();
+    update();
   }
 
   //-----------------------------------------
@@ -167,13 +178,13 @@ class ScreenEditEntryVModel with ChangeNotifier {
       entry.employee = _employeesRepo.getEmployeeByUid(uid);
     } else {
       var result =
-          await showDialog<String>(context: context, builder: (context) => DialogEditEmployee());
+          await showDialog<Employee>(context: context, builder: (context) => DialogEditEmployee());
       if (result != null) {
-        entry.employee = _employeesRepo.getEmployeeByUid(result);
-        dropdownState.currentState.didChange(result);
+        entry.employee = result;
+        dropdownKey.currentState.didChange(result.uid);
       }
     }
-    notifyListeners();
+    update();
   }
 
   //-----------------------------------------

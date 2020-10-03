@@ -3,8 +3,6 @@ import 'package:Staffield/core/entities/penalty.dart';
 import 'package:uuid_type/uuid_type.dart';
 
 class Entry {
-  // String employeeName = '';
-  // String employeeUid = '';
   Employee employee = Employee();
   double interest = 0;
   var penalties = <Penalty>[];

@@ -68,15 +68,26 @@ class ViewReports extends StatelessWidget {
                                   value: vmodel.auxMenuCurrentValue,
                                 ),
                               ),
+                            if (vmodel.criterion == ReportCriterion.revenue)
+                              DropdownButtonHideUnderline(
+                                child: DropdownButton<MenuWageItem>(
+                                  style: TextStyle(color: Colors.lightBlueAccent, fontSize: 20.0),
+                                  iconEnabledColor: Colors.white,
+                                  dropdownColor: AppColors.primary,
+                                  items: vmodel.auxMenuRevenueItems,
+                                  onChanged: (value) => vmodel.auxMenuCurrentValue = value,
+                                  value: vmodel.auxMenuCurrentValue,
+                                ),
+                              ),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text('Период: за   ', style: TextStyle(color: Colors.white)),
+                            Text('за   ', style: TextStyle(color: Colors.white)),
                             DropdownButtonHideUnderline(
                               child: DropdownButton<int>(
-                                style: TextStyle(color: Colors.lightBlueAccent, fontSize: 20.0),
+                                style: TextStyle(color: Colors.lightBlueAccent, fontSize: 18.0),
                                 iconEnabledColor: Colors.lightBlueAccent,
                                 dropdownColor: AppColors.primary,
                                 items: List<int>.generate(12, (index) => index + 1)
@@ -96,10 +107,10 @@ class ViewReports extends StatelessWidget {
                             Text('мес. до', style: TextStyle(color: Colors.white)),
                             PlatformButton(
                               padding: EdgeInsets.only(bottom: 0.0, top: 0.0, left: 8.0),
-                              // color: Colors.lightBlueAccent,
+                              materialFlat: (_, __) => MaterialFlatButtonData(),
                               child: Text(
                                 vmodel.startDate,
-                                style: TextStyle(color: Colors.lightBlueAccent, fontSize: 20.0),
+                                style: TextStyle(color: Colors.lightBlueAccent, fontSize: 18.0),
                               ),
                               onPressed: () => vmodel.pickStartDate(context),
                             ),

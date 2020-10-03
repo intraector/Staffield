@@ -44,7 +44,7 @@ class DialogPenaltyVModel extends ChangeNotifier {
   String labelTotal;
   String labelTotalPrefix = 'Сумма: '.toUpperCase();
   Penalty penalty;
-  final ScreenEditEntryVModel screenEntryVModel;
+  final VModelEditEntry screenEntryVModel;
   TextFieldHandlerDouble plainSum;
   TextFieldHandlerDouble unit;
   TextFieldHandlerDouble cost;

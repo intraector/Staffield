@@ -1,6 +1,6 @@
 import 'package:Staffield/views/edit_entry/dialog_penalty/dialog_penalty_vmodel.dart';
-import 'package:Staffield/views/edit_entry/dialog_penalty/views/view_calc.dart';
-import 'package:Staffield/views/edit_entry/dialog_penalty/views/view_plain.dart';
+import 'package:Staffield/views/edit_entry/dialog_penalty/areas/area_calc.dart';
+import 'package:Staffield/views/edit_entry/dialog_penalty/areas/area_plain.dart';
 import 'package:Staffield/views/edit_entry/vmodel_edit_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:Staffield/constants/app_colors.dart';
@@ -15,7 +15,7 @@ class DialogPenalty extends StatelessWidget {
       {@required this.penalty, this.isNewPenalty = false, @required this.screenEntryVModel});
   final Penalty penalty;
   final bool isNewPenalty;
-  final ScreenEditEntryVModel screenEntryVModel;
+  final VModelEditEntry screenEntryVModel;
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
@@ -34,8 +34,8 @@ class DialogPenalty extends StatelessWidget {
                   child: ListView(
                     shrinkWrap: true,
                     children: <Widget>[
-                      if (vModel.penalty.mode == PenaltyMode.plain) ViewPlain(vModel),
-                      if (vModel.penalty.mode == PenaltyMode.calc) ViewCalc(vModel),
+                      if (vModel.penalty.mode == PenaltyMode.plain) AreaPlain(vModel),
+                      if (vModel.penalty.mode == PenaltyMode.calc) AreaCalc(vModel),
                     ],
                   ),
                 ),

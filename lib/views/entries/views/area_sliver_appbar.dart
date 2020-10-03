@@ -1,10 +1,10 @@
-import 'package:Staffield/views/entries/view_entries_vmodel.dart';
+import 'package:Staffield/views/entries/vmodel_entries.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EntriesSliverAppBar extends StatelessWidget {
-  EntriesSliverAppBar({@required this.vModel});
-  final VModelViewEntries vModel;
+class AreaSliverAppBar extends StatelessWidget {
+  AreaSliverAppBar({@required this.vModel});
+  final VModelEntries vModel;
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -37,7 +37,7 @@ class EntriesSliverAppBar extends StatelessWidget {
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.delete),
-          onPressed: () => Get.find<VModelViewEntries>().refreshDb(),
+          onPressed: () => Get.find<VModelEntries>().refreshDb(),
         ),
         IconButton(
           icon: Icon(Icons.create_rounded),

@@ -5,8 +5,8 @@ import 'package:Staffield/views/edit_entry/dialog_penalty/dialog_penalty_vmodel.
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ViewCalc extends StatelessWidget {
-  ViewCalc(this.vModel);
+class AreaCalc extends StatelessWidget {
+  AreaCalc(this.vModel);
   final DialogPenaltyVModel vModel;
   final focusCost = FocusNode();
   @override
