@@ -1,7 +1,7 @@
 import 'package:Staffield/core/entities/penalty_type.dart';
 import 'package:Staffield/core/penalty_types_repository.dart';
 import 'package:Staffield/views/common/dialog_confirm.dart';
-import 'package:Staffield/views/common/text_feild_handler/text_field_handler_double.dart';
+import 'package:Staffield/views/common/text_feild_handler/text_field_data_decimal.dart';
 import 'package:flutter/widgets.dart';
 import 'package:Staffield/core/entities/penalty_mode.dart';
 import 'package:Staffield/core/entities/penalty.dart';
@@ -14,27 +14,27 @@ class DialogPenaltyVModel extends ChangeNotifier {
     _type = _penaltyTypesRepo.getType(penalty.typeUid);
     penalty.mode = _type.mode;
     if (penalty.mode == PenaltyMode.plain) {
-      plainSum = TextFieldHandlerDouble(
+      plainSum = TextFieldDataDecimal(
         label: 'CУММА ШТРАФА',
         maxLength: 8,
-        defaultValue: penalty.total?.toString()?.emptyIfZero?.noDotZero?.formatDouble ??
+        defaultValue: penalty.total?.toString()?.emptyIfZero?.formatAsCurrency() ??
             _type.costDefaultValue?.toString()?.emptyIfZero?.noDotZero,
       );
     } else if (penalty.mode == PenaltyMode.calc) {
-      labelTotal = (penalty.total?.toString()?.formatDouble ?? '0.0');
-      unit = TextFieldHandlerDouble(
+      labelTotal = (penalty.total?.toString()?.formatAsCurrency() ?? '0.0');
+      unit = TextFieldDataDecimal(
         label: _type.unitTitle.toUpperCase(),
         maxLength: 4,
-        defaultValue: penalty.units?.toString()?.emptyIfZero?.noDotZero?.formatDouble ??
+        defaultValue: penalty.units?.toString()?.emptyIfZero?.formatAsCurrency() ??
             _type.unitDefaultValue?.toString()?.emptyIfZero?.noDotZero,
-        onChange: _calcPenaltyTotal,
+        onChanged: _calcPenaltyTotal,
       );
-      cost = TextFieldHandlerDouble(
+      cost = TextFieldDataDecimal(
         label: 'ЦЕНА',
         maxLength: 4,
-        defaultValue: penalty.cost?.toString()?.emptyIfZero?.noDotZero?.formatDouble ??
+        defaultValue: penalty.cost?.toString()?.emptyIfZero?.formatAsCurrency() ??
             _type.costDefaultValue?.toString()?.emptyIfZero?.noDotZero,
-        onChange: _calcPenaltyTotal,
+        onChanged: _calcPenaltyTotal,
       );
     }
   }
@@ -45,26 +45,26 @@ class DialogPenaltyVModel extends ChangeNotifier {
   String labelTotalPrefix = 'Сумма: '.toUpperCase();
   Penalty penalty;
   final VModelEditEntry screenEntryVModel;
-  TextFieldHandlerDouble plainSum;
-  TextFieldHandlerDouble unit;
-  TextFieldHandlerDouble cost;
+  TextFieldDataDecimal plainSum;
+  TextFieldDataDecimal unit;
+  TextFieldDataDecimal cost;
 
   final _penaltyTypesRepo = Get.find<PenaltyTypesRepository>();
 
   //-----------------------------------------
   void _calcPenaltyTotal() {
-    penalty.total = unit.result * cost.result;
-    labelTotal = penalty.total.toString().formatDouble;
+    penalty.total = unit.value * cost.value;
+    labelTotal = penalty.total.toString().formatAsCurrency(decimals: 2);
     notifyListeners();
   }
 
   //-----------------------------------------
   void save() {
     if (penalty.mode == PenaltyMode.plain)
-      penalty.total = plainSum.result;
+      penalty.total = plainSum.value;
     else if (penalty.mode == PenaltyMode.calc) {
-      penalty.units = unit.result;
-      penalty.cost = cost.result;
+      penalty.units = unit.value;
+      penalty.cost = cost.value;
       penalty.total = penalty.units * penalty.cost;
     }
   }

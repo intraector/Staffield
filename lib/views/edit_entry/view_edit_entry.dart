@@ -3,7 +3,7 @@ import 'package:Staffield/constants/routes_paths.dart';
 import 'package:Staffield/views/bottom_navigation.dart';
 import 'package:Staffield/views/common/chip_total.dart';
 import 'package:Staffield/views/common/data_chip.dart';
-import 'package:Staffield/views/common/text_fields/text_field_double.dart';
+import 'package:Staffield/views/common/text_fields/text_field_decimal.dart';
 import 'package:Staffield/views/view_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:Staffield/constants/app_colors.dart';
@@ -106,7 +106,7 @@ class ViewEditEntry extends StatelessWidget {
                                       flex: 2,
                                       child: Padding(
                                         padding: const EdgeInsets.only(right: 10.0),
-                                        child: TextFieldDouble(
+                                        child: TextFieldDecimal(
                                           vmodel.wage,
                                           focusNode: focusWage,
                                           nextFocusNode: focusRevenue,
@@ -123,7 +123,7 @@ class ViewEditEntry extends StatelessWidget {
                                       flex: 2,
                                       child: Padding(
                                         padding: const EdgeInsets.only(right: 10.0),
-                                        child: TextFieldDouble(
+                                        child: TextFieldDecimal(
                                           vmodel.revenue,
                                           focusNode: focusRevenue,
                                           nextFocusNode: focusInterest,
@@ -132,7 +132,7 @@ class ViewEditEntry extends StatelessWidget {
                                     ),
                                     Flexible(
                                       flex: 1,
-                                      child: TextFieldDouble(
+                                      child: TextFieldDecimal(
                                         vmodel.interest,
                                         focusNode: focusInterest,
                                       ),
@@ -140,48 +140,56 @@ class ViewEditEntry extends StatelessWidget {
                                   ],
                                 ),
                                 SizedBox(height: 5.0),
-                                Divider(),
-                                Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: Wrap(
-                                        alignment: WrapAlignment.spaceEvenly,
-                                        children: <Widget>[
-                                          DataChip(
-                                            value: vmodel.penaltiesTotal,
-                                            label: vmodel.labelPenalties,
-                                          ),
-                                          DataChip(value: vmodel.bonus, label: vmodel.labelBonus),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Divider(),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    DropdownButton<String>(
-                                        hint: Text('Добавить штраф'),
-                                        items: vmodel.penaltyTypesList,
-                                        onChanged: (typeUid) {
-                                          return vmodel.handlePenalty(context, typeUid);
-                                        }),
-                                  ],
-                                ),
-                                AreaPenalties(vmodel),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: <Widget>[
-                                      ChipTotal(
-                                        title: 'ИТОГО: ',
-                                        value: vmodel.total,
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                GetBuilder<VModelEditEntry>(
+                                    id: 'calc',
+                                    builder: (vmodel) => Column(
+                                          children: [
+                                            Divider(),
+                                            Row(
+                                              children: <Widget>[
+                                                Expanded(
+                                                  child: Wrap(
+                                                    alignment: WrapAlignment.spaceEvenly,
+                                                    children: <Widget>[
+                                                      DataChip(
+                                                        value: vmodel.penaltiesTotal,
+                                                        label: vmodel.labelPenalties,
+                                                      ),
+                                                      DataChip(
+                                                          value: vmodel.bonus,
+                                                          label: vmodel.labelBonus),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Divider(),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: <Widget>[
+                                                DropdownButton<String>(
+                                                    hint: Text('Добавить штраф'),
+                                                    items: vmodel.penaltyTypesList,
+                                                    onChanged: (typeUid) {
+                                                      return vmodel.handlePenalty(context, typeUid);
+                                                    }),
+                                              ],
+                                            ),
+                                            AreaPenalties(vmodel),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: <Widget>[
+                                                  ChipTotal(
+                                                    title: 'ИТОГО: ',
+                                                    value: vmodel.total,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        )),
                                 Center(
                                   child: Row(
                                     children: <Widget>[

@@ -1,6 +1,5 @@
 import 'package:Staffield/core/entities/employee.dart';
 import 'package:Staffield/core/entities/report.dart';
-import 'package:Staffield/core/entities/penalty.dart';
 import 'package:Staffield/utils/string_utils.dart';
 import 'package:jiffy/jiffy.dart';
 
@@ -15,15 +14,15 @@ class ReportUiAdapted {
     date = Jiffy(DateTime.fromMillisecondsSinceEpoch(report.timestamp)).MMMMd;
     report.timestamp.toString();
     employee = report.employee;
-    total = report.total.toString().formatDouble.noDotZero;
-    revenue = report.revenue.toString().formatDouble.noDotZero;
-    interest = report.interest.toString().formatDouble.noDotZero;
-    bonus = report.bonus.toString().formatDouble.noDotZero;
-    wage = report.wage.toString().formatDouble.noDotZero;
-    penaltiesTotal = report.penaltiesTotal.toString().formatDouble.noDotZero;
-    penalties = report.penalties.map((penalty) => penalty.strings).toList();
-    penaltyUnit = report.penaltyUnits.toString().formatDouble.noDotZero;
-    penaltiesCount = report.penaltiesCount.toString().formatInt;
+    total = report.total.toString().formatAsCurrency() ?? '';
+    revenue = report.revenue.toString().formatAsCurrency() ?? '';
+    interest = report.interest.toString().formatAsCurrency() ?? '';
+    bonus = report.bonus.toString().formatAsCurrency() ?? '';
+    wage = report.wage.toString().formatAsCurrency() ?? '';
+    penaltiesTotal = report.penaltiesTotal.toString().formatAsCurrency() ?? '';
+    penaltyUnits = report.penaltyUnits.toString().formatAsCurrency() ?? '';
+    penaltiesCount = report.penaltiesCount.toString().formatAsCurrency() ?? '';
+    // penalties = report.penalties.map((penalty) => penalty.strings).toList();
   }
   String uid;
   Employee employee;
@@ -35,12 +34,12 @@ class ReportUiAdapted {
   String penaltiesTotal;
   String penaltiesCount;
   String date;
-  String penaltyUnit;
-  var penalties = <PenaltyStrings>[];
+  String penaltyUnits;
+  // var penalties = <PenaltyStrings>[];
   bool isDateLabel = false;
 
   @override
   String toString() {
-    return 'penaltiesTotal: $penaltiesTotal';
+    return 'wage: $wage, bonus: $bonus, penaltiesTotal: $penaltiesTotal';
   }
 }

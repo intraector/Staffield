@@ -1,4 +1,4 @@
-import 'package:Staffield/views/common/text_fields/text_field_double.dart';
+import 'package:Staffield/views/common/text_fields/text_field_decimal.dart';
 import 'package:Staffield/views/common/text_fields/text_field_string.dart';
 import 'package:Staffield/views/edit_penalty_type/screen_edit_penalty_type_vmodel.dart';
 import 'package:Staffield/views/edit_penalty_type/views/view_plain/view_expected.dart';
@@ -25,7 +25,8 @@ class ViewPlain extends StatelessWidget {
             ),
             Row(
               children: <Widget>[
-                Flexible(child: TextFieldDouble(vModel.defaultValue, focusNode: focusDefaultValue)),
+                Flexible(
+                    child: TextFieldDecimal(vModel.defaultValue, focusNode: focusDefaultValue)),
               ],
             ),
             Container(

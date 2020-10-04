@@ -1,10 +1,10 @@
 import 'package:Staffield/constants/app_text_styles.dart';
-import 'package:Staffield/views/common/text_feild_handler/text_field_handler_double.dart';
+import 'package:Staffield/views/common/text_feild_handler/text_field_data_decimal.dart';
 import 'package:flutter/material.dart';
 
-class TextFieldDouble extends StatelessWidget {
-  TextFieldDouble(this.handler, {this.focusNode, this.nextFocusNode, this.autofocus = false});
-  final TextFieldHandlerDouble handler;
+class TextFieldDecimal extends StatelessWidget {
+  TextFieldDecimal(this.data, {this.focusNode, this.nextFocusNode, this.autofocus = false});
+  final TextFieldDataDecimal data;
   final FocusNode focusNode;
   final FocusNode nextFocusNode;
   final bool autofocus;
@@ -12,25 +12,23 @@ class TextFieldDouble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: handler.txtCtrl,
+      controller: data.txtCtrl,
       autofocus: autofocus,
       decoration: InputDecoration(
         isDense: true,
-        labelText: handler.label,
+        labelText: data.label,
         labelStyle: AppTextStyles.dataChipLabel,
         counter: SizedBox.shrink(),
-        hintText: handler.hint,
+        hintText: data.hint,
         hintStyle: Theme.of(context).textTheme.caption,
       ),
       textInputAction: nextFocusNode == null ? TextInputAction.done : TextInputAction.next,
       maxLines: 1,
-      maxLength: handler.maxLength,
-      maxLengthEnforced: true,
       keyboardType: TextInputType.number,
-      inputFormatters: handler.inputFormatters,
-      validator: (_) => handler.validate(),
-      onSaved: (_) => handler.onSave(),
-      onChanged: (_) => handler.format(),
+      inputFormatters: data.inputFormatters,
+      validator: data.validate,
+      onSaved: data.onSave,
+      onChanged: data.onChanged,
       focusNode: focusNode,
       onFieldSubmitted:
           nextFocusNode == null ? null : (_) => FocusScope.of(context).requestFocus(nextFocusNode),

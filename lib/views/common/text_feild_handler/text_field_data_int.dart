@@ -1,9 +1,8 @@
-import 'package:Staffield/views/common/text_feild_handler/mixin_format.dart';
 import 'package:Staffield/utils/string_utils.dart';
-import 'package:Staffield/views/common/text_feild_handler/text_field_handler_base.dart';
+import 'package:Staffield/views/common/text_feild_handler/text_field_data.dart';
 import 'package:flutter/services.dart';
 
-class TextFieldHandlerInt extends TextFieldHandlerBase with Format {
+class TextFieldHandlerInt extends TextFieldDataBase {
   TextFieldHandlerInt({
     void Function() onChange,
     void Function() onSave,
@@ -12,7 +11,7 @@ class TextFieldHandlerInt extends TextFieldHandlerBase with Format {
     String hint,
     String defaultValue,
   }) : super(
-          onChange: onChange,
+          // onChange: onChange,
           onSave: onSave,
           maxLength: maxLength,
           label: label,
@@ -20,9 +19,11 @@ class TextFieldHandlerInt extends TextFieldHandlerBase with Format {
           defaultValue: defaultValue,
         );
 
-  int get result => int.tryParse(txtCtrl.text.removeSpaces) ?? 0;
+  int get output => int.tryParse(txtCtrl.text.removeSpaces) ?? 0;
 
-  List<TextInputFormatter> inputFormatters = [FilteringTextInputFormatter.digitsOnly];
+  List<TextInputFormatter> inputFormatters = [
+    FilteringTextInputFormatter.digitsOnly,
+  ];
 
   @override
   String validate() {

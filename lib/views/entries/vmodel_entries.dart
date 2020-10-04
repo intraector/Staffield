@@ -65,8 +65,6 @@ class VModelEntries extends GetxController {
     var result = <Report>[];
     if (_repo.cache.isNotEmpty) {
       _currentDate = DateTime.fromMillisecondsSinceEpoch(_repo.cache.first.timestamp);
-      var tt = DateTime.fromMillisecondsSinceEpoch(_repo.cache.first.timestamp);
-      print('---------- viewEntries : $tt');
       result.add(Report.dateLabel(_repo.cache.first.timestamp));
     }
     for (var entry in _repo.cache) {

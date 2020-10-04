@@ -1,10 +1,10 @@
 import 'package:Staffield/constants/app_text_styles.dart';
-import 'package:Staffield/views/common/text_feild_handler/text_field_handler_string.dart';
+import 'package:Staffield/views/common/text_feild_handler/text_field_data_string.dart';
 import 'package:flutter/material.dart';
 
 class TextFieldString extends StatelessWidget {
   TextFieldString(this.handler, {this.focusNode, this.nextFocusNode, this.autofocus = false});
-  final TextFieldHandlerString handler;
+  final TextFieldDataString handler;
   final FocusNode focusNode;
   final FocusNode nextFocusNode;
   final bool autofocus;
@@ -28,7 +28,7 @@ class TextFieldString extends StatelessWidget {
       maxLengthEnforced: true,
       validator: (_) => handler.validate(),
       onSaved: (_) => handler.onSave(),
-      onChanged: (_) => handler.onChange(),
+      // onChanged: (_) => handler.onChange(),
       focusNode: focusNode,
       onFieldSubmitted:
           nextFocusNode == null ? null : (_) => FocusScope.of(context).requestFocus(nextFocusNode),

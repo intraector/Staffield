@@ -1,7 +1,7 @@
-import 'package:Staffield/views/common/text_feild_handler/text_field_handler_base.dart';
+import 'package:Staffield/views/common/text_feild_handler/text_field_data.dart';
 
-class TextFieldHandlerString extends TextFieldHandlerBase {
-  TextFieldHandlerString({
+class TextFieldDataString extends TextFieldDataBase {
+  TextFieldDataString({
     void Function() onChange,
     void Function() onSave,
     int maxLength = 40,
@@ -9,7 +9,7 @@ class TextFieldHandlerString extends TextFieldHandlerBase {
     String hint,
     String defaultValue,
   }) : super(
-          onChange: onChange,
+          // onChange: onChange,
           onSave: onSave,
           maxLength: maxLength,
           label: label,

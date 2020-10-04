@@ -7,16 +7,16 @@ class PeriodReportUiAdapted {
   PeriodReportUiAdapted(PeriodReport report) {
     employee = report.employee;
     periodTitle = report.periodTitle;
-    total = report.total.toString().formatInt;
-    wage = report.wage.toString().formatInt;
-    bonus = report.bonus.toString().formatInt;
-    totalAverage = report.totalAvg.toString().formatInt;
+    total = report.total.toString().formatAsCurrency();
+    wage = report.wage.toString().formatAsCurrency();
+    bonus = report.bonus.toString().formatAsCurrency();
+    totalAverage = report.totalAvg.toString().formatAsCurrency();
     reportsCount = report.reportsCount.toString();
-    revenue = report.revenue.toString().formatInt;
-    revenueAverage = report.revenueAvg.toString().formatInt;
-    penaltiesTotal = report.penaltiesTotal.toString().formatInt;
-    penaltyUnit = report.penaltyUnits.toString().formatInt;
-    penaltiesCount = report.penaltiesCount.toString().formatInt;
+    revenue = report.revenue.toString().formatAsCurrency();
+    revenueAverage = report.revenueAvg.toString().formatAsCurrency();
+    penaltiesTotal = report.penaltiesTotal.toString().formatAsCurrency();
+    penaltyUnit = report.penaltyUnits.toString().formatAsCurrency();
+    penaltiesCount = report.penaltiesCount.toString().formatAsCurrency();
     periodTitle = report.periodTitle;
     penalties = report.penalties;
   }

@@ -45,7 +45,7 @@ class AreaLineChart extends StatelessWidget {
             fontWeight: FontWeight.bold,
             fontSize: 15,
           ),
-          getTitles: (value) => value.toString().formatInt,
+          getTitles: (value) => value.toString().formatAsCurrency(),
           interval: data.interval,
           reservedSize: 80,
           margin: 4,

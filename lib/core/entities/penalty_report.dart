@@ -35,8 +35,8 @@ class PenaltyReport {
   double total;
   String typeTitle;
   String unitTitle;
-  String get unitString => units?.toString()?.formatDouble?.noDotZero ?? '';
-  String get totalString => total?.toString()?.formatDouble?.noDotZero ?? '';
+  String get unitString => units.toString().formatAsCurrency() ?? '';
+  String get totalString => total.toString().formatAsCurrency() ?? '';
 
   @override
   String toString() =>

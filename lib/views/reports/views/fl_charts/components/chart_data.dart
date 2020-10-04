@@ -128,7 +128,9 @@ class ChartData {
   //----------------------------------------
   List<LineTooltipItem> getTooltipItems(list) => list.map<LineTooltipItem>((spot) {
         return LineTooltipItem(
-          spots.keys.elementAt(spot.barIndex).name + ': ' + spot.y.toString().formatInt,
+          spots.keys.elementAt(spot.barIndex).name +
+              ': ' +
+              spot.y.toString().formatAsCurrency(ifNullReturn: ''),
           TextStyle(
             color: spots.keys.elementAt(spot.barIndex).color,
           ),
@@ -183,8 +185,13 @@ class ChartData {
               .toList();
           cellContent = Column(children: rows);
         } else {
-          cellContent =
-              Text(periodValues[i].periodReports[employee]?.y?.toString()?.formatInt ?? '0');
+          cellContent = Text(
+            periodValues[i]
+                .periodReports[employee]
+                ?.y
+                ?.toString()
+                ?.formatAsCurrency(ifNullReturn: '0'),
+          );
         }
         cells.add(DataCell(cellContent));
       }

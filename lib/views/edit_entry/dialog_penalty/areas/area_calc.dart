@@ -1,6 +1,6 @@
 import 'package:Staffield/constants/app_colors.dart';
 import 'package:Staffield/constants/app_text_styles.dart';
-import 'package:Staffield/views/common/text_fields/text_field_double.dart';
+import 'package:Staffield/views/common/text_fields/text_field_decimal.dart';
 import 'package:Staffield/views/edit_entry/dialog_penalty/dialog_penalty_vmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +18,7 @@ class AreaCalc extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: TextFieldDouble(
+                child: TextFieldDecimal(
                   vModel.unit,
                   autofocus: true,
                   nextFocusNode: focusCost,
@@ -29,7 +29,7 @@ class AreaCalc extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: TextFieldDouble(
+                child: TextFieldDecimal(
                   vModel.cost,
                   focusNode: focusCost,
                 ),

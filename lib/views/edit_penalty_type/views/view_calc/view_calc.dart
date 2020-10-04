@@ -1,4 +1,4 @@
-import 'package:Staffield/views/common/text_fields/text_field_double.dart';
+import 'package:Staffield/views/common/text_fields/text_field_decimal.dart';
 import 'package:Staffield/views/common/text_fields/text_field_string.dart';
 import 'package:Staffield/views/edit_penalty_type/screen_edit_penalty_type_vmodel.dart';
 import 'package:Staffield/views/edit_penalty_type/views/view_calc/view_calc_vmodel.dart';
@@ -64,7 +64,7 @@ class ViewCalc extends StatelessWidget {
                               Expanded(
                                 child: Padding(
                                     padding: const EdgeInsets.only(left: 5.0),
-                                    child: TextFieldDouble(
+                                    child: TextFieldDecimal(
                                       vModel.unitDefault,
                                       focusNode: focusUnitDefault,
                                       nextFocusNode: focusCostDefault,
@@ -83,7 +83,7 @@ class ViewCalc extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: TextFieldDouble(
+                      child: TextFieldDecimal(
                         vModel.costDefault,
                         focusNode: focusCostDefault,
                       ),

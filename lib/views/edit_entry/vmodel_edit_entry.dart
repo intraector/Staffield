@@ -13,7 +13,7 @@ import 'package:Staffield/core/utils/calc_total_mixin.dart';
 import 'package:Staffield/constants/routes.dart';
 import 'package:Staffield/utils/string_utils.dart';
 import 'package:Staffield/views/common/dialog_confirm.dart';
-import 'package:Staffield/views/common/text_feild_handler/text_field_handler_double.dart';
+import 'package:Staffield/views/common/text_feild_handler/text_field_data_decimal.dart';
 import 'package:Staffield/views/edit_employee/dialog_edit_employee.dart';
 import 'package:Staffield/views/edit_entry/dialog_penalty/dialog_penalty.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ class VModelEditEntry extends GetxController {
     init(uid);
   }
   Entry entry;
-  TextFieldHandlerDouble interest;
+  TextFieldDataDecimal interest;
   String labelBonus = 'БОНУС';
   String labelName = 'СОТРУДНИК';
   String labelPenalties = 'ШТРАФЫ';
@@ -33,8 +33,8 @@ class VModelEditEntry extends GetxController {
   double _bonusAux;
 
   List<Penalty> penalties;
-  TextFieldHandlerDouble revenue;
-  TextFieldHandlerDouble wage;
+  TextFieldDataDecimal revenue;
+  TextFieldDataDecimal wage;
   final dropdownKey = GlobalKey<FormFieldState>();
   final _employeesRepo = Get.find<EmployeesRepository>();
 
@@ -46,21 +46,24 @@ class VModelEditEntry extends GetxController {
     if (uid != null) {
       print('---------- view_edit_entry : ${DateTime.fromMillisecondsSinceEpoch(entry.timestamp)}');
     }
-    wage = TextFieldHandlerDouble(
+    wage = TextFieldDataDecimal(
       label: 'ОКЛАД',
-      defaultValue: uid == null ? '' : entry.wage?.toString()?.formatDouble?.noDotZero,
-      onChange: calcTotalAndNotify,
+      defaultValue:
+          uid == null ? '' : entry.wage?.toString()?.formatAsCurrency(decimals: 2)?.noDotZero,
+      onChanged: calcTotalAndNotify,
     );
-    revenue = TextFieldHandlerDouble(
+    revenue = TextFieldDataDecimal(
       label: 'ВЫРУЧКА',
-      defaultValue: uid == null ? '' : entry.revenue?.toString()?.formatDouble?.noDotZero,
-      onChange: calcTotalAndNotify,
+      defaultValue:
+          uid == null ? '' : entry.revenue?.toString()?.formatAsCurrency(decimals: 2)?.noDotZero,
+      onChanged: calcTotalAndNotify,
     );
-    interest = TextFieldHandlerDouble(
+    interest = TextFieldDataDecimal(
       label: 'ПРОЦЕНТ',
       maxLength: 5,
-      defaultValue: uid == null ? '' : entry.interest?.toString()?.formatDouble?.noDotZero,
-      onChange: calcTotalAndNotify,
+      defaultValue:
+          uid == null ? '' : entry.interest?.toString()?.formatAsCurrency(decimals: 2)?.noDotZero,
+      onChanged: calcTotalAndNotify,
       validator: validateInterest,
     );
     penalties = entry.penalties.map((penalty) => Penalty.copy(penalty)).toList();
@@ -68,7 +71,7 @@ class VModelEditEntry extends GetxController {
   }
 
   //-----------------------------------------
-  String get bonus => _bonusAux.toString().formatDouble;
+  String get bonus => _bonusAux.toString().formatAsCurrency(decimals: 2);
 
   //-----------------------------------------
   List<DropdownMenuItem<String>> get employeesItems {
@@ -89,7 +92,7 @@ class VModelEditEntry extends GetxController {
   }
 
   //-----------------------------------------
-  String get penaltiesTotal => _penaltiesTotal.toString().formatDouble;
+  String get penaltiesTotal => _penaltiesTotal.toString().formatAsCurrency(decimals: 2);
 
   //-----------------------------------------
   List<DropdownMenuItem> get penaltyTypesList {
@@ -102,14 +105,14 @@ class VModelEditEntry extends GetxController {
   }
 
   //-----------------------------------------
-  String get total => entry.total.toString().formatDouble;
+  String get total => entry.total.toString().formatAsCurrency(decimals: 2);
 
   //-----------------------------------------
-  void calcTotal() {
+  void calcTotal([String _]) {
     var result = CalcTotal(
-      revenue: revenue.result,
-      interest: interest.result,
-      wage: wage.result,
+      revenue: revenue.value,
+      interest: interest.value,
+      wage: wage.value,
       penalties: penalties,
     );
     _bonusAux = result.bonus;
@@ -118,9 +121,9 @@ class VModelEditEntry extends GetxController {
   }
 
   //-----------------------------------------
-  void calcTotalAndNotify() {
+  void calcTotalAndNotify([String _]) {
     calcTotal();
-    update();
+    update(['calc']);
   }
 
   //-----------------------------------------
@@ -165,9 +168,9 @@ class VModelEditEntry extends GetxController {
   void save() {
     entry.timestamp = DateTime.now().millisecondsSinceEpoch;
     entry.penalties = penalties.toList();
-    entry.wage = wage.result;
-    entry.revenue = revenue.result;
-    entry.interest = interest.result;
+    entry.wage = wage.value;
+    entry.revenue = revenue.value;
+    entry.interest = interest.value;
     calcTotal();
     _entriesRepo.addOrUpdate([entry]);
   }

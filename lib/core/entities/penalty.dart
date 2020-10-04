@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:uuid_type/uuid_type.dart';
-import 'package:Staffield/utils/string_utils.dart';
 
 class Penalty {
   Penalty({@required this.parentUid, @required this.typeUid, this.mode});
@@ -33,19 +32,19 @@ class Penalty {
   }
 
   //-----------------------------------------
-  PenaltyStrings get strings => PenaltyStrings.from(this);
+  // PenaltyStrings get strings => PenaltyStrings.from(this);
 }
 
-class PenaltyStrings {
-  PenaltyStrings.from(Penalty penalty) {
-    typeUid = penalty.typeUid;
-    units = penalty.units?.toString()?.formatDouble?.noDotZero ?? '';
-    total = penalty.total.toString().formatDouble.noDotZero;
-  }
+// class PenaltyStrings {
+//   PenaltyStrings.from(Penalty penalty) {
+//     typeUid = penalty.typeUid;
+//     units = StringUtils.formatAsCurrency(penalty.units);
+//     total = StringUtils.formatAsCurrency(penalty.total);
+//   }
 
-  String typeUid;
-  String units;
-  String total;
-  String typeTitle;
-  String unitTitle;
-}
+//   String typeUid;
+//   String units;
+//   String total;
+//   String typeTitle;
+//   String unitTitle;
+// }

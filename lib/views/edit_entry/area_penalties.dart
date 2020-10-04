@@ -55,7 +55,7 @@ class ViewPenaltiesItem extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(
-                      penalty.total.toString().formatInt,
+                      penalty.total.toString().formatAsCurrency(),
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
